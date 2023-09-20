@@ -35,8 +35,10 @@ You can feel free to move your code here.
 - They are frontend, backend, mysql, nginx, and php-fpm.
 - This is necessary information to make the backend connect to the database, and the frontend connect to the backend.
 
-## A funky thing about the database
-- The database will not be saved in the repository and must be imported with a `.sql` file in PhpMyAdmin.
+## Database Info
+- Before importing the database, you must create a new DB in PhpMyAdmin called 'tigeropsdata'.
+- Select the database by clicking on it on the left hand side of the screen.
+- Import the tables using Steven's `.sql` file provided in Discord.
 
 ## Installing Node Packages
 - Run `docker-compose down`
