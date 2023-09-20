@@ -48,3 +48,6 @@ You can feel free to move your code here.
 - If the Docker daemon won't run (Windows), run `wsl --update`
 - If the containers fail to build and there is an error with port 3306, kill the mysql service running on your host.
 - If you see `react-scripts not found` or something similar, run `npm install` in `frontend/` and in `backend/`. Run `docker-compose build` afterwards.
+
+## Optimizing the React container
+- On Windows, I recommend adding a Windows Defender exclusion to the repo's folder as React will compile two times faster.
