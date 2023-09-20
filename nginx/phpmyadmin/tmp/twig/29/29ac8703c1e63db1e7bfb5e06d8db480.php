@@ -86,6 +86,6 @@ echo _gettext("No tables found in database.");
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/tree/path.twig", "/var/www/html/phpmyadmin/templates/navigation/tree/path.twig");
+        return new Source("", "navigation/tree/path.twig", "/var/www/html/templates/navigation/tree/path.twig");
     }
 }

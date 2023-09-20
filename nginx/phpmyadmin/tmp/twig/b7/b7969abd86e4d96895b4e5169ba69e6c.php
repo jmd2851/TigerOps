@@ -94,6 +94,6 @@ class __TwigTemplate_cc9aa1709819205269f144199fd28457 extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "console/query_action.twig", "/var/www/html/phpmyadmin/templates/console/query_action.twig");
+        return new Source("", "console/query_action.twig", "/var/www/html/templates/console/query_action.twig");
     }
 }

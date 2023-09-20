@@ -274,6 +274,6 @@ class __TwigTemplate_2b60d77e9db9152bd8f5b959014f1b59 extends Template
 
     public function getSourceContext()
     {
-        return new Source("", "navigation/tree/node.twig", "/var/www/html/phpmyadmin/templates/navigation/tree/node.twig");
+        return new Source("", "navigation/tree/node.twig", "/var/www/html/templates/navigation/tree/node.twig");
     }
 }
