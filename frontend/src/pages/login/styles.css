@@ -9,20 +9,35 @@
     flex-direction: row;
     box-shadow: 1px 1px 5px var(--boxShadow);
     border-radius: 10px;
-    min-height: 480px;
+    min-height: 470px;
     width: 840px;
 }
 .loginContainer > * {
     padding: 50px;
     width: 50%;
 }
+/* login - left side */
 .login {
     border-radius: 10px 0 0 10px;
     background-color: var(--primary);
 }
-.header {
-    padding: 30px 0;
+.login > div {
+    padding: 5px 0;
 }
 .header > p.bodyText {
-    padding-right: 24%;
+    padding: 0 24% 8px 0;
+}
+.forgotPasswordContainer > p {
+    text-align: left;
+}
+.loginButtonContainer {
+    text-align: right;
+}
+/* visitor - right side */
+.visitor {
+    padding-top: 16%;
+}
+.visitorButtonContainer {
+    text-align: center;
+    padding: 15px 0;
 }
