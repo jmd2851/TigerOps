@@ -2,10 +2,11 @@ import logo from '../../assets/images/logo.png';
 import './styles.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import Page from '../../components/Page';
 
 export default function Login() {
     return (
-        <div className="loginPage">
+        <Page>
             <img src={logo} className="App-logo" alt="St. Peter's Kitchen logo" />
             <div className="loginContainer">
                 <div className="login">
@@ -39,7 +40,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-        </div>
+        </Page>
     )
 }
 
