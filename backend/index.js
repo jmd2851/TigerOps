@@ -66,11 +66,74 @@ app.post("/login", (req, res) => {
     function (err, results) {
       if (err || results[0].Password != req.body.password) {
         res.status(500).json({ error: "Invalid Login Credentials. ", err });
-        return;
+      } else {
+        res.status(200).json({
+          message: "Successful Authentication",
+        });
       }
-      res.status(200).json({
-        message: "Successful Authentication",
-      });
+    }
+  );
+});
+
+app.post("/event", async (req, res) => {
+  const { name, description, starttime, endtime } = req.body;
+  db.query(
+    `INSERT INTO event (EventName, Description, EventStartTime, EventEndTime)
+      VALUES ?, ?, ?, ?`,
+    [name, description, starttime, endtime],
+    function (err, results) {
+      if (err) {
+        res.status(500).send("Failed to create event.");
+      } else {
+        res.status(200).send("Successfully created an event.");
+      }
+    }
+  );
+});
+
+app.get("/event/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query(
+    "SELECT * FROM Event WHERE EventID = ?",
+    [id],
+    function (err, results) {
+      if (err) {
+        res.status(500).send(`Unable to retrieve event with the id ${id}.`);
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
+});
+
+app.put("/event/:id", async (req, res) => {
+  const { name, description, starttime, endtime } = req.body;
+  const id = parseInt(req.params.id);
+  db.query(
+    `UPDATE Event SET EventName = ?, EventStartDate = ?, EventEndDate = ? WHERE EventID = ?`,
+    [name, starttime, endtime, id],
+    function (err, results) {
+      if (err) {
+        res.status(500).send(`Unable to update event with the id ${id}.`);
+      } else {
+        res.status(200).json(results);
+      }
+    }
+  );
+});
+
+app.delete("/event/:id", async (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query(
+    `DELETE FROM Event WHERE EventID = ?`,
+    [id],
+    function (err, results) {
+      if (err) {
+        console.log(err)
+        res.status(500).send(`Unable to delete event with the id ${id}.`);
+      } else {
+        res.status(200).send(`Event deleted with ID: ${id}`);
+      }
     }
   );
 });
