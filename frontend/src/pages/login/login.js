@@ -2,17 +2,16 @@ import logo from '../../assets/images/logo.png';
 import './styles.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Page from '../../components/Page';
 import Title from '../../components/Title';
 
 export default function Login() {
     return (
-        <Page>
+        <div className='loginPage'>
             <img src={logo} className="App-logo" alt="St. Peter's Kitchen logo" />
             <div className="loginContainer">
                 <div className="login">
                     <div className="header">
-                        <Title text="login" />
+                        <Title title="login" />
                         <p className="bodyText">enter your email address and password to log in.</p>
                     </div>
 
@@ -32,7 +31,7 @@ export default function Login() {
 
                 <div className="visitor">
                     <div className="header">
-                        <p className="headerTitle">no account?</p>
+                        <Title title="no account?" />
                         <p className="bodyText">click here to view St. Peter's Kitchen's menu, news, reminders and events.</p>
                     </div>
                     
@@ -41,7 +40,7 @@ export default function Login() {
                     </div>
                 </div>
             </div>
-        </Page>
+        </div>
     )
 }
 
