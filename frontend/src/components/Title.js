@@ -2,6 +2,8 @@ import './Title.css';
 
 export default function Title(props) {
     return (
-        <p className='headerTitle'>{props.text}</p>
+        <div className='headerTitleContainer'>
+            <p className='headerTitle'>{props.title}</p>
+        </div>
     )
 }
