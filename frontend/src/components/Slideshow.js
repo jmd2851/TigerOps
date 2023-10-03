@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
 import './Slideshow.css';
-import IconButton from '@mui/material/IconButton';
-import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
-import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import Carousel from 'react-material-ui-carousel';
 
 export default function Slideshow() {
