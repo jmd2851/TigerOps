@@ -1,17 +1,18 @@
-import './App.css';
-import './assets/colors.css';
-import './assets/fonts.css';
+import "./App.css";
+import "./assets/colors.css";
+import "./assets/fonts.css";
+import { Router, Routes, Route } from "react-router-dom";
 
-import Login from './pages/login/login';
-import Events from './pages/events/events';
+import Login from "./pages/login/login";
+import Events from "./pages/events/events";
 
-function App() {
+const App = () => {
   return (
-    <div className="appContainer">
-      <Login />
-      {/* <Events /> */}
-    </div>
+    <Routes>
+      <Route exact path="/login" element={<Login />} />
+      <Route exact path="/events" element={<Events />} />
+    </Routes>
   );
-}
+};
 
 export default App;
