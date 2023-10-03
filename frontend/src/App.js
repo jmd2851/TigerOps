@@ -8,8 +8,8 @@ import Events from './pages/events/events';
 function App() {
   return (
     <div className="appContainer">
-      {/* <Login /> */}
-      <Events />
+      <Login />
+      {/* <Events /> */}
     </div>
   );
 }
