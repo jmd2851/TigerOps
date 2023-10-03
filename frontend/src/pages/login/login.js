@@ -3,6 +3,7 @@ import './styles.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Page from '../../components/Page';
+import Title from '../../components/Title';
 
 export default function Login() {
     return (
@@ -11,7 +12,7 @@ export default function Login() {
             <div className="loginContainer">
                 <div className="login">
                     <div className="header">
-                        <p className="headerTitle">login</p>
+                        <Title text="login" />
                         <p className="bodyText">enter your email address and password to log in.</p>
                     </div>
 
