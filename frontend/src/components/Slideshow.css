@@ -2,7 +2,7 @@
     border: 1px solid black;
     border-radius: 5px;
     height: 600px;
-    min-width: 60%;
+    width: 800px;
     display: flex;
     flex-direction: column;
     align-self: center;
@@ -23,5 +23,4 @@
     flex-direction: column;
     align-self: center;
     justify-content: center;
-    background-color: light;
 }
