@@ -1,7 +1,7 @@
 .slideshowContainer {
     border: 1px solid black;
     border-radius: 5px;
-    min-height: 600px;
+    height: 600px;
     min-width: 60%;
     display: flex;
     flex-direction: column;
@@ -9,32 +9,7 @@
     justify-content: center;
     position: relative;
 }
-.slideshowContainer, .slideshow {
-    height: max-content;
-}
-.slideshowControlsContainer {
-    position: absolute;
-    z-index: 1;
-    height: 100%;
-    width: 100%;
-}
-.leftButton, .rightButton {
-    position: absolute;
-    height: 100%;
-    width: 32px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-}
-.leftButton {
-    left:0;
-}
-.rightButton {
-    right: 0;
-}
 .slideshow {
-    z-index: -1;
     height: 100%;
     width: 100%;
     display:flex;
@@ -43,5 +18,10 @@
     justify-content: center;
 }
 .slide {
-    background-color: red;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+    background-color: light;
 }

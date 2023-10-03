@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import './Slideshow.css';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
+import Carousel from 'react-material-ui-carousel';
 
 export default function Slideshow() {
      const [sildeshowData, setSlideshowData] = useState([]);
@@ -14,22 +15,26 @@ export default function Slideshow() {
             {
                 "id": 0,
                 "title": "title1",
-                "description": "description1"
+                "description": "description1",
+                "bg": "lightblue"
             },
             {
                 "id": 1,
                 "title": "title2",
-                "description": "description2"
+                "description": "description2",
+                "bg": "lightcoral"
             },
             {
                 "id": 2,
                 "title": "title3",
-                "description": "description3"
+                "description": "description3",
+                "bg": "lightgreen"
             },
             {
                 "id": 3,
                 "title": "title4",
-                "description": "description4"
+                "description": "description4",
+                "bg": "lightsalmon"
             },
         ]);
 
@@ -43,34 +48,30 @@ export default function Slideshow() {
 
     return (
         <div className='slideshowContainer'>
+            {/* https://github.com/Learus/react-material-ui-carousel#props */}
+            <Carousel 
+                className='slideshow' 
+                height={'600px'} 
+                fullHeightHover={true} 
+                navButtonsAlwaysVisible={true}
+                interval={10000} //10 seconds
+                animation='slide'
+                indicatorContainerProps={{
+                    style: {
+                        paddingBottom: '8px',
+                    }
+                }}>
 
-            <div className='slideshowControlsContainer'>
-                <div className='leftButton'>
-                    <IconButton aria-label="left" onClick={() => {
-                        console.log('left button clicked');
-                    }}>
-                        <ArrowBackIosNewRoundedIcon />
-                    </IconButton>
-                </div>
-                <div className='rightButton'>
-                    <IconButton aria-label="right" onClick={() => {
-                        console.log('right button clciked');
-                    }}>
-                        <ArrowForwardIosRoundedIcon />
-                    </IconButton>
-                </div>
-            </div>
-
-            <div className='slideshow'>
                 {sildeshowData.map((slide) => {
                     return (
-                        <div className='slide' key={slide.id}>
+                        //TODO: create reusable slide component
+                        <div className='slide' key={slide.id} style={{backgroundColor: slide.bg}}>
                             <h2>{slide.title}</h2>
                             <p>{slide.description}</p>
                         </div>
                     )
                 })}
-            </div>
+            </Carousel>
         </div>
     )
 }
