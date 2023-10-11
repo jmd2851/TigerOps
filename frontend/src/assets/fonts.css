@@ -1,6 +1,6 @@
 .headerTitle {
     /* font-style font-variant font-weight font-size/line-height font-family */
-    font: normal normal bold 1.8em Arial, sans-serif;
+    font: normal normal bold 1.9em Arial, sans-serif;
     text-transform: capitalize;
     padding: 8px 0;
 }
@@ -8,8 +8,11 @@
     font: normal normal normal 0.9em Arial, sans-serif;
     text-transform: lowercase;
     color: var(--textDark);
-    padding: 4px 0;
 }
 .bodyText::first-letter {
     text-transform: uppercase;
+}
+.subtitle {
+    color: var(--textDark);
+    font-size: 0.8em;
 }
