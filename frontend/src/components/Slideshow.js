@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './Slideshow.css';
 import Carousel from 'react-material-ui-carousel';
+import Slide from './Slide';
 
 export default function Slideshow() {
      const [sildeshowData, setSlideshowData] = useState([]);
@@ -61,10 +62,8 @@ export default function Slideshow() {
 
                 {sildeshowData.map((slide) => {
                     return (
-                        //TODO: create reusable slide component
-                        <div className='slide' key={slide.id} style={{backgroundColor: slide.bg}}>
-                            <h2>{slide.title}</h2>
-                            <p>{slide.description}</p>
+                        <div className='slideContainer' key={slide.id}>
+                            <Slide title={slide.title} description={slide.description} bg={slide.bg} />
                         </div>
                     )
                 })}
