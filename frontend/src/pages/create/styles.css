@@ -1,0 +1,16 @@
+.formContainer {
+    border: 1px solid black;
+    padding: 8px 16px;
+    min-height: 600px;
+    width: 800px;
+    position: relative;
+}
+.labelInput {
+    display:flex;
+    flex-direction: row;
+}
+.createButtonContainer {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+}
