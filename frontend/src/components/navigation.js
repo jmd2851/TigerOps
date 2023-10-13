@@ -1,5 +1,6 @@
 import React from 'react';
 import './navigation.css';
+import { Outlet, Link } from "react-router-dom";
 
 export default function Navigation (){
         return (
@@ -11,12 +12,12 @@ export default function Navigation (){
                         <div className='calendarOptions'>
                             <div className='topOptions'>
                                 <h2 className='links'>
-                                    Events
+                                    <Link to="/events">Events </Link>
                                 </h2>
                             </div>
                             <div className='topOptions'>
                                 <h2 className = "links">
-                                    Calendar View
+                                <Link to="/events"> Calendar View </Link>
                                 </h2>
                             </div>
                         </div>
@@ -25,15 +26,15 @@ export default function Navigation (){
                         </div>
                             <div className='bottomOptions'>
                                 <h2 className='links'>
-                                    Configuration
+                                <Link to="/events"> Configuration </Link>
                                 </h2>
                             </div>
                                 <h2 className='links'>
-                                    Help
+                                <Link to="/events">Help </Link>
                                 </h2>
                             <div className='bottomOptions'>
                                 <h2 className='links'>
-                                    Log Out
+                                <Link to="/events"> Log Out </Link>
                                 </h2>
                             </div>
             </div>
