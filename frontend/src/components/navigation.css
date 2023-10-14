@@ -1,0 +1,70 @@
+.nav{
+    background-color: #51A46A;
+    padding-right: 2em;
+    padding-left: 2em;
+    width: 20vw;
+    display: flex;
+    flex-direction: column;
+    padding-right: 2em;
+    padding-left: 2em;
+    height: 100vh;
+    flex-grow: 1;
+    box-shadow: 0px 0px 5px .5px black;
+}
+
+.navContainer{
+    display: inline;
+}
+
+.User{
+    margin-top: 2em;
+}
+
+.links{
+    font-weight: 500;
+}
+
+.calendarOptions{
+    margin-top: 6em;
+    margin-bottom: 14em;
+}
+
+.topOptions{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.border{
+    border: 1.5px solid black;
+    margin: 0em;
+}
+
+.bottomOptions{
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+
+a:link{
+    text-decoration: none;
+}
+
+a:active{
+    color: black;
+}
+
+a:visited{
+    color: black;
+}
+
+a:hover{
+    color: white;
+}
+
+
+
+html{
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden;
+}
