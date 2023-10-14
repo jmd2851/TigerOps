@@ -5,12 +5,14 @@ import { Router, Routes, Route } from "react-router-dom";
 
 import Login from "./pages/login/login";
 import Events from "./pages/events/events";
+import Configuration from "./pages/configuration/configuration";
 
 const App = () => {
   return (
     <Routes>
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/events" element={<Events />} />
+      <Route exact path="/configuration" element={<Configuration />} />
     </Routes>
   );
 };
