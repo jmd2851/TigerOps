@@ -58,17 +58,29 @@ app.get("/", (req, res) => {
 
 app.post("/login", (req, res) => {
   if (!req.body.email || !req.body.password) {
-    res.status(400).json({ error: "Insufficient Login Credentials Provided. ", err });
+    res.status(400).json({
+      status: "failed",
+      data: [],
+      message: "Insufficient Login Credentials Provided. ",
+      err,
+    });
   }
   db.query(
     "SELECT Password FROM user where Email = ?",
     [req.body.email],
     function (err, results) {
       if (err || results[0].Password != req.body.password) {
-        res.status(401).json({ error: "Invalid Login Credentials. ", err });
+        res.status(401).json({
+          status: "failed",
+          data: [],
+          message: "Invalid Login Credentials. ",
+          err,
+        });
         return;
       }
       res.status(200).json({
+        status: "success",
+        data: [],
         message: "Successful Authentication",
       });
     }
