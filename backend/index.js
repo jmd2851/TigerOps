@@ -53,22 +53,44 @@ app.use(
 
 app.use(cookieparser());
 
-// Add admin account for testing
-bcrypt.genSalt(10, (err, salt) => {
-  if (err) return next(err);
-  bcrypt.hash("tigerops", salt, (err, hash) => {
-    if (err) return;
-    db.query(
-      `INSERT IGNORE INTO User (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
-      ["test", "test", "tigerops@test.com", hash, "admin"],
-      function (err, results) {
+// Add admin account for testing only if it doesn't already exist
+const adminEmail = "tigerops@test.com";
+
+db.query(
+  `SELECT * FROM User WHERE Email = ?`,
+  [adminEmail],
+  function (err, results) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+
+    if (results.length === 0) {
+      // Admin account doesn't exist, so insert it
+      bcrypt.genSalt(10, (err, salt) => {
         if (err) {
           console.log(err);
+          return;
         }
-      }
-    );
-  });
-});
+        bcrypt.hash("tigerops", salt, (err, hash) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          db.query(
+            `INSERT INTO User (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
+            ["test", "test", adminEmail, hash, "admin"],
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        });
+      });
+    }
+  }
+);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -84,7 +106,7 @@ app.post("/login", (req, res) => {
     });
   }
   db.query(
-    "SELECT Password FROM user where Email = ?",
+    "SELECT Password FROM User where Email = ?",
     [req.body.email],
     function (err, results) {
       if (err || !bcrypt.compare(results[0].Password, req.body.password)) {

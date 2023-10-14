@@ -34,10 +34,15 @@ export default function Login(props) {
     })
       .then((response) => {
         if (!response.ok) throw new Error(response.status);
-        else return response.json();
+        else {
+          //TODO: The user should redirected to another page.
+          alert("You've logged in!"); // remove this once the redirection is added
+          return response.json();
+        }
       })
       .catch((error) => {
-        console.log(error);
+        // TODO: handle error here
+        alert("Oops. Incorrect credentials!");
       });
   };
 
