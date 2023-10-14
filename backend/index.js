@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieparser from "cookie-parser";
 import sessions from "express-session";
 import expressMysqlSession from "express-mysql-session";
+import bcrypt from "bcryptjs";
 
 const app = express();
 
@@ -52,6 +53,23 @@ app.use(
 
 app.use(cookieparser());
 
+// Add admin account for testing
+bcrypt.genSalt(10, (err, salt) => {
+  if (err) return next(err);
+  bcrypt.hash("tigerops", salt, (err, hash) => {
+    if (err) return;
+    db.query(
+      `INSERT IGNORE INTO User (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
+      ["test", "test", "tigerops@test.com", hash, "admin"],
+      function (err, results) {
+        if (err) {
+          console.log(err);
+        }
+      }
+    );
+  });
+});
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -69,7 +87,7 @@ app.post("/login", (req, res) => {
     "SELECT Password FROM user where Email = ?",
     [req.body.email],
     function (err, results) {
-      if (err || results[0].Password != req.body.password) {
+      if (err || !bcrypt.compare(results[0].Password, req.body.password)) {
         res.status(401).json({
           status: "failed",
           data: [],
