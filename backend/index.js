@@ -41,10 +41,8 @@ app.use(
     secret: consts.SESSIONSECRET,
     saveUninitialized: true,
     cookie: {
-      name: "session",
       maxAge: consts.SESSIONAGE,
       sameSite: "lax",
-      httpOnly: false,
     },
     resave: false,
     store: sessionStore,
@@ -64,7 +62,6 @@ db.query(
       console.log(err);
       return;
     }
-
     if (results.length === 0) {
       // Admin account doesn't exist, so insert it
       bcrypt.genSalt(10, (err, salt) => {
@@ -97,32 +94,39 @@ app.get("/", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  if (!req.body.email || !req.body.password) {
-    res.status(400).json({
-      status: "failed",
-      data: [],
-      message: "Insufficient Login Credentials Provided. ",
-      err,
-    });
-  }
+  const email = req.body.email;
+  const password = req.body.password;
   db.query(
-    "SELECT Password FROM User where Email = ?",
-    [req.body.email],
-    function (err, results) {
-      if (err || !bcrypt.compare(results[0].Password, req.body.password)) {
-        res.status(401).json({
-          status: "failed",
+    "SELECT * FROM User where Email = ?",
+    [email],
+    function (err, result) {
+      if (err) {
+        res.status(500).json({
+          status: "error",
           data: [],
-          message: "Invalid Login Credentials. ",
+          message: "Internal Error",
           err,
         });
-        return;
       }
-      res.status(200).json({
-        status: "success",
-        data: [],
-        message: "Successful Authentication",
-      });
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].Password, (error, response) => {
+          if (response) {
+            req.session.user = result[0];
+            res.status(200).json({
+              status: "success",
+              data: [],
+              message: "Successful Authentication",
+            });
+          } else {
+            res.status(401).json({
+              status: "failed",
+              data: [],
+              message: "Invalid Credentials",
+              err,
+            });
+          }
+        });
+      }
     }
   );
 });
