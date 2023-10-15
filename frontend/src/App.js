@@ -1,29 +1,36 @@
 import "./App.css";
 import "./assets/colors.css";
 import "./assets/fonts.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 import Login from "./pages/login/login";
 import Events from "./pages/events/events";
 import Calendar from "./pages/calendar/calendar";
 
 const App = () => {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [profile, setProfile] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    role: "",
-  });
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    console.log("hello world");
-  });
+    axios
+      .get("http://localhost:4000/login", { withCredentials: true })
+      .then((response) => {
+        if (response.data.authenticated) {
+          setUser(response.data.user);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <Routes>
-      <Route exact path="/login" element={<Login />} />
+      <Route
+        path="/login"
+        element={user ? <Navigate to="/calendar" replace /> : <Login />}
+      />
       <Route exact path="/events" element={<Events />} />
       <Route exact path="/calendar" element={<Calendar />} />
     </Routes>
