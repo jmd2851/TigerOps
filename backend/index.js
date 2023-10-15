@@ -120,7 +120,7 @@ app.get("/logout", (req, res) => {
         res.status(200).json({
           status: "success",
           data: {},
-          message: "Logout successfull",
+          message: "Logout successful",
         });
       }
     });
