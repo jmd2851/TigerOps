@@ -3,7 +3,7 @@ import './navigation.css';
 import { Outlet, Link } from "react-router-dom";
 
 export default function Navigation (){
-        return (
+    return(
             <div className='navContainer'>
             <div className = "nav">
                         <h1 className = "User">
@@ -39,5 +39,5 @@ export default function Navigation (){
                             </div>
             </div>
             </div>
-          );
+        );
 };
