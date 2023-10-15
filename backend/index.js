@@ -93,6 +93,19 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
+app.get("/login", (req, res) => {
+  if (req.session.user) {
+    res.send({
+      authenticated: true,
+      user: req.session.user,
+    });
+  } else {
+    res.send({
+      authenticated: false,
+    });
+  }
+});
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -103,7 +116,7 @@ app.post("/login", (req, res) => {
       if (err) {
         res.status(500).json({
           status: "error",
-          data: [],
+          data: {},
           message: "Internal Error",
           err,
         });
@@ -114,13 +127,13 @@ app.post("/login", (req, res) => {
             req.session.user = result[0];
             res.status(200).json({
               status: "success",
-              data: [],
+              data: { user: req.session.user },
               message: "Successful Authentication",
             });
           } else {
             res.status(401).json({
               status: "failed",
-              data: [],
+              data: {},
               message: "Invalid Credentials",
               err,
             });
