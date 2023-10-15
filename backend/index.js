@@ -106,7 +106,7 @@ app.get("/login", (req, res) => {
   }
 });
 
-app.get("/logout", (req, res) => {
+app.post("/logout", (req, res) => {
   if (req.session) {
     req.session.destroy((err) => {
       if (err) {
