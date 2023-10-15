@@ -106,6 +106,33 @@ app.get("/login", (req, res) => {
   }
 });
 
+app.post("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        res.status(500).json({
+          status: "error",
+          data: {},
+          message: "Internal error ",
+          err,
+        });
+      } else {
+        res.status(200).json({
+          status: "success",
+          data: {},
+          message: "Logout successful",
+        });
+      }
+    });
+  } else {
+    res.status(400).json({
+      status: "failed",
+      data: {},
+      message: "The user is not logged in",
+    });
+  }
+});
+
 app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
