@@ -17,7 +17,7 @@ export default function Navigation (){
                 </div>
                 <div className='topOptions'>
                     <h2 className = "links">
-                    <Link to="/events"> Calendar View </Link>
+                    <Link to="/calendar"> Calendar View </Link>
                     </h2>
                 </div>
             </div>
@@ -26,11 +26,11 @@ export default function Navigation (){
             </div>
                 <div className='bottomOptions'>
                     <h2 className='links'>
-                    <Link to="/events"> Configuration </Link>
+                    <Link to="/configuration"> Configuration </Link>
                     </h2>
                 </div>
                     <h2 className='links'>
-                    <Link to="/events">Help </Link>
+                    <Link to="/help">Help </Link>
                     </h2>
                 <div className='bottomOptions'>
                     <h2 className='links'>
