@@ -3,6 +3,7 @@ import "./styles.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import axios from "axios";
 
 export default function Login(props) {
   const [state, setState] = useState({
@@ -20,24 +21,24 @@ export default function Login(props) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    fetch("http://localhost:4000/login", {
-      method: "POST",
-      body: JSON.stringify({
-        email: state.email,
-        password: state.password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      credentials: "include",
-    })
+    const body = JSON.stringify({
+      email: state.email,
+      password: state.password,
+    });
+    axios
+      .post("http://localhost:4000/login", body, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        withCredentials: true,
+      })
       .then((response) => {
         if (!response.ok) throw new Error(response.status);
-        else return response.json();
+        return response.json();
       })
       .catch((error) => {
-        console.log(error);
+        // TODO: handle error here
       });
   };
 
