@@ -6,6 +6,7 @@ import cors from "cors";
 import cookieparser from "cookie-parser";
 import sessions from "express-session";
 import expressMysqlSession from "express-mysql-session";
+import bcrypt from "bcryptjs";
 
 const app = express();
 
@@ -40,10 +41,8 @@ app.use(
     secret: consts.SESSIONSECRET,
     saveUninitialized: true,
     cookie: {
-      name: "session",
       maxAge: consts.SESSIONAGE,
       sameSite: "lax",
-      httpOnly: false,
     },
     resave: false,
     store: sessionStore,
@@ -52,37 +51,122 @@ app.use(
 
 app.use(cookieparser());
 
+// Add admin account for testing only if it doesn't already exist
+const adminEmail = "tigerops@test.com";
+
+db.query(
+  `SELECT * FROM User WHERE Email = ?`,
+  [adminEmail],
+  function (err, results) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (results.length === 0) {
+      // Admin account doesn't exist, so insert it
+      bcrypt.genSalt(10, (err, salt) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        bcrypt.hash("tigerops", salt, (err, hash) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          db.query(
+            `INSERT INTO User (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
+            ["test", "test", adminEmail, hash, "admin"],
+            function (err, results) {
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+        });
+      });
+    }
+  }
+);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.post("/login", (req, res) => {
-  if (!req.body.email || !req.body.password) {
-    res.status(400).json({
-      status: "failed",
-      data: [],
-      message: "Insufficient Login Credentials Provided. ",
-      err,
+app.get("/login", (req, res) => {
+  if (req.session.user) {
+    res.send({
+      authenticated: true,
+      user: req.session.user,
+    });
+  } else {
+    res.send({
+      authenticated: false,
     });
   }
-  db.query(
-    "SELECT Password FROM user where Email = ?",
-    [req.body.email],
-    function (err, results) {
-      if (err || results[0].Password != req.body.password) {
-        res.status(401).json({
-          status: "failed",
-          data: [],
-          message: "Invalid Login Credentials. ",
+});
+
+app.post("/logout", (req, res) => {
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        res.status(500).json({
+          status: "error",
+          data: {},
+          message: "Internal error ",
           err,
         });
-        return;
+      } else {
+        res.status(200).json({
+          status: "success",
+          data: {},
+          message: "Logout successful",
+        });
       }
-      res.status(200).json({
-        status: "success",
-        data: [],
-        message: "Successful Authentication",
-      });
+    });
+  } else {
+    res.status(400).json({
+      status: "failed",
+      data: {},
+      message: "The user is not logged in",
+    });
+  }
+});
+
+app.post("/login", (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+  db.query(
+    "SELECT * FROM User where Email = ?",
+    [email],
+    function (err, result) {
+      if (err) {
+        res.status(500).json({
+          status: "error",
+          data: {},
+          message: "Internal Error",
+          err,
+        });
+      }
+      if (result.length > 0) {
+        bcrypt.compare(password, result[0].Password, (error, response) => {
+          if (response) {
+            req.session.user = result[0];
+            res.status(200).json({
+              status: "success",
+              data: { user: req.session.user },
+              message: "Successful Authentication",
+            });
+          } else {
+            res.status(401).json({
+              status: "failed",
+              data: {},
+              message: "Invalid Credentials",
+              err,
+            });
+          }
+        });
+      }
     }
   );
 });

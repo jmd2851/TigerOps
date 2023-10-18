@@ -7,7 +7,7 @@
     flex-direction: column;
     padding-right: 2em;
     padding-left: 2em;
-    height: 100vh;
+    height: 100%;
     flex-grow: 1;
     box-shadow: 0px 0px 5px .5px black;
 }
@@ -25,8 +25,8 @@
 }
 
 .calendarOptions{
-    margin-top: 6em;
-    margin-bottom: 14em;
+    margin-top: 3em;
+    margin-bottom: 9em;
 }
 
 .topOptions{
@@ -40,8 +40,8 @@
 }
 
 .bottomOptions{
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 
@@ -59,12 +59,4 @@ a:visited{
 
 a:hover{
     color: white;
-}
-
-
-
-html{
-    margin: 0; 
-    height: 100%; 
-    overflow: hidden;
 }
