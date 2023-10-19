@@ -53,7 +53,6 @@ export default function Create() {
     function nextPage(
     ) {
         if (page===1) {
-            document.getElementById("prevButton").disabled = false;
             pageRef.current.style.backgroundColor = "red";
         } 
 
@@ -69,7 +68,6 @@ export default function Create() {
     function previousPage() {
         if(page===1) {
             setPage(1);
-            document.getElementById("prevButton").disabled = true;
             pageRef.current.style.backgroundColor = "blue";
         } else {
             setPage(page-1);
