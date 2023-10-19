@@ -2,11 +2,11 @@ import './styles.css';
 import Button from '@mui/material/Button';
 import Page from '../../components/Page';
 import PageHeader from '../../components/PageHeader';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Create() {
+    const [pageRef, prevButtonRef] = [useRef(null),useRef(null)];
     const [page, setPage] = useState(1);
-    const [type, setType] = useState();
     const [slide, setSlide] = useState({
         type: "",
         data: {},
@@ -30,61 +30,74 @@ export default function Create() {
     useEffect(() => {
     }, [page]);
 
+    //TODO: load possible menu layouts
     function getMenuLayouts() {
         return <p>menu layout choices</p>;
     }
 
+    //TODO: load possile event layouts
     function getEventLayouts() {
         return <p>event layout choices</p>;
     }
 
     
-    //disable button for a certain amount of seconds
-    //so user cant spam the button...
-    function nextPage() {
-        document.getElementById("previousButton").disabled = false;
+    //TODO: disable button for a certain amount of seconds so user cant spam the button...
+    function nextPage(
+    ) {
+        if (page===1) {
+            document.getElementById("prevButton").disabled = false;
+            pageRef.current.style.backgroundColor = "red";
+        } 
+
+        //TODO: validation
+            //get page
+            //is the data on this page filled out
+            //is the data on this page valid
+        
         setPage(page+1);
     }
 
-    //disable button for a certain amount of seconds
-    //so user cant spam the button...
+    //TODO: disable button for a certain amount of seconds so user cant spam the button...
     function previousPage() {
         if(page===1) {
             setPage(1);
-            document.getElementById("previousButton").disabled = true;
+            document.getElementById("prevButton").disabled = true;
+            pageRef.current.style.backgroundColor = "blue";
         } else {
             setPage(page-1);
         }
     }
 
-    function fp1() {
+    //TODO: helper function the "formPage" depending on page state
+    //for now, will hardcode form pages as functions ie. formPage1() formPage2()
+
+    function formPage1() {
         return (
-            <div className='formPage' id="fp1">
+            <div id="formPage1">
                 <div className='labelInput'>
                     <label>pick a slide type</label>
                     <div className='radioButtonsContainer'>
                         <Button id="eventButton" variant="contained" onClick={ () => {
-                            setType("event");
-                            alert("create a slide - " + slide.type + " type");
+                            setSlide({...slide, type:"event"});
+                            nextPage();
+                            console.log("create a slide - " + slide.type + " type");
                         }}>event</Button>
                         <Button id="menuButton" variant="contained" onClick={ () => {
-                            setType("menu");
-                            alert("create a slide - " + slide.type + " type");
+                            setSlide({...slide, type:"menu"});
+                            nextPage();
+                            console.log("create a slide - " + slide.type + " type");
                         }}>menu</Button>
                     </div>
                 </div>
-
-                {type == "" ? <p>nothing</p> : <></>}
-                {type == "menu" ? getMenuLayouts() : <></>}
-                {type == "event" ? getEventLayouts() : <></>}
             </div>
         )
     }
 
-    function fp2() {
+    function formPage2() {
         return (
-            <div className='formPage' id="fp2">
-                <p>page2</p>
+            <div id="formPage2">
+                {slide.type == "menu" ? getMenuLayouts() : <></>}
+                {slide.type == "event" ? getEventLayouts() : <></>}
             </div> 
         )
     }
@@ -94,14 +107,16 @@ export default function Create() {
         <Page>
             <PageHeader title="Create Slide" />
             <form action="" method="POST" onsubmit="" className="formContainer">
-                <p>*insert linear progress MUI component here* page {page}</p>
+                {/* TODO: breadcrumb - implement MUI linear progress component */}
+                <p>page {page}</p>
 
-                {page===1 ? fp1() : <></>}
-
-                {page===2 ? fp2() : <></>}
-
+                <div className='formPage' ref={pageRef}>
+                    {page===1 ? formPage1() : <></>}
+                    {page===2 ? formPage2() : <></>}
+                </div>
+                
                 <div className='paginationContainer'>
-                    <Button id="previousButton" variant="contained" onClick={previousPage}>previous</Button>
+                    <Button id="prevButton" ref={prevButtonRef} variant="contained" onClick={previousPage}>previous</Button>
                     <Button id="nextButton" variant="contained" onClick={nextPage}>next</Button>
                 </div>
             </form>
