@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 
 export default function Create() {
     const [pageRef, prevButtonRef] = [useRef(null),useRef(null)];
+    const [isPrevButtonDisabled, setIsPrevButtonDisabled] = useState(false);
     const [page, setPage] = useState(1);
     const [slide, setSlide] = useState({
         type: "",
@@ -28,6 +29,13 @@ export default function Create() {
     };
 
     useEffect(() => {
+        if(page===1) {
+            //disable prev button
+            setIsPrevButtonDisabled(true);
+        } else {
+            //enable prev button
+            setIsPrevButtonDisabled(false);
+        }
     }, [page]);
 
     //TODO: load possible menu layouts
@@ -116,7 +124,7 @@ export default function Create() {
                 </div>
                 
                 <div className='paginationContainer'>
-                    <Button id="prevButton" ref={prevButtonRef} variant="contained" onClick={previousPage}>previous</Button>
+                    <Button id="prevButton" ref={prevButtonRef} disabled={isPrevButtonDisabled} variant="contained" onClick={previousPage}>previous</Button>
                     <Button id="nextButton" variant="contained" onClick={nextPage}>next</Button>
                 </div>
             </form>
