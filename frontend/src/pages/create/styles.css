@@ -6,12 +6,11 @@
     position: relative;
 }
 .formPage {
-    background-color: red;
-}
-.labelInput {
     display:flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 .labelInput > * {
     margin: 8px;
@@ -21,9 +20,17 @@
     flex-direction: row;
     gap: 8px;
 }
-    
+#formPage3 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+} 
 .paginationContainer {
     position: absolute;
     bottom: 16px;
     right: 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }
