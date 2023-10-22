@@ -77,7 +77,8 @@ app.post("/login", (req, res) => {
 
 app.post("/events", async (req, res) => {
   const { name, description, starttime, endtime } = req.body;
-  const sql = "INSERT INTO event (EventName, Description, EventStartTime, EventEndTime) VALUES ?, ?, ?, ?";
+  const sql =
+    "INSERT INTO event (EventName, Description, EventStartTime, EventEndTime) VALUES ?, ?, ?, ?";
   db.query(
     sql,
     [name, description, starttime, endtime],
@@ -124,7 +125,8 @@ app.get("/events/:id", async (req, res) => {
 app.put("/events/:id", async (req, res) => {
   const { name, description, starttime, endtime } = req.body;
   const id = parseInt(req.params.id);
-  const sql = "UPDATE Event SET EventName = ?, Description = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
+  const sql =
+    "UPDATE Event SET EventName = ?, Description = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
   db.query(sql, [name, description, starttime, endtime, id], (err, results) => {
     if (err) {
       return res.status(400).json({
@@ -176,10 +178,10 @@ app.get("/events", async (req, res) => {
   }
   db.query(sql, [startdate, enddate], (err, results) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: "failed",
         data: {},
-        message: `Failed to retrieve events within the date range, ${err}`,
+        message: `Failed to find events within the date range, ${err}`,
       });
     }
     return res.status(200).json({
