@@ -181,14 +181,12 @@ app.post("/events", async (req, res) => {
     function (err, results) {
       if (err) {
         return res.status(400).json({
-          status: "failed",
-          data: {},
+          events: [],
           message: `Failed to create the event, ${err}`,
         });
       } else {
         return res.status(201).json({
-          status: "success",
-          data: {},
+          events: results,
           message: "Successfully created the event.",
           err,
         });
@@ -204,14 +202,12 @@ app.get("/events/:id", async (req, res) => {
   db.query(sql, [id], (err, results) => {
     if (err) {
       return res.status(404).json({
-        status: "failed",
-        data: {},
+        events: [],
         message: `Failed to find event ${id}: ${err}`,
       });
     }
     return res.status(200).json({
-      status: "success",
-      data: { event: results[0] },
+      events: results,
       message: `Successfully retrieved event with ID ${id}.`,
     });
   });
@@ -226,14 +222,12 @@ app.put("/events/:id", async (req, res) => {
   db.query(sql, [name, description, starttime, endtime, id], (err, results) => {
     if (err) {
       return res.status(400).json({
-        status: "failed",
-        data: {},
+        events: [],
         message: `Failed to update event ${id}: ${err}`,
       });
     }
     return res.status(200).json({
-      status: "success",
-      data: { event: results[0] },
+      events: results,
       message: `Successfully updated event with ID ${id}.`,
     });
   });
@@ -246,14 +240,12 @@ app.delete("/events/:id", async (req, res) => {
   db.query(sql, [id], function (err, results) {
     if (err) {
       res.status(400).json({
-        status: "error",
-        data: { events: results },
+        event: results,
         message: `Failed to delete event ${id}, ${err}`,
       });
     } else {
       res.status(200).json({
-        status: "success",
-        data: {},
+        events: [],
         message: `Successfully deleted event with ID ${id}`,
       });
     }
@@ -264,25 +256,22 @@ app.delete("/events/:id", async (req, res) => {
 app.get("/events", async (req, res) => {
   const { startdate, enddate } = req.query;
   const sql =
-    "SELECT * FROM Event WHERE EventStartTime >= ? AND EventEndTime <= ?";
+    "SELECT * FROM Event WHERE EventStartTime >= ? AND EventStartTime <= ?";
   if (!startdate || !enddate) {
     return res.status(400).json({
-      status: "failed",
-      data: {},
+      events: [],
       message: "Both 'startdate' and 'enddate' query parameters are required.",
     });
   }
   db.query(sql, [startdate, enddate], (err, results) => {
     if (err) {
       return res.status(404).json({
-        status: "failed",
-        data: {},
+        events: [],
         message: `Failed to find events within the date range, ${err}`,
       });
     }
     return res.status(200).json({
-      status: "success",
-      data: { events: results },
+      events: results,
       message: `Successfully retrieved events within the specified date range.`,
     });
   });
