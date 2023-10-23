@@ -26,7 +26,7 @@
     align-items: center;
     justify-content: space-between;
 } 
-.paginationContainer {
+.pageButtonContainer {
     position: absolute;
     bottom: 16px;
     right: 16px;

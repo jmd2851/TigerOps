@@ -5,99 +5,105 @@ import PageHeader from '../../components/PageHeader';
 import { useEffect, useRef, useState } from 'react';
 
 export default function Create() {
-    const [formPage1, formPage2, formPage3, formPage4, formPage5, formPage6, formPage7] = [useRef(null),useRef(null),useRef(null),useRef(null),useRef(null),useRef(null),useRef(null)];
-    const pageRefs = [formPage1, formPage2, formPage3, formPage4, formPage5, formPage6, formPage7];
-    
     const [pageRef, prevButtonRef] = [useRef(null),useRef(null)];
     const [isPrevButtonDisabled, setIsPrevButtonDisabled] = useState(false);
+    const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
 
     //TODO: page -> currentPage
     const [page, setPage] = useState(1);
     const [slide, setSlide] = useState({
         type: "",
+        layout: "",
         data: {},
     });
 
-    const menu = {
-        layout: "",
-        menu: "",
-        date: "",
-    };
-
-    const event = {
-        layout: "",
-        name: "",
-        description: "",
-        date: "",
-        startDate: "",
-        endDate: "",
-    };
+    //menu - menu, date
+    //event - name, description, startDate, endDate
     
     //TODO: disable button for a certain amount of seconds so user cant spam the button...
     useEffect(() => {
         if(page===1) {
-            //disable prev button
-            setIsPrevButtonDisabled(true);
+            setIsPrevButtonDisabled(true); //disable prev button
         } 
         if(page===7) {
             //hide the next button
             //hide the previous button
+            setIsNextButtonDisabled(true);
+            setIsPrevButtonDisabled(true);
         }
         else {
-            //enable prev button
-            setIsPrevButtonDisabled(false);
+            setIsNextButtonDisabled(false);
+            setIsPrevButtonDisabled(false); //enable prev button
         }
     }, [page]);
 
 
-    //TODO: load possible menu layouts
-    function getMenuLayouts() {
-        return  (
-            <div className='formPage' id="formPage3">
-                <p>pick a layout</p>
+    //TODO: load possible event/menu layouts
+    function getLayouts() {
+        switch (slide.type) {
+            case "event": return (
+            <div className='formPage' id="formPage2">
+                <p>pick an event layout</p>
                 <div className="layoutContainer">
                     <Button variant="contained" onClick={() => {
-                        console.log('menu slide - option1');
+                            console.log('set event.layout:"option1"');
                         nextPage({...slide, layout:'option1'});
                     }}>option1</Button>
                     <Button variant="contained" onClick={() => {
-                        console.log('menu slide - option2');
+                            console.log('set event.layout:"option2"');
                         nextPage({...slide, layout:'option2'});
                     }}>option2</Button>
                     <Button variant="contained" onClick={() => {
-                        console.log('menu slide - option3');
+                            console.log('set event.layout:"option3"');
                         nextPage({...slide, layout:'option3'});
                     }}>option3</Button>
                     <Button variant="contained" onClick={() => {
-                        console.log('menu slide - option4');
+                            console.log('set event.layout:"option4"');
                         nextPage({...slide, layout:'option4'});
                     }}>option4</Button>
                 </div>
             </div>
-        );
+            )
+            case "menu": return (
+            <div className='formPage' id="formPage2">
+                <p>pick a menu layout</p>
+                <div className="layoutContainer">
+                    <Button variant="contained" onClick={() => {
+                            console.log('set menu.layout:"option1"');
+                        nextPage({...slide, layout:'option1'});
+                    }}>option1</Button>
+                    <Button variant="contained" onClick={() => {
+                            console.log('set menu.layout:"option2"');
+                        nextPage({...slide, layout:'option2'});
+                    }}>option2</Button>
+                    <Button variant="contained" onClick={() => {
+                            console.log('set menu.layout:"option3"');
+                        nextPage({...slide, layout:'option3'});
+                    }}>option3</Button>
+                    <Button variant="contained" onClick={() => {
+                            console.log('set menu.layout:"option4"');
+                        nextPage({...slide, layout:'option4'});
+                    }}>option4</Button>
+                </div>
+            </div>
+            )
+        }
     }
-
-    //TODO: load possile event layouts
-    function getEventLayouts() {
-        return <p>event layout choices</p>;
-    }
-
     
     function nextPage(slideProps) {
         //TODO: pages.length
         if (page===7) { //max limit on pages
             setPage(7);
         } 
-
-        //TODO: validation
+        else {
+            //TODO: validation
             //get page
             //is the data on this page filled out
             //is the data on this page valid
-        
-        if (slideProps) {
+
             setSlide(slideProps);
+            setPage(page+1);
         }
-        setPage(page+1);
     }
 
     function previousPage() {
@@ -118,22 +124,17 @@ export default function Create() {
                     <p>pick a slide type</p>
                     <div className='radioButtonsContainer'>
                         <Button id="eventButton" variant="contained" onClick={ () => {
-                            console.log('create event slide');
+                            console.log('set slide.type:"event"');
                             nextPage({...slide,type:"event"});
                         }}>event</Button>
                         <Button id="menuButton" variant="contained" onClick={ () => {
-                            console.log('create menu slide');
+                            console.log('set slide.type:"menu"');
                             nextPage({...slide,type:"menu"});
                         }}>menu</Button>
                     </div>
                 </div>
                 )
-            case 2: return (
-                <div className='formPage' id="formPage2">
-                    {slide.type == "menu" ? getMenuLayouts() : <></>}
-                    {slide.type == "event" ? getEventLayouts() : <></>}
-                </div> 
-                )
+            case 2: return getLayouts();
             case 3: return ( 
                 <div className='formPage' id='formPage3'>
                     <div className='slidePreview'>slide preview</div>
@@ -163,11 +164,16 @@ export default function Create() {
             )
             case 7: return (
                 <div className='formPage' id='formPage7'>
-                    {/* add buttons with options - go back to homepage, go to slideshow, etc */}
-                    <div>confirmed - slide created!</div>
+                    <div>
+                        <p>confirmed - slide created!</p>
+                        <div>
+                            <Button variant='contained'>Homepage</Button>
+                            <Button variant='contained'>Live Slideshow</Button>
+                            <Button variant='contained'>Create another slide</Button>
+                        </div>
+                    </div>
                 </div>
             )
-                    
         }
     }
 
@@ -177,6 +183,7 @@ export default function Create() {
             <form action="" method="POST" className="formContainer">
                 {/* TODO: breadcrumb - implement MUI linear progress component */}
 
+                {/* TODO: theres a better way to do this */}
                 <div className='formPage' ref={pageRef}>
                     {page===1 ? formPage(1) : <></>}
                     {page===2 ? formPage(2) : <></>}
@@ -187,10 +194,10 @@ export default function Create() {
                     {page===7 ? formPage(7) : <></>}
                 </div>
                 
-                <div className='paginationContainer'>
+                <div className='pageButtonContainer'>
                     <p>page {page}</p>
                     <Button id="prevButton" ref={prevButtonRef} disabled={isPrevButtonDisabled} variant="contained" onClick={previousPage}>previous</Button>
-                    <Button id="nextButton" variant="contained" onClick={nextPage}>next</Button>
+                    <Button id="nextButton" variant="contained" onClick={nextPage} disabled={isNextButtonDisabled}>next</Button>
                 </div>
             </form>
         </Page>
