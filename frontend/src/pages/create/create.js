@@ -3,6 +3,9 @@ import Button from '@mui/material/Button';
 import Page from '../../components/Page';
 import PageHeader from '../../components/PageHeader';
 import { useEffect, useRef, useState } from 'react';
+import Stack from '@mui/material/Stack';
+import getUserOptions from './getUserOptions';
+import getSlideOptions from './getSlideOptions';
 
 export default function Create() {
     const [pageRef, prevButtonRef] = [useRef(null),useRef(null)];
@@ -14,11 +17,11 @@ export default function Create() {
     const [slide, setSlide] = useState({
         type: "",
         layout: "",
-        data: {},
+        data: {
+            //menu - menu, date
+            //event - name, description, startDate, endDate
+        },
     });
-
-    //menu - menu, date
-    //event - name, description, startDate, endDate
     
     //TODO: disable button for a certain amount of seconds so user cant spam the button...
     useEffect(() => {
@@ -138,7 +141,7 @@ export default function Create() {
             case 3: return ( 
                 <div className='formPage' id='formPage3'>
                     <div className='slidePreview'>slide preview</div>
-                    <div className='slideEdit'>slide edits</div>
+                    <div className='slideEdit'> {getSlideOptions(slide.type)} </div>
                 </div>
                 )
             case 4: return (
@@ -150,10 +153,11 @@ export default function Create() {
                 <div className='formPage' id='formPage5'>
                     <p>slide settings</p>
                     <div className='settingsContainer'>
-                        <div className='labelGroup'>
-                            <label>label here</label>
+                        {/* TODO: implement slide settings */}
+                        <Stack direction={'row'} spacing={2}>
+                            <label>slide title</label>
                             <input type='text'></input>
-                        </div>
+                        </Stack>
                     </div>
                 </div>
                 )
@@ -166,11 +170,7 @@ export default function Create() {
                 <div className='formPage' id='formPage7'>
                     <div>
                         <p>confirmed - slide created!</p>
-                        <div>
-                            <Button variant='contained'>Homepage</Button>
-                            <Button variant='contained'>Live Slideshow</Button>
-                            <Button variant='contained'>Create another slide</Button>
-                        </div>
+                        {getUserOptions()}
                     </div>
                 </div>
             )
@@ -182,16 +182,9 @@ export default function Create() {
             <PageHeader title="Create Slide" />
             <form action="" method="POST" className="formContainer">
                 {/* TODO: breadcrumb - implement MUI linear progress component */}
-
-                {/* TODO: theres a better way to do this */}
+                
                 <div className='formPage' ref={pageRef}>
-                    {page===1 ? formPage(1) : <></>}
-                    {page===2 ? formPage(2) : <></>}
-                    {page===3 ? formPage(3) : <></>}
-                    {page===4 ? formPage(4) : <></>}
-                    {page===5 ? formPage(5) : <></>}
-                    {page===6 ? formPage(6) : <></>}
-                    {page===7 ? formPage(7) : <></>}
+                    {formPage(page)}
                 </div>
                 
                 <div className='pageButtonContainer'>
