@@ -12,13 +12,15 @@ export default function Create() {
     const [isPrevButtonDisabled, setIsPrevButtonDisabled] = useState(false);
     const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
 
+    const [currentPage, setCurrentPage] = useState(<p>n/a</p>);
+
     //TODO: page -> currentPage
     const [page, setPage] = useState(1);
     const [slide, setSlide] = useState({
         type: "",
         layout: "",
         data: {
-            //menu - menu, date
+            //menu - menuItems, date
             //event - name, description, startDate, endDate
         },
     });
@@ -41,56 +43,26 @@ export default function Create() {
     }, [page]);
 
 
-    //TODO: load possible event/menu layouts
-    function getLayouts() {
-        switch (slide.type) {
-            case "event": return (
-            <div className='formPage' id="formPage2">
-                <p>pick an event layout</p>
-                <div className="layoutContainer">
-                    <Button variant="contained" onClick={() => {
-                            console.log('set event.layout:"option1"');
-                        nextPage({...slide, layout:'option1'});
-                    }}>option1</Button>
-                    <Button variant="contained" onClick={() => {
-                            console.log('set event.layout:"option2"');
-                        nextPage({...slide, layout:'option2'});
-                    }}>option2</Button>
-                    <Button variant="contained" onClick={() => {
-                            console.log('set event.layout:"option3"');
-                        nextPage({...slide, layout:'option3'});
-                    }}>option3</Button>
-                    <Button variant="contained" onClick={() => {
-                            console.log('set event.layout:"option4"');
-                        nextPage({...slide, layout:'option4'});
-                    }}>option4</Button>
-                </div>
-            </div>
-            )
-            case "menu": return (
-            <div className='formPage' id="formPage2">
-                <p>pick a menu layout</p>
-                <div className="layoutContainer">
-                    <Button variant="contained" onClick={() => {
-                            console.log('set menu.layout:"option1"');
-                        nextPage({...slide, layout:'option1'});
-                    }}>option1</Button>
-                    <Button variant="contained" onClick={() => {
-                            console.log('set menu.layout:"option2"');
-                        nextPage({...slide, layout:'option2'});
-                    }}>option2</Button>
-                    <Button variant="contained" onClick={() => {
-                            console.log('set menu.layout:"option3"');
-                        nextPage({...slide, layout:'option3'});
-                    }}>option3</Button>
-                    <Button variant="contained" onClick={() => {
-                            console.log('set menu.layout:"option4"');
-                        nextPage({...slide, layout:'option4'});
-                    }}>option4</Button>
-                </div>
-            </div>
-            )
-        }
+    //TODO: hook up to backend
+    function getSlideLayouts() {
+        const menuLayouts = ['option1', 'option2', 'option3'];
+        const eventLayouts = ['option1', 'option2', 'option3', 'option4'];
+
+        let options = [];
+        {slide.type==="event" ? options=eventLayouts : options=menuLayouts}
+
+        return (
+            <Stack direction={'row'} spacing={2}>
+                {options.map(option => {
+                    return (
+                        <Button variant="contained" onClick={() => {
+                            console.log('set event.layout: ' +option);
+                            nextPage({...slide, layout:option});
+                        }}>{option}</Button>
+                    )
+                })}
+            </Stack>
+        )
     }
     
     function nextPage(slideProps) {
@@ -100,10 +72,6 @@ export default function Create() {
         } 
         else {
             //TODO: validation
-            //get page
-            //is the data on this page filled out
-            //is the data on this page valid
-
             setSlide(slideProps);
             setPage(page+1);
         }
@@ -111,7 +79,6 @@ export default function Create() {
 
     function previousPage() {
         //TODO: check if there are values in the current page? yes- save into respective slide or event obj
-
         if(page===1) {
             setPage(1);
         } else {
@@ -119,36 +86,27 @@ export default function Create() {
         }
     }
 
-    //TODO: export this helper function
-    function formPage(pageNumber) {
+
+    const formPageTitles = ['pick a slide type', 'pick a layout', 'add content', 'preview', 'slide settings', 'final preview', 'slide created!'];
+
+    // TODO: refactor
+    function getFormPage(pageNumber) {
         switch (pageNumber) {
             case 1: return (
-                <div className='formPage' id="formPage1">
-                    <p>pick a slide type</p>
-                    <div className='radioButtonsContainer'>
-                        <Button id="eventButton" variant="contained" onClick={ () => {
-                            console.log('set slide.type:"event"');
-                            nextPage({...slide,type:"event"});
-                        }}>event</Button>
-                        <Button id="menuButton" variant="contained" onClick={ () => {
-                            console.log('set slide.type:"menu"');
-                            nextPage({...slide,type:"menu"});
-                        }}>menu</Button>
-                    </div>
+                <div className='radioButtonsContainer'>
+                    <Button id="eventButton" variant="contained" onClick={ () => {
+                        console.log('set slide.type:"event"');
+                        nextPage({...slide,type:"event"});
+                    }}>event</Button>
+                    <Button id="menuButton" variant="contained" onClick={ () => {
+                        console.log('set slide.type:"menu"');
+                        nextPage({...slide,type:"menu"});
+                    }}>menu</Button>
                 </div>
-                )
-            case 2: return getLayouts();
-            case 3: return ( 
-                <div className='formPage' id='formPage3'>
-                    <div className='slidePreview'>slide preview</div>
-                    <div className='slideEdit'> {getSlideOptions(slide.type)} </div>
-                </div>
-                )
-            case 4: return (
-                <div className='formPage' id='formPage4'>
-                    <div>silde preview big</div>
-                </div>
-                )
+                );
+            case 2: return getSlideLayouts();
+            case 3: return getSlideOptions(slide.type);
+            case 4: return <div>silde preview with content</div>;
             case 5: return (
                 <div className='formPage' id='formPage5'>
                     <p>slide settings</p>
@@ -160,20 +118,9 @@ export default function Create() {
                         </Stack>
                     </div>
                 </div>
-                )
-            case 6: return (
-                <div className='formPage' id='formPage6'>
-                    <div>preview with settings</div>
-                </div>
-            )
-            case 7: return (
-                <div className='formPage' id='formPage7'>
-                    <div>
-                        <p>confirmed - slide created!</p>
-                        {getUserOptions()}
-                    </div>
-                </div>
-            )
+                );
+            case 6: return <div>slide preview with settings</div>;
+            case 7: return getUserOptions();
         }
     }
 
@@ -184,7 +131,8 @@ export default function Create() {
                 {/* TODO: breadcrumb - implement MUI linear progress component */}
                 
                 <div className='formPage' ref={pageRef}>
-                    {formPage(page)}
+                    <p>{formPageTitles[page-1]}</p>
+                    {getFormPage(page)}
                 </div>
                 
                 <div className='pageButtonContainer'>

@@ -9,18 +9,15 @@ export default function getSlideOptions(type) {
     type==="event" ? options=eventOptions: options=menuOptions
 
     return (
-        <div>
-            <p>slide type: {type}</p>
-            <Stack direction={'column'} spacing={1}>
-                {options.map(option => {
-                    return (
-                        <Stack direction={'row'} spacing={2}>
-                            <label>{option}</label>
-                            <input type='text'></input>
-                        </Stack>
-                    )
-                })}
-            </Stack>
-        </div>
+        <Stack direction={'column'} spacing={1}>
+            {options.map(option => {
+                return (
+                    <Stack direction={'row'} spacing={2}>
+                        <label>{option}</label>
+                        <input type='text'></input>
+                    </Stack>
+                )
+            })}
+        </Stack>
     );
 }
