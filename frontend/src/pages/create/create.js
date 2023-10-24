@@ -107,12 +107,11 @@ export default function Create() {
 
     return (
         <Page>
-            <PageHeader title="Create Slide" showMenu={false} />
+            <PageHeader title={formPageTitles[page-1]} showMenu={false} />
             <form action="" method="POST" className="formContainer">
                 {/* TODO: breadcrumb - implement MUI linear progress component */}
                 
                 <Stack ref={pageRef} direction={'column'} spacing={2} sx={{textAlign: 'center'}}>
-                    <p>{formPageTitles[page-1]}</p>
                     {getFormPage(page)} 
                 </Stack>
                 
