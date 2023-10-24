@@ -4,15 +4,12 @@ import Page from '../../components/Page';
 import PageHeader from '../../components/PageHeader';
 import { useEffect, useRef, useState } from 'react';
 import Stack from '@mui/material/Stack';
+import Container from '@mui/material/Container';
 import getUserOptions from './getUserOptions';
 import getSlideOptions from './getSlideOptions';
 
 export default function Create() {
     const [pageRef, prevButtonRef] = [useRef(null),useRef(null)];
-    const [isPrevButtonDisabled, setIsPrevButtonDisabled] = useState(false);
-    const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
-
-    const [currentPage, setCurrentPage] = useState(<p>n/a</p>);
 
     //TODO: page -> currentPage
     const [page, setPage] = useState(1);
@@ -27,19 +24,6 @@ export default function Create() {
     
     //TODO: disable button for a certain amount of seconds so user cant spam the button...
     useEffect(() => {
-        if(page===1) {
-            setIsPrevButtonDisabled(true); //disable prev button
-        } 
-        if(page===7) {
-            //hide the next button
-            //hide the previous button
-            setIsNextButtonDisabled(true);
-            setIsPrevButtonDisabled(true);
-        }
-        else {
-            setIsNextButtonDisabled(false);
-            setIsPrevButtonDisabled(false); //enable prev button
-        }
     }, [page]);
 
 
@@ -55,7 +39,7 @@ export default function Create() {
             <Stack direction={'row'} spacing={2}>
                 {options.map(option => {
                     return (
-                        <Button variant="contained" onClick={() => {
+                        <Button className="formPageButton" variant="contained" onClick={() => {
                             console.log('set event.layout: ' +option);
                             nextPage({...slide, layout:option});
                         }}>{option}</Button>
@@ -93,30 +77,27 @@ export default function Create() {
     function getFormPage(pageNumber) {
         switch (pageNumber) {
             case 1: return (
-                <div className='radioButtonsContainer'>
-                    <Button id="eventButton" variant="contained" onClick={ () => {
+                <Stack direction={'row'} spacing={2}>
+                    <Button id="eventButton" variant="contained" className='formPageButton' onClick={ () => {
                         console.log('set slide.type:"event"');
                         nextPage({...slide,type:"event"});
                     }}>event</Button>
-                    <Button id="menuButton" variant="contained" onClick={ () => {
+                    <Button id="menuButton" variant="contained" className='formPageButton' onClick={ () => {
                         console.log('set slide.type:"menu"');
                         nextPage({...slide,type:"menu"});
                     }}>menu</Button>
-                </div>
+                </Stack>
                 );
             case 2: return getSlideLayouts();
             case 3: return getSlideOptions(slide.type);
             case 4: return <div>silde preview with content</div>;
             case 5: return (
-                <div className='formPage' id='formPage5'>
-                    <p>slide settings</p>
-                    <div className='settingsContainer'>
-                        {/* TODO: implement slide settings */}
-                        <Stack direction={'row'} spacing={2}>
-                            <label>slide title</label>
-                            <input type='text'></input>
-                        </Stack>
-                    </div>
+                <div className='settingsContainer'>
+                    {/* TODO: implement slide settings */}
+                    <Stack direction={'row'} spacing={2}>
+                        <label>slide title</label>
+                        <input type='text'></input>
+                    </Stack>
                 </div>
                 );
             case 6: return <div>slide preview with settings</div>;
@@ -126,19 +107,19 @@ export default function Create() {
 
     return (
         <Page>
-            <PageHeader title="Create Slide" />
+            <PageHeader title="Create Slide" showMenu={false} />
             <form action="" method="POST" className="formContainer">
                 {/* TODO: breadcrumb - implement MUI linear progress component */}
                 
-                <div className='formPage' ref={pageRef}>
+                <Stack ref={pageRef} direction={'column'} spacing={2} sx={{textAlign: 'center'}}>
                     <p>{formPageTitles[page-1]}</p>
-                    {getFormPage(page)}
-                </div>
+                    {getFormPage(page)} 
+                </Stack>
                 
                 <div className='pageButtonContainer'>
                     <p>page {page}</p>
-                    <Button id="prevButton" ref={prevButtonRef} disabled={isPrevButtonDisabled} variant="contained" onClick={previousPage}>previous</Button>
-                    <Button id="nextButton" variant="contained" onClick={nextPage} disabled={isNextButtonDisabled}>next</Button>
+                    <Button ref={prevButtonRef} disabled={page===1 || page===7 ? true : false} variant="contained" onClick={previousPage}>previous</Button>
+                    <Button id="nextButton" variant="contained" onClick={nextPage} disabled={page===7 ? true : false }>next</Button>
                 </div>
             </form>
         </Page>
