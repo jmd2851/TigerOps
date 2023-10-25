@@ -1,29 +1,26 @@
 import { Container } from '@mui/material';
 import Stack from '@mui/material/Stack';
 
-// TODO: MUI date picker component
-const menuOptions = ['date', 'menu items'];
-const eventOptions = ['title', 'subtitle', 'label', 'description'];
+//TODO: whitelist, automatic delete, tags
+const settings = ['title','start date', 'end date'];
 
-export default function getSlideOptions(type) {
-    let options = [];
-    type==="event" ? options=eventOptions: options=menuOptions
-
+export default function getSlideSettings() {
     return (
-       <Stack direction={'row'} spacing={2}>
+        <Stack direction={'row'} spacing={2}>
             <Container sx={{backgroundColor:'lightgrey', height:'500px'}}>
                 slide preview here
             </Container>
+            
             <Stack direction={'column'} spacing={1}>
-                {options.map(option => {
+                {settings.map(setting => {
                     return (
                         <Stack direction={'row'} spacing={2}>
-                            <label>{option}</label>
+                            <label>{setting}</label>
                             <input type='text'></input>
                         </Stack>
                     )
                 })}
             </Stack>
-       </Stack>
-    );
+        </Stack>
+    )
 }
