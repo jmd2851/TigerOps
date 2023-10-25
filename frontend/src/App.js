@@ -10,6 +10,7 @@ import Events from "./pages/events/events";
 import Calendar from "./pages/calendar/calendar";
 import Help from "./pages/help/help";
 import Configuration from "./pages/configuration/configuration";
+import Create from "./pages/create/create";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -37,6 +38,7 @@ const App = () => {
       <Route exact path="/calendar" element={<Calendar />} />
       <Route exact path="/help" element={<Help />} />
       <Route exact path="/configuration" element={<Configuration />} />
+      <Route exact path="/create" element={<Create />} />
     </Routes>
   );
 };
