@@ -16,7 +16,7 @@ import Switch from '@mui/material/Switch';
 
 export default function Create() {
     // TODO: export into debugger dev package
-    const [dev, setdev] = useState(true);
+    const [dev, setdev] = useState(false);
 
     const [pageRef, slideRef] = [useRef(null),useRef(null)];
 
@@ -120,14 +120,19 @@ export default function Create() {
                 <div className='pageButtonContainer'>
                     {dev ? <p>page {page}</p> : <></>}
                     
-                    <Button variant="contained" disabled={page===1 || page===6 ? true : false} onClick={() =>{
-                        // TODO: check if there are values in the current page
-                        previousPage();
-                    }}>previous</Button>
+                    {dev || page===2 || page===3 || page===4 || page===5 ? 
+                        <Button variant="contained" disabled={page===1 || page===6 ? true : false} onClick={() =>{
+                            // TODO: check if there are values in the current page
+                            previousPage();
+                        }}>previous</Button>
+                    :
+                        //dont show on page 1 and 6
+                        <></>
+                    }
 
-                    {dev ? 
+                    {dev || page===3 || page===4 || page===5 ? 
                         <Button variant="contained" disabled={page===6 ? true : false } onClick={() => {
-                            // TODO: input validation
+                            // TODO: input validation page3
                             nextPage();
                         }}>next</Button> 
                     : <></> }
