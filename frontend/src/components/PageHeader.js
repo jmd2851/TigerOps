@@ -12,7 +12,7 @@ export default function PageHeader(props) {
     return (
         <div className='eventsHeader'>
             <Title title={props.title} />
-            <div className='iconContainer'>
+            {/* <div className='iconContainer'>
                 <div className='iconGroup'>
                     <Button variant="contained" 
                         onClick={() => alert('add button clicked')}
@@ -34,7 +34,7 @@ export default function PageHeader(props) {
                         <p>delete</p>
                     </Button>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

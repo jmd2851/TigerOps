@@ -9,7 +9,15 @@ import getUserOptions from './getUserOptions';
 import getSlideOptions from './getSlideOptions';
 import getSlideSettings from './getSlideSettings';
 
+// TODO: export into debugger dev package
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+
 export default function Create() {
+    // TODO: export into debugger dev package
+    const [dev, setdev] = useState(true);
+
     const [pageRef, slideRef] = [useRef(null),useRef(null)];
 
     //TODO: page -> currentPage
@@ -23,10 +31,11 @@ export default function Create() {
     });
     
     //TODO: disable button for a X seconds so user cant spam the button
+    // TODO: fade animation on page change
     useEffect(() => {
     }, [page]);
     
-    function nextPage() { page===7 ? setPage(7) : setPage(page+1); } //max limit of 7 pages
+    function nextPage() { page===6 ? setPage(6) : setPage(page+1); } //max limit of 6 pages
     function previousPage() { page===1 ? setPage(1) : setPage(page-1); }
 
     //TODO: hook up to backend
@@ -58,7 +67,20 @@ export default function Create() {
         const slideTypes = ['menu', 'event'];
 
         return (
-            <Stack direction={'row'} spacing={2}>
+            <Stack direction={'row'} spacing={1}>
+
+            <div className='dev-container'>
+                <div className='dev-pic'></div>
+                <Container>
+                    <Stack className='dev-settings' direction={'column'} spacing={2}>
+                        <p className='dev-title'>dev settings</p>
+                        <Button onClick={() => { setdev(!dev) } }>
+                            <p className='dev-label' style={ dev ? {color:'orange'} : {color:'grey'}}>{dev? 'debugging' : '😴🏖️😎🌄🌴' }</p>
+                        </Button>
+                    </Stack>
+                </Container>
+            </div>
+
                 {slideTypes.map(slideType => {
                     return (
                         <Button variant="contained" className='formPageButton' onClick={ () => {
@@ -72,7 +94,7 @@ export default function Create() {
         )
     }
 
-    const formPageTitles = ['pick a slide type', 'pick a layout', 'add content', 'slide preview', 'slide settings', 'final preview', 'slide created!'];
+    const formPageTitles = ['pick a slide type', 'pick a layout', 'add some content', 'slide settings', 'final preview', 'slide created!'];
 
     // TODO: refactor
     function getFormPage(pageNumber) {
@@ -80,19 +102,9 @@ export default function Create() {
             case 1: return getSlideTypes();
             case 2: return getSlideLayouts();
             case 3: return getSlideOptions(slide.type);
-            case 4: return (
-                <Stack direction={'row'} spacing={2} sx={{backgroundColor:'lightgray'}}>
-                    {/* this is the slide itself */}
-                    <Stack ref={slideRef} sx={{height: '500px', backgroundColor: 'lightgray'}}>
-                        <p>slide type: {slide.type}</p>
-                        <p>layout option: {slide.layout}</p>
-                        {/* <p>data: {slide.data.length}</p> */}
-                    </Stack>
-                </Stack>
-            );
-            case 5: return getSlideSettings();
-            case 6: return <div>slide preview with settings</div>;
-            case 7: return getUserOptions();
+            case 4: return getSlideSettings();
+            case 5: return <div>slide preview with settings</div>;
+            case 6: return getUserOptions();
         }
     }
 
@@ -107,10 +119,19 @@ export default function Create() {
                 </Stack>
                 
                 <div className='pageButtonContainer'>
-                    <p>page {page}</p>
-                    {/* TODO: check if there are values in the current page? yes- save into respective slide or event obj */}
-                    <Button disabled={page===1 || page===7 ? true : false} variant="contained" onClick={previousPage}>previous</Button>
-                    <Button id="nextButton" variant="contained" onClick={nextPage} disabled={page===7 ? true : false }>next</Button>
+                    {dev ? <p>page {page}</p> : <></>}
+                    
+                    <Button variant="contained" disabled={page===1 || page===6 ? true : false} onClick={() =>{
+                        // TODO: check if there are values in the current page
+                        previousPage();
+                    }}>previous</Button>
+
+                    {dev ? 
+                        <Button variant="contained" disabled={page===6 ? true : false } onClick={() => {
+                            // TODO: input validation
+                            nextPage();
+                        }}>next</Button> 
+                    : <></> }
                 </div>
             </form>
         </Page>

@@ -14,6 +14,7 @@ export default function getSlideOptions(type) {
             <Container sx={{backgroundColor:'lightgrey', height:'500px'}}>
                 slide preview here
             </Container>
+            
             <Stack direction={'column'} spacing={1}>
                 {options.map(option => {
                     return (

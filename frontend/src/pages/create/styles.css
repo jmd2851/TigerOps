@@ -1,3 +1,35 @@
+.dev-container {
+    position: fixed;
+    bottom: 0;
+    right: 32px;
+    z-index: 1;
+    padding-bottom: 32px;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0 ;
+    width: 180px;
+    border: 1px solid black;
+}
+.dev-pic {
+    border-radius: 5px 5px 0 0 ;
+    background-image: url(https://i.pinimg.com/564x/0d/c3/91/0dc391d9ec7ad7ed9d14acd2b907d90c.jpg);
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 80px;
+    width: 150px;
+}
+.dev-settings {
+    padding: 0 10px;
+    text-align: center;
+}
+.dev-title {
+    font-weight: bolder;
+}
+.dev-label {
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
 .formContainer {
     /* border: 1px solid black; */
     padding: 8px 16px;
