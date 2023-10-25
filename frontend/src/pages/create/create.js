@@ -68,19 +68,6 @@ export default function Create() {
 
         return (
             <Stack direction={'row'} spacing={1}>
-
-            <div className='dev-container'>
-                <div className='dev-pic'></div>
-                <Container>
-                    <Stack className='dev-settings' direction={'column'} spacing={2}>
-                        <p className='dev-title'>dev settings</p>
-                        <Button onClick={() => { setdev(!dev) } }>
-                            <p className='dev-label' style={ dev ? {color:'orange'} : {color:'grey'}}>{dev? 'debugging' : '😴🏖️😎🌄🌴' }</p>
-                        </Button>
-                    </Stack>
-                </Container>
-            </div>
-
                 {slideTypes.map(slideType => {
                     return (
                         <Button variant="contained" className='formPageButton' onClick={ () => {
@@ -110,6 +97,18 @@ export default function Create() {
 
     return (
         <Page>
+            <div className='dev-container'>
+                <div className='dev-pic'></div>
+                <Container>
+                    <Stack className='dev-settings' direction={'column'} spacing={2}>
+                        <p className='dev-title'>dev settings</p>
+                        <Button onClick={() => { setdev(!dev) } }>
+                            <p className='dev-label' style={ dev ? {color:'orange'} : {color:'grey'}}>{dev? 'debugging' : '😴🏖️😎🌄🌴' }</p>
+                        </Button>
+                    </Stack>
+                </Container>
+            </div>
+
             <PageHeader title={formPageTitles[page-1]} showMenu={false} />
             <form action="" method="POST" className="formContainer">
                 {/* TODO: breadcrumb - implement MUI linear progress component */}
