@@ -17,6 +17,7 @@ import Switch from '@mui/material/Switch';
 export default function Create() {
     // TODO: export into debugger dev package
     const [dev, setdev] = useState(false);
+    const [showDev, setShowDev] = useState(true);
 
     const [pageRef, slideRef] = [useRef(null),useRef(null)];
 
@@ -97,17 +98,22 @@ export default function Create() {
 
     return (
         <Page>
-            <div className='dev-container'>
-                <div className='dev-pic'></div>
-                <Container>
-                    <Stack className='dev-settings' direction={'column'} spacing={2}>
-                        <p className='dev-title'>dev settings</p>
-                        <Button onClick={() => { setdev(!dev) } }>
-                            <p className='dev-label' style={ dev ? {color:'orange'} : {color:'grey'}}>{dev? 'debugging' : '😴🏖️😎🌄🌴' }</p>
-                        </Button>
-                    </Stack>
-                </Container>
-            </div>
+            {showDev ? 
+                <div className='dev-container'>
+                    <Button className='dev-x' onClick={() => setShowDev(false)}>
+                        <p className='dev-x-label'>x</p>
+                    </Button>
+                    <div className='dev-pic'></div>
+                    <Container>
+                        <Stack className='dev-settings' direction={'column'} spacing={2}>
+                            <p className='dev-title'>dev settings</p>
+                            <Button onClick={() => { setdev(!dev) } }>
+                                <p className='dev-label' style={ dev ? {color:'orange'} : {color:'grey'}}>{dev? 'debugging' : '😴🏖️😎🌄🌴' }</p>
+                            </Button>
+                        </Stack>
+                    </Container>
+                </div>
+            : <></>}
 
             <PageHeader title={formPageTitles[page-1]} showMenu={false} />
             <form action="" method="POST" className="formContainer">
