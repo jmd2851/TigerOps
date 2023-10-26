@@ -29,17 +29,19 @@ export default function Create() {
                         }}>menu</Button>
                     </Stack>
                     {type===""? <></> : 
-                        //render the menu/event options
-                        options.map(option => {
-                            return (
-                                <Stack direction={'row'} spacing={2}>
-                                    <Typography variant="h5">{option}</Typography>
-                                    <TextField variant="outlined" size="small" />
-                                </Stack>
-                            )
-                        })
+                        <Stack direction={'column'} spacing={2}>
+                            {/* render the menu/event options */}
+                            {options.map(option => {
+                                return (
+                                    <Stack direction={'row'} spacing={2}>
+                                        <Typography variant="h5">{option}</Typography>
+                                        <TextField variant="outlined" size="small" />
+                                    </Stack>
+                                )
+                            })}
+                            <Button variant="contained" sx={{width:'40%'}}>submit</Button>
+                        </Stack>
                     }
-                    <Button variant="contained" sx={{width:'40%'}}>submit</Button>
                 </Stack>
             </form>
         </Page>
