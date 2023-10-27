@@ -2,10 +2,9 @@
     /* font-style font-variant font-weight font-size/line-height font-family */
     font: normal normal bold 1.9em Arial, sans-serif;
     text-transform: capitalize;
-    padding: 8px 0;
 }
 .bodyText {
-    font: normal normal normal 0.9em Arial, sans-serif;
+    font: normal normal normal 0.85em Arial, sans-serif;
     text-transform: lowercase;
     color: var(--textDark);
 }

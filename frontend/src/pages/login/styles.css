@@ -10,11 +10,11 @@
     flex-direction: row;
     box-shadow: 1px 1px 5px var(--boxShadow);
     border-radius: 10px;
-    min-height: 470px;
-    width: 840px;
+    min-height: 425px;
+    width: 780px;
 }
 .loginContainer > * {
-    padding: 50px;
+    padding: 20px 40px;
     width: 50%;
 }
 /* login - left side */
@@ -22,11 +22,8 @@
     border-radius: 10px 0 0 10px;
     background-color: var(--primary);
 }
-.login > div {
-    padding: 5px 0;
-}
-.header > p.bodyText {
-    padding: 0 24% 8px 0;
+.header p.bodyText {
+    margin-top: -20px;
 }
 .forgotPasswordContainer > p {
     text-align: left;
@@ -36,7 +33,7 @@
 }
 /* visitor - right side */
 .visitor {
-    padding-top: 16%;
+    padding-top: 8%;
 }
 .visitorButtonContainer {
     text-align: center;
