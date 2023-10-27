@@ -1,4 +1,11 @@
 .page {
-    padding-top: 120px;
-    width: 60%;
+    display:grid;
+    grid-template-columns: 1fr 3fr;
+    height: 100vh;
+}
+.navBar {
+}
+.content {
+    padding-top: 80px;
+    margin: 0 auto;
 }
