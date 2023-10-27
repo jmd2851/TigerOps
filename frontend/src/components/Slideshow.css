@@ -1,8 +1,12 @@
+.slideshowContainer, .slideshow {
+    border-radius: 10px;
+}
 .slideshowContainer {
     border: 1px solid black;
-    border-radius: 5px;
-    height: 600px;
-    width: 800px;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
+    margin-bottom: 80px;
+    height: 420px;
+    width: 900px;
     display: flex;
     flex-direction: column;
     align-self: center;
