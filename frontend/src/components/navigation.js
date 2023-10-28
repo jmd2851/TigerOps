@@ -1,12 +1,29 @@
 import React from "react";
 import "./navigation.css";
 import { Link } from "react-router-dom";
+import AppContext from "../AppContext";
+import axios from "axios";
 
 export default function Navigation() {
+  const { user, setUser } = React.useContext(AppContext);
+
+  const role = user ? user.UserRole : "Guest";
+
+  const handleLogout = () => {
+    axios
+      .post("http://localhost:4000/logout", {}, { withCredentials: true })
+      .then((response) => {
+        setUser(null);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="navContainer">
       <div className="nav">
-        <h1 className="User">Admin</h1>
+        <h1 className="User">{role.toUpperCase()}</h1>
         <div className="calendarOptions">
           <div className="topOptions">
             <h2 className="links">
@@ -28,11 +45,16 @@ export default function Navigation() {
         <h2 className="links">
           <Link to="/help">Help </Link>
         </h2>
-        <div className="bottomOptions">
-          <h2 className="links">
-            <Link to="/events"> Log Out </Link>
-          </h2>
-        </div>
+
+        {user != null && (
+          <div className="bottomOptions">
+            <h2 className="links">
+              <Link to="/events" onClick={handleLogout}>
+                Log Out
+              </Link>
+            </h2>
+          </div>
+        )}
       </div>
     </div>
   );
