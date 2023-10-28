@@ -37,10 +37,7 @@ const App = () => {
         <Route exact path="/calendar" element={<Calendar />} />
         <Route exact path="/help" element={<Help />} />
         <Route exact path="/configuration" element={<Configuration />} />
-<<<<<<< HEAD
         <Route exact path="/create" element={<Create />} />
-=======
->>>>>>> main
       </Routes>
     </AppContext.Provider>
   );
