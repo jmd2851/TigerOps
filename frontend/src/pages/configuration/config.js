@@ -1,6 +1,8 @@
 import './styles.css';
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
+import Page from '../../components/Page';
+import PageHeader from '../../components/PageHeader';
 import Button from '@mui/material/Button';
 import { DataGrid } from '@mui/x-data-grid';
 import TextField from '@mui/material/TextField';
@@ -161,7 +163,7 @@ function Permissions() {
                   <TextField autoFocus margin="dense" className="firstName" label="First Name" variant="standard"/>
               </div>
               <div className='lastNameField'>
-                  <TextField autoFocus margin="dense" className="lasttName" label="Last Name" variant="standard"/>
+                  <TextField autoFocus margin="dense" className="lastName" label="Last Name" variant="standard"/>
               </div>
               <div className='emailField'>
                   <TextField autoFocus margin="dense" className="email" label="Email" variant="standard"/>
@@ -198,11 +200,8 @@ const columns = [
 
   export default function DataTable() {
     return (
-    <div>
-        <h1 className='configTitle'>
-            Configuration 
-        </h1>
-    
+    <Page>
+        <PageHeader title="Configuration"/>
         <div className='configBorder'>
             <h1 className='userListTitle'>
                 User List
@@ -222,8 +221,7 @@ const columns = [
             <div className = 'addAccountPosition'>
                 <AddAccount/>
             </div>
-
         </div>
-      </div>
+      </Page>
     );
   }
