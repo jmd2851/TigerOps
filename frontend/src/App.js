@@ -11,6 +11,7 @@ import Calendar from "./pages/calendar/calendar";
 import Help from "./pages/help/help";
 import Configuration from "./pages/configuration/configuration";
 import Create from "./pages/create/create";
+import AppContext from "./AppContext";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -29,17 +30,16 @@ const App = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route
-        path="/login"
-        element={user ? <Navigate to="/calendar" replace /> : <Login />}
-      />
-      <Route exact path="/events" element={<Events />} />
-      <Route exact path="/calendar" element={<Calendar />} />
-      <Route exact path="/help" element={<Help />} />
-      <Route exact path="/configuration" element={<Configuration />} />
-      <Route exact path="/create" element={<Create />} />
-    </Routes>
+    <AppContext.Provider value={{ user, setUser }}>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route exact path="/events" element={<Events />} />
+        <Route exact path="/calendar" element={<Calendar />} />
+        <Route exact path="/help" element={<Help />} />
+        <Route exact path="/configuration" element={<Configuration />} />
+        <Route exact path="/create" element={<Create />} />
+      </Routes>
+    </AppContext.Provider>
   );
 };
 
