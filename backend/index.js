@@ -68,22 +68,15 @@ db.query(
       // Admin account doesn't exist, so insert it
       bcrypt.genSalt(10, (err, salt) => {
         if (err) {
-          console.log(err);
           return;
         }
         bcrypt.hash("tigerops", salt, (err, hash) => {
           if (err) {
-            console.log(err);
             return;
           }
           db.query(
             `INSERT INTO User (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
-            ["test", "test", adminEmail, hash, "admin"],
-            function (err, results) {
-              if (err) {
-                console.log(err);
-              }
-            }
+            ["test", "test", adminEmail, hash, "admin"]
           );
         });
       });
@@ -114,8 +107,7 @@ app.post("/logout", (req, res) => {
     req.session.destroy((err) => {
       if (err) {
         res.status(500).json({
-          message: `Internal error ${err}.`,
-          err,
+          message: `Internal error ${err}`,
         });
       } else {
         res.clearCookie("connect.sid", {
@@ -146,7 +138,7 @@ app.post("/login", (req, res) => {
     function (err, result) {
       if (err) {
         res.status(500).json({
-          message: `Internal Error $err`,
+          message: `Internal Error ${err}`,
         });
       }
       if (result.length > 0) {
@@ -183,7 +175,7 @@ app.post("/events", async (req, res) => {
       } else {
         return res.status(201).json({
           events: results,
-          message: "Successfully created the event.",
+          message: "Successfully created the event",
           err,
         });
       }
@@ -199,12 +191,12 @@ app.get("/events/:id", async (req, res) => {
     if (err) {
       return res.status(404).json({
         events: [],
-        message: `Failed to find event ${id}: ${err}`,
+        message: `Failed to find event ${id}, ${err}`,
       });
     }
     return res.status(200).json({
       events: results,
-      message: `Successfully retrieved event with ID ${id}.`,
+      message: `Successfully retrieved event with ID ${id}`,
     });
   });
 });
@@ -219,12 +211,12 @@ app.put("/events/:id", async (req, res) => {
     if (err) {
       return res.status(400).json({
         events: [],
-        message: `Failed to update event ${id}: ${err}`,
+        message: `Failed to update event ${id}, ${err}`,
       });
     }
     return res.status(200).json({
       events: results,
-      message: `Successfully updated event with ID ${id}.`,
+      message: `Successfully updated event with ID ${id}`,
     });
   });
 });
@@ -256,7 +248,7 @@ app.get("/events", async (req, res) => {
   if (!startdate || !enddate) {
     return res.status(400).json({
       events: [],
-      message: "Both 'startdate' and 'enddate' query parameters are required.",
+      message: "Both 'startdate' and 'enddate' query parameters are required",
     });
   }
   db.query(sql, [startdate, enddate], (err, results) => {
@@ -268,10 +260,55 @@ app.get("/events", async (req, res) => {
     }
     return res.status(200).json({
       events: results,
-      message: `Successfully retrieved events within the specified date range.`,
+      message: `Successfully retrieved events within the specified date range`,
     });
   });
 });
+
+app.post("/users", (req, res) => {
+  const { email, password, firstName, lastName } = req.body;
+  if (!email || !password || !firstName || lastName) {
+    return res.status(400).json({
+      message: "Email, password, first name, and last name are required",
+    });
+  }
+  db.query(
+    "SELECT * FROM Users WHERE Email = ?",
+    [username, email],
+    (queryErr, results) => {
+      if (queryErr) {
+        return res
+          .status(500)
+          .json({ message: `Database query failed ${err}` });
+      }
+      if (results.length > 0) {
+        return res.status(400).json({ message: "Email is already in use" });
+      }
+      bcrypt.hash(password, 10, (hashErr, hash) => {
+        if (hashErr) {
+          return res
+            .status(500)
+            .json({ message: `Password hashing failed ${hashErr}` });
+        }
+        const sql =
+          "INSERT INTO Users (Email, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
+        db.query(sql, [email, hash, firstName, lastName], (sqlErr, result) => {
+          if (sqlErr) {
+            return res
+              .status(500)
+              .json({ message: `Failed to create user ${sqlErr}` });
+          }
+          res.status(201).json({
+            id: userId,
+            email,
+            message: "Successfully created a new user",
+          });
+        });
+      });
+    }
+  );
+});
+
 app.listen(consts.PORT, () => {
   console.log(`Express API listening on port ${consts.PORT}`);
 });
