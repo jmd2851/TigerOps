@@ -267,43 +267,54 @@ app.get("/events", async (req, res) => {
 
 app.post("/users", (req, res) => {
   const { email, password, firstName, lastName } = req.body;
-  if (!email || !password || !firstName || lastName) {
+  console.log(req.body);
+  if (!email || !password || !firstName || !lastName) {
     return res.status(400).json({
       message: "Email, password, first name, and last name are required",
     });
   }
   db.query(
-    "SELECT * FROM Users WHERE Email = ?",
-    [username, email],
+    "SELECT * FROM User WHERE Email = ?",
+    [email],
     (queryErr, results) => {
       if (queryErr) {
+        console.log(queryErr);
         return res
           .status(500)
-          .json({ message: `Database query failed ${err}` });
+          .json({ message: `Database query failed ${queryErr}` });
       }
       if (results.length > 0) {
         return res.status(400).json({ message: "Email is already in use" });
       }
       bcrypt.hash(password, 10, (hashErr, hash) => {
         if (hashErr) {
+          console.log(hashErr);
+
           return res
             .status(500)
             .json({ message: `Password hashing failed ${hashErr}` });
         }
         const sql =
-          "INSERT INTO Users (Email, Password, FirstName, LastName) VALUES (?, ?, ?, ?)";
-        db.query(sql, [email, hash, firstName, lastName], (sqlErr, result) => {
-          if (sqlErr) {
-            return res
-              .status(500)
-              .json({ message: `Failed to create user ${sqlErr}` });
+          "INSERT INTO User (Email, Password, FirstName, LastName, UserRole) VALUES (?, ?, ?, ?, ?)";
+        db.query(
+          sql,
+          [email, hash, firstName, lastName, "User"],
+          (sqlErr, result) => {
+            if (sqlErr) {
+              console.log(sqlErr);
+
+              return res
+                .status(500)
+                .json({ message: `Failed to create user ${sqlErr}` });
+            }
+            const userId = result.insertId;
+            res.status(201).json({
+              id: userId,
+              email,
+              message: "Successfully created a new user",
+            });
           }
-          res.status(201).json({
-            id: userId,
-            email,
-            message: "Successfully created a new user",
-          });
-        });
+        );
       });
     }
   );
