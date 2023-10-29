@@ -272,6 +272,113 @@ app.get("/events", async (req, res) => {
     });
   });
 });
+
+app.post("/menus", (req, res) => {
+  const { MenuData } = req.body;
+  const sql = "INSERT INTO Menu (MenuData, LastUpdated) VALUES (?, NOW())";
+  db.query(sql, [JSON.stringify(MenuData)], (err, result) => {
+    if (err) {
+      return res.status(400).json({
+        message: `Failed to create the menu: ${err}`,
+      });
+    }
+    res.status(201).json({
+      message: "Menu created successfully",
+      menuId: result.insertId,
+    });
+  });
+});
+
+app.get("/menus", (req, res) => {
+  const sql = "SELECT * FROM Menu";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        message: `Failed to fetch menus: ${err}`,
+      });
+    }
+    res.status(200).json(results);
+  });
+});
+
+app.get("/menus/:menuId", (req, res) => {
+  const menuId = req.params.menuId;
+  const sql = "SELECT * FROM Menu WHERE MenuID = ?";
+  db.query(sql, [menuId], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        message: `Failed to fetch the menu: ${err}`,
+      });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({
+        message: "Menu not found",
+      });
+    }
+    res.status(200).json(results[0]);
+  });
+});
+
+app.put("/menus/:menuId", (req, res) => {
+  const menuId = req.params.menuId;
+  const { MenuData } = req.body;
+  const sql =
+    "UPDATE Menu SET MenuData = ?, LastUpdated = NOW() WHERE MenuID = ?";
+  db.query(sql, [JSON.stringify(MenuData), menuId], (err, result) => {
+    if (err) {
+      return res.status(400).json({
+        message: `Failed to update the menu: ${err}`,
+      });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Menu not found",
+      });
+    }
+    res.status(200).json({
+      message: "Menu updated successfully",
+    });
+  });
+});
+
+app.delete("/menus/:id", (req, res) => {
+  const menuId = req.params.menuId;
+  const sql = "DELETE FROM Menu WHERE MenuID = ?";
+  db.query(sql, [menuId], (err, result) => {
+    if (err) {
+      return res.status(500).json({
+        message: `Failed to delete the menu: ${err}`,
+      });
+    }
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        message: "Menu not found",
+      });
+    }
+    res.status(200).json({
+      message: "Menu deleted successfully",
+    });
+  });
+});
+
+app.get("/menus/date", (req, res) => {
+  const { startDate, endDate } = req.query;
+  const sql = "SELECT * FROM Menu WHERE LastUpdated BETWEEN ? AND ?";
+  db.query(sql, [startDate, endDate], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        message: `Failed to fetch menus within the date range: ${err}`,
+      });
+    }
+    res
+      .status(200)
+      .json({
+        message: "Menus within the date range retrieved successfully",
+        menus: results,
+      });
+  });
+});
+
 app.listen(consts.PORT, () => {
   console.log(`Express API listening on port ${consts.PORT}`);
 });
