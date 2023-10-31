@@ -1,8 +1,9 @@
 .headerTitle {
-    /* font-style font-variant font-weight font-size/line-height font-family */
-    font: normal normal bold 1.9em Arial, sans-serif;
+    font-weight: bold;
     text-transform: capitalize;
+    padding: 24px 0;
 }
+/* refactor bottom code - do we still need this if we implement mui typography? */
 .bodyText {
     font: normal normal normal 0.85em Arial, sans-serif;
     text-transform: lowercase;
