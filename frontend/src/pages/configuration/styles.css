@@ -1,0 +1,101 @@
+.configTitle{
+    margin-bottom: 2em;
+    font-size: 36;
+}
+
+.userListTitle{
+    font-size: 24;
+}
+
+.removeButton{
+    background-color: #D10000 !important;
+    color: black !important;
+}
+
+.permissionButton{
+    background-color: #D9D9D9 !important;
+    color: black !important;
+}
+
+.configBorder{
+    padding: 2em;
+    background-color: #F7F7F7;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+.addAccount{
+    background-color: #7CB8FF;
+    width: 200px;
+    height: 50px;
+}
+
+.addAccountPosition{
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
+}
+
+.removeAccount_YesButton{
+    background-color: red !important;
+}
+
+.removeAccount_ButtonItems{
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-between;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.firstName{
+    display: block !important;
+}
+
+.lasttName{
+    display: block !important;
+}
+
+.email{
+    display: block !important;
+}
+
+.firstNameField{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.lastNameField{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.emailField{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.radioButtonOption{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.css-rtrcn9-MuiTablePagination-root .MuiTablePagination-selectLabel{
+    display: none !important;
+}
+
+.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input.css-194a1fa-MuiSelect-select-MuiInputBase-input{
+    display: none !important;
+}
+
+.css-levciy-MuiTablePagination-displayedRows{
+    display: none !important;
+}
+
+.css-zylse7-MuiButtonBase-root-MuiIconButton-root.Mui-disabled{
+    display: none !important;
+}
+
+.css-78c6dr-MuiToolbar-root-MuiTablePagination-toolbar{
+    display: none !important;
+}

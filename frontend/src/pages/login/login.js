@@ -2,14 +2,26 @@ import logo from "../../assets/images/logo.png";
 import "./styles.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import AppContext from "../../AppContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Login(props) {
   const [state, setState] = useState({
     email: "",
     password: "",
   });
+
+  const { user, setUser } = React.useContext(AppContext);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user != null) {
+      navigate("/calendar");
+    }
+  }, user);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -34,7 +46,7 @@ export default function Login(props) {
         withCredentials: true,
       })
       .then((response) => {
-        if (!response.ok) throw new Error(response.status);
+        setUser(response.data.user);
         return response.json();
       })
       .catch((error) => {

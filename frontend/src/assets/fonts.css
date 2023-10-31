@@ -5,7 +5,7 @@
 }
 /* refactor bottom code - do we still need this if we implement mui typography? */
 .bodyText {
-    font: normal normal normal 0.9em Arial, sans-serif;
+    font: normal normal normal 0.85em Arial, sans-serif;
     text-transform: lowercase;
     color: var(--textDark);
 }

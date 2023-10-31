@@ -42,7 +42,9 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: consts.SESSIONAGE,
-      sameSite: "lax",
+      sameSite: "strict",
+      httpOnly: true,
+      secure: false,
     },
     resave: false,
     store: sessionStore,
@@ -94,6 +96,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
+  console.log(req.sessionID);
   if (req.session.user) {
     res.send({
       authenticated: true,
@@ -111,23 +114,24 @@ app.post("/logout", (req, res) => {
     req.session.destroy((err) => {
       if (err) {
         res.status(500).json({
-          status: "error",
-          data: {},
-          message: "Internal error ",
+          message: `Internal error ${err}.`,
           err,
         });
       } else {
+        res.clearCookie("connect.sid", {
+          path: "/",
+          domain: "localhost",
+          sameSite: "strict",
+          httpOnly: true,
+          secure: false,
+        });
         res.status(200).json({
-          status: "success",
-          data: {},
           message: "Logout successful",
         });
       }
     });
   } else {
     res.status(400).json({
-      status: "failed",
-      data: {},
       message: "The user is not logged in",
     });
   }
@@ -142,10 +146,7 @@ app.post("/login", (req, res) => {
     function (err, result) {
       if (err) {
         res.status(500).json({
-          status: "error",
-          data: {},
-          message: "Internal Error",
-          err,
+          message: `Internal Error $err`,
         });
       }
       if (result.length > 0) {
@@ -153,16 +154,12 @@ app.post("/login", (req, res) => {
           if (response) {
             req.session.user = result[0];
             res.status(200).json({
-              status: "success",
-              data: { user: req.session.user },
+              user: req.session.user,
               message: "Successful Authentication",
             });
           } else {
             res.status(401).json({
-              status: "failed",
-              data: {},
-              message: "Invalid Credentials",
-              err,
+              message: `Invalid Credentials ${err}`,
             });
           }
         });
@@ -181,7 +178,6 @@ app.post("/events", async (req, res) => {
     function (err, results) {
       if (err) {
         return res.status(400).json({
-          events: [],
           message: `Failed to create the event, ${err}`,
         });
       } else {
