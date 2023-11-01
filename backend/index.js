@@ -144,6 +144,60 @@ app.post("/login", (req, res) => {
   );
 });
 
+// PUT endpoint for updating configuration items
+app.put("/config", async (req, res) => {
+  const { name, value } = req.body;
+  const sql = "UPDATE config SET Name = ?, Value = ? WHERE Name = ?";
+  db.query(sql, [name, value], (err, results) => {
+    if (err) {
+      return res.status(400).json({
+        config: [],
+        message: `Failed to retreive configuration item with name ${name}`
+      });
+    }
+    return res.status(200).json({
+      config: results,
+      message: `Successfully updated configuration item ${name}`
+    });
+  });
+});
+
+// GET endpoint for retreiving configuration items
+app.get("/config", async (req, res) => {
+  
+  const { name } = req.query;
+  // Retrieve all configuration items if no name is specified
+  if (!name) {
+    const sql = "SELECT * FROM config";
+    db.query(sql, (err, results) => {
+      if (err) {
+        return res.status(404).json({
+          config: [],
+          message: `Failed to get configuration, ${err}`,
+      });
+    }
+    return res.status(200).json({
+        config: results,
+        message: `Successfully retreived configuration.`
+    });
+  });
+  } else {
+    const sql = "SELECT * FROM config WHERE Name = ?";
+    db.query(sql, [name], (err, results) => {
+      if (err) {
+        return res.status(400).json({
+          config: [],
+          message: `Failed to get configuration with name ${name}, ${err}`
+        });
+      }
+      return res.status(200).json({
+        config: results,
+        message: `Successfully retreived configuration with name ${name}`
+      })
+    });
+  }
+});
+
 app.listen(consts.PORT, () => {
   console.log(`Express API listening on port ${consts.PORT}`);
 });
