@@ -109,8 +109,7 @@ export default function Calendar() {
   };
 
   return (
-    <Page>
-      <PageHeader title="Calendar View" />
+    <Page title="Calendar View" >
       <div className="calendarContainer">
         <div className="calendar">
           <LocalizationProvider dateAdapter={AdapterDayjs}>

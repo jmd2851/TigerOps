@@ -200,8 +200,7 @@ const columns = [
 
   export default function DataTable() {
     return (
-    <Page>
-        <PageHeader title="Configuration"/>
+    <Page title="Configuration" subtitle="Various configuration settings and options for site administrators">
         <div className='configBorder'>
             <h1 className='userListTitle'>
                 User List

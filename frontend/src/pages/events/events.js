@@ -20,9 +20,9 @@ export default function Events() {
     ];
 
     return (
-        <Page>
+        <Page title="Live Slideshow" subtitle="This week's current Slideshow, featuring Menus and Events">
             <Slideshow />
-            <PageHeader title="Slide Options and Settings" />
+            <PageHeader title="Slide Customizations" subtitle="Various Slide options and settings" />
             <Stack direction={'row'} spacing={4}>
                 {settings.map(setting => {
                     return (
