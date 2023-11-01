@@ -2,7 +2,7 @@ import './styles.css';
 import Page from '../../components/Page';
 import PageHeader from '../../components/PageHeader';
 import Slideshow from '../../components/Slideshow';
-import { Card, CardContent, Stack, Typography } from '@mui/material';
+import { Card, CardContent, CardHeader, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 export default function Events() {
@@ -14,7 +14,7 @@ export default function Events() {
         },
         {
             title: 'Edit Slideshow',
-            description: 'Edit the current slideshow, toggle slide visibility, and more',
+            description: 'Edit the current slideshow, delete a slide, toggle slide visibility, and more',
             path: '/edit',
         }
     ];
@@ -27,13 +27,8 @@ export default function Events() {
                 {settings.map(setting => {
                     return (
                         <Link to={setting.path} className='settingsCardContainer'>
-                            <Card variant='outlined' className='settingsCard'>
-                                <CardContent>
-                                    <Stack direction={'column'} spacing={2}>
-                                        <Typography variant='h5'>{setting.title}</Typography>
-                                        <Typography variant='body1'>{setting.description}</Typography>
-                                    </Stack>
-                                </CardContent>
+                            <Card className='settingsCard'>
+                                <CardHeader title={setting.title} subheader={setting.description} />
                             </Card>
                         </Link>
                     )
