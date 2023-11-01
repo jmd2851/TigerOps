@@ -1,9 +1,19 @@
 import './styles.css';
 import Page from '../../components/Page';
-import { Stack, Card, Typography, CardContent, CardHeader, CardActionArea } from '@mui/material';
+import { Stack, Card, Typography, CardContent, CardHeader, CardActionArea, Modal, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Edit() {
+    const [title,setTitle] = useState("");
+    const [open,setOpen] = useState(false);
+    const handleOPen = () => {
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(false);
+    }
+
     const slides = [
         {
             id: 1,
@@ -41,15 +51,39 @@ export default function Edit() {
         },
     ]
 
+    // TODO: export as reusable modal component
+    const modalStyle = {
+        position: 'absolute',
+        marginTop: '30%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        pt: 2,
+        px: 4,
+        pb: 3,
+    }
+
     return (
-        <Page title="Edit a slide" subtitle="Pick a slide from the current slideshow to edit.">
+        <Page title="Edit a slide" subtitle="Pick a slide from the current slideshow to edit." style={{zIndex:'0'}}>
+            <Modal open={open} onClose={handleClose}>
+                <Box sx={{...modalStyle, width:'600px', height: '700px', paddingTop:'40px'}}>
+                    <Typography variant="h5">{title}</Typography>
+                    <p>event/menu form content</p>
+                </Box>
+            </Modal>
             <form>
                 <Stack spacing={{sm:2}} direction="row" useFlexGap flexWrap="wrap">
                 {
                     slides.map((slide) => {
                         return (
                             <Card sx={{width:'45%', minHeight: '280px', boxShadow: 'rgb(0, 0, 0, 0.25)', backgroundColor: '#d6dad6'}}>
-                                <Link to={slide.route} sx={{height:'100%'}}>
+                                <CardActionArea onClick={() =>{
+                                    handleOPen();
+                                    setTitle(slide.title || slide.date + " menu");
+                                }} sx={{height:'100%'}}>
                                     <CardHeader
                                             title={slide.title || slide.date + " menu" }
                                             subheader={slide.type=="event" ? slide.start + " through " + slide.end : slide.label}
@@ -60,7 +94,7 @@ export default function Edit() {
                                                 {slide.description}
                                             </Typography>
                                         </CardContent>
-                                </Link>
+                                </CardActionArea>
                             </Card>
                         )
                     })   
