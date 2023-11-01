@@ -16,10 +16,9 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import Checkbox from '@mui/material/Checkbox';
 
 
-function RadioButton() {
+function createAccountRadioButton() {
     return (
       <FormControl>
         <FormLabel className = "radioButton">Account Type:</FormLabel>
@@ -34,24 +33,28 @@ function RadioButton() {
     );
   }
 
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
-function permCheckbox() {
-  return (
-    <div>
-      <Checkbox {...label} />
-    </div>
-  );
+  function accountRoleButton() {
+    return (
+      <FormControl>
+        <RadioGroup
+          defaultValue="admin"
+          name="adminButton"
+        >   
+            <div className = "accountRoleButton">
+              <FormControlLabel value="admin" control={<Radio />} label="Admin" /> 
+              <FormControlLabel value="user" control={<Radio />} label="User" /> 
+            </div>
+        </RadioGroup>
+      </FormControl>
+    );
 }
 
 
+
 const permissionCol = [
-    { field: 'name', headerName: 'Name', width: 130 },
-    { field: 'delete', headerName: 'Delete Slides', width: 130, renderCell: permCheckbox, disableClickEventBubbling: true },
-    { field: 'create', headerName: 'Create Slides', width: 130, renderCell: permCheckbox, disableClickEventBubbling: true },
-    { field: 'write', headerName: 'Edit slides', width: 130, renderCell: permCheckbox, disableClickEventBubbling: true },
-    { field: 'removeAccounts', headerName: 'Remove Account(s)', width: 150, renderCell: permCheckbox, disableClickEventBubbling: true },
-    { field: 'createAccounts', headerName: 'Create Account(s)', width: 130, renderCell: permCheckbox, disableClickEventBubbling: true },
+    { field: 'name', headerName: 'Name', width: 160 },
+    { field: 'admin', headerName: 'Account Role', width: 180, renderCell: accountRoleButton, disableClickEventBubbling: true },
   ];
   
   const permissionRow = [
@@ -59,7 +62,7 @@ const permissionCol = [
     removeAccount: ' '},
   ];
 
-function Permissions() {
+function AccountRole() {
     const [open, setOpen] = React.useState(false);
   
     const handleClickOpen = () => {
@@ -73,13 +76,13 @@ function Permissions() {
     return (
       <div>
         <Button variant="contained" className='permissionButton' onClick={handleClickOpen}>
-          Permissions
+          Account Role
         </Button>
         <Dialog open={open} onClose={handleClose}>
-          <DialogTitle>Permissions</DialogTitle>
+          <DialogTitle>Account Role</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Below, are permissions that are set in place for the selected account.
+              Below, are the options to change the specified account's role.
             </DialogContentText>
             
             <div style={{ height: 'auto', width: '100%' }}>
@@ -169,7 +172,7 @@ function Permissions() {
                   <TextField autoFocus margin="dense" className="email" label="Email" variant="standard"/>
               </div>
               <div className='radioButtonOption'>
-                  <RadioButton/>
+                  <createAccountRadioButton/>
               </div>
             </div>
 
@@ -187,7 +190,7 @@ const columns = [
     { field: 'name', headerName: 'Name', width: 130 },
     { field: 'email', headerName: 'Email', width: 180 },
     { field: 'accountType', headerName: 'Account Type', width: 130},
-    { field: 'permissions', headerName: 'Permissions', width: 150, renderCell: Permissions, disableClickEventBubbling: true  },
+    { field: 'accountRole', headerName: 'Account Role', width: 170, renderCell: AccountRole, disableClickEventBubbling: true  },
     { field: 'removeAccount', headerName: 'Remove Account', width: 190, renderCell: RemoveAccount, disableClickEventBubbling: true },
   ];
   

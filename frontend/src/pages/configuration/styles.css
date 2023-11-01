@@ -80,6 +80,11 @@
     margin-bottom: 20px;
 }
 
+
+.acccountRole{
+    display: inline;
+}
+
 .css-rtrcn9-MuiTablePagination-root .MuiTablePagination-selectLabel{
     display: none !important;
 }
