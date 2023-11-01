@@ -57,7 +57,7 @@ app.use(cookieparser());
 const adminEmail = "tigerops@test.com";
 
 db.query(
-  `SELECT * FROM User WHERE Email = ?`,
+  `SELECT * FROM user WHERE Email = ?`,
   [adminEmail],
   function (err, results) {
     if (err) {
@@ -77,7 +77,7 @@ db.query(
             return;
           }
           db.query(
-            `INSERT INTO User (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
+            `INSERT INTO user (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
             ["test", "test", adminEmail, hash, "admin"],
             function (err, results) {
               if (err) {
@@ -141,7 +141,7 @@ app.post("/login", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   db.query(
-    "SELECT * FROM User where Email = ?",
+    "SELECT * FROM user where Email = ?",
     [email],
     function (err, result) {
       if (err) {
@@ -169,12 +169,12 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/events", async (req, res) => {
-  const { name, description, starttime, endtime } = req.body;
+  const { name, description, startTime, endTime } = req.body;
   const sql =
-    "INSERT INTO event (EventName, Description, EventStartTime, EventEndTime) VALUES ?, ?, ?, ?";
+    "INSERT INTO event (EventName, EventDescription, EventStartTime, EventEndTime) VALUES (?, ?, ?, ?)";
   db.query(
     sql,
-    [name, description, starttime, endtime],
+    [name, description, startTime, endTime],
     function (err, results) {
       if (err) {
         return res.status(400).json({
@@ -194,7 +194,7 @@ app.post("/events", async (req, res) => {
 // GET endpoint to retrieve an event by ID
 app.get("/events/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  const sql = "SELECT * FROM Event WHERE EventID = ?";
+  const sql = "SELECT * FROM event WHERE EventID = ?";
   db.query(sql, [id], (err, results) => {
     if (err) {
       return res.status(404).json({
@@ -211,11 +211,11 @@ app.get("/events/:id", async (req, res) => {
 
 // PUT endpoint to update an event by ID
 app.put("/events/:id", async (req, res) => {
-  const { name, description, starttime, endtime } = req.body;
+  const { name, description, startTime, endTime } = req.body;
   const id = parseInt(req.params.id);
   const sql =
-    "UPDATE Event SET EventName = ?, Description = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
-  db.query(sql, [name, description, starttime, endtime, id], (err, results) => {
+    "UPDATE event SET EventName = ?, Description = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
+  db.query(sql, [name, description, startTime, endTime, id], (err, results) => {
     if (err) {
       return res.status(400).json({
         events: [],
@@ -232,7 +232,7 @@ app.put("/events/:id", async (req, res) => {
 // DELETE endpoint to delete an event by ID
 app.delete("/events/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  const sql = `DELETE FROM Event WHERE EventID = ?`;
+  const sql = `DELETE FROM event WHERE EventID = ?`;
   db.query(sql, [id], function (err, results) {
     if (err) {
       res.status(400).json({
@@ -250,16 +250,16 @@ app.delete("/events/:id", async (req, res) => {
 
 // GET endpoint to retrieve events within a date range
 app.get("/events", async (req, res) => {
-  const { startdate, enddate } = req.query;
+  const { startDate, endDate } = req.query;
   const sql =
-    "SELECT * FROM Event WHERE EventStartTime >= ? AND EventStartTime <= ?";
-  if (!startdate || !enddate) {
+    "SELECT * FROM event WHERE EventStartTime >= ? AND EventStartTime <= ?";
+  if (!startDate || !endDate) {
     return res.status(400).json({
       events: [],
       message: "Both 'startdate' and 'enddate' query parameters are required.",
     });
   }
-  db.query(sql, [startdate, enddate], (err, results) => {
+  db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       return res.status(404).json({
         events: [],
@@ -274,9 +274,9 @@ app.get("/events", async (req, res) => {
 });
 
 app.post("/menus", (req, res) => {
-  const { MenuData } = req.body;
-  const sql = "INSERT INTO Menu (MenuData, LastUpdated) VALUES (?, NOW())";
-  db.query(sql, [JSON.stringify(MenuData)], (err, result) => {
+  const { menuData, date } = req.body;
+  const sql = "INSERT INTO menu (MenuData, Date) VALUES (?, ?)";
+  db.query(sql, [JSON.stringify(menuData), date], (err, result) => {
     if (err) {
       return res.status(400).json({
         message: `Failed to create the menu: ${err}`,
@@ -290,7 +290,7 @@ app.post("/menus", (req, res) => {
 });
 
 app.get("/menus", (req, res) => {
-  const sql = "SELECT * FROM Menu";
+  const sql = "SELECT * FROM menu";
   db.query(sql, (err, results) => {
     if (err) {
       return res.status(500).json({
@@ -303,7 +303,7 @@ app.get("/menus", (req, res) => {
 
 app.get("/menus/:menuId", (req, res) => {
   const menuId = req.params.menuId;
-  const sql = "SELECT * FROM Menu WHERE MenuID = ?";
+  const sql = "SELECT * FROM menu WHERE MenuID = ?";
   db.query(sql, [menuId], (err, results) => {
     if (err) {
       return res.status(500).json({
@@ -321,10 +321,10 @@ app.get("/menus/:menuId", (req, res) => {
 
 app.put("/menus/:menuId", (req, res) => {
   const menuId = req.params.menuId;
-  const { MenuData } = req.body;
+  const { data, date } = req.body;
   const sql =
-    "UPDATE Menu SET MenuData = ?, LastUpdated = NOW() WHERE MenuID = ?";
-  db.query(sql, [JSON.stringify(MenuData), menuId], (err, result) => {
+    "UPDATE menu SET MenuData = ?, Date = ? WHERE MenuID = ?";
+  db.query(sql, [JSON.stringify(data), date, menuId], (err, result) => {
     if (err) {
       return res.status(400).json({
         message: `Failed to update the menu: ${err}`,
@@ -343,7 +343,7 @@ app.put("/menus/:menuId", (req, res) => {
 
 app.delete("/menus/:id", (req, res) => {
   const menuId = req.params.menuId;
-  const sql = "DELETE FROM Menu WHERE MenuID = ?";
+  const sql = "DELETE FROM menu WHERE MenuID = ?";
   db.query(sql, [menuId], (err, result) => {
     if (err) {
       return res.status(500).json({
@@ -362,18 +362,18 @@ app.delete("/menus/:id", (req, res) => {
 });
 
 app.get("/menus/date", (req, res) => {
-  const { startDate, endDate } = req.query;
-  const sql = "SELECT * FROM Menu WHERE LastUpdated BETWEEN ? AND ?";
-  db.query(sql, [startDate, endDate], (err, results) => {
+  const { date } = req.query;
+  const sql = "SELECT * FROM Menu WHERE Date = ?";
+  db.query(sql, [date], (err, results) => {
     if (err) {
       return res.status(500).json({
-        message: `Failed to fetch menus within the date range: ${err}`,
+        message: `Failed to fetch menus on the date ${date}: ${err}`,
       });
     }
     res
       .status(200)
       .json({
-        message: "Menus within the date range retrieved successfully",
+        message: `Menus on the date ${date} retrieved successfully`,
         menus: results,
       });
   });

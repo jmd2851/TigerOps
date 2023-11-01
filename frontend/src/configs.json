@@ -1,0 +1,10 @@
+{
+  "production": {
+    "apiDomain": "api.yourdomain.com",
+    "appDomain": "yourdomain.com"
+  },
+  "development": {
+    "apiDomain": "http://localhost:4000",
+    "appDomain": "http://localhost:3000"
+  }
+}

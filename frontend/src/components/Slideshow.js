@@ -34,8 +34,6 @@ export default function Slideshow() {
                 "bg": "lightsalmon"
             },
         ]);
-
-        console.log('slideshowdata: ' + JSON.stringify(sildeshowData));
      },[]);
 
      

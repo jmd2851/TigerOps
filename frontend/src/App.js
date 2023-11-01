@@ -11,6 +11,8 @@ import Calendar from "./pages/calendar/calendar";
 import Help from "./pages/help/help";
 import Configuration from "./pages/configuration/configuration";
 import Create from "./pages/create/create";
+import Edit from "./pages/create/edit";
+
 import AppContext from "./AppContext";
 
 const App = () => {
@@ -38,6 +40,7 @@ const App = () => {
         <Route exact path="/help" element={<Help />} />
         <Route exact path="/configuration" element={<Configuration />} />
         <Route exact path="/create" element={<Create />} />
+        <Route exact path="/edit" element={<Edit />} />
       </Routes>
     </AppContext.Provider>
   );
