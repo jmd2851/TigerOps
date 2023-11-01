@@ -10,59 +10,36 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import EventForm from "./EventForm";
+import MenuForm from "./MenuForm";
+import { FormTypes, SlideTypes } from "./constants";
 
 export default function Create() {
-  const [type, setType] = useState("");
-  const [data, setData] = useState(null);
-  const [options, setOptions] = useState([]);
+  const [type, setType] = useState(null);
+
   return (
     <Page>
       <PageHeader title="Create a Slide" />
-      <form>
-        <Stack direction={"column"} spacing={2}>
-          <Stack direction={"row"} spacing={2}>
-            <Typography variant="h5">type</Typography>
-            <Button
-              variant="contained"
-              onClick={() => {
-                console.log("slide.type = event");
-                setType("event");
-                setOptions(["title", "description", "start time", "end time"]);
-              }}
-            >
-              event
-            </Button>
-            <Button
-              variant="contained"
-              onClick={() => {
-                console.log("slide.type = menu");
-                setType("menu");
-                setOptions(["date", "label", "description"]);
-              }}
-            >
-              menu
-            </Button>
-          </Stack>
-          {type === "" ? (
-            <></>
-          ) : (
-            <Stack direction={"column"} spacing={2}>
-              {/* render the menu/event options */}
-              {options.map((option) => {
-                return (
-                  <Stack direction={"row"} spacing={2}>
-                    <Typography variant="h5">{option}</Typography>
-                    <TextField variant="outlined" size="small" />
-                  </Stack>
-                );
-              })}
-              <Button variant="contained" sx={{ width: "40%" }}>
-                submit
-              </Button>
-            </Stack>
-          )}
-        </Stack>
-      </form>
+
+      <Button
+        variant="contained"
+        onClick={() => {
+          setType(SlideTypes.EVENT);
+        }}
+      >
+        event
+      </Button>
+
+      <Button
+        variant="contained"
+        onClick={() => {
+          setType(SlideTypes.MENU);
+        }}
+      >
+        menu
+      </Button>
+      {type === SlideTypes.EVENT && <EventForm formType={FormTypes.CREATE} />}
+      {type === SlideTypes.MENU && <MenuForm formType={FormTypes.CREATE} />}
     </Page>
   );
 }

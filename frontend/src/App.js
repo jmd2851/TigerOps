@@ -11,6 +11,7 @@ import Calendar from "./pages/calendar/calendar";
 import Help from "./pages/help/help";
 import Configuration from "./pages/configuration/configuration";
 import Create from "./pages/create/create";
+
 import AppContext from "./AppContext";
 
 const App = () => {
