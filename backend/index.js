@@ -146,13 +146,13 @@ app.post("/login", (req, res) => {
 
 // PUT endpoint for updating configuration items
 app.put("/config", async (req, res) => {
-  const { name, value } = req.body;
+  const { name, value } = req.query;
   const sql = "UPDATE config SET Name = ?, Value = ? WHERE Name = ?";
-  db.query(sql, [name, value], (err, results) => {
+  db.query(sql, [name, value, name], (err, results) => {
     if (err) {
       return res.status(400).json({
         config: [],
-        message: `Failed to retreive configuration item with name ${name}`
+        message: `Failed to update configuration item with name ${name} and value ${value}`
       });
     }
     return res.status(200).json({
