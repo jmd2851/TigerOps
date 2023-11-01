@@ -64,7 +64,7 @@ export default function Navigation() {
                   <Button variant="contained" sx={{width:'50%'}} onClick={handleClose}>Cancel</Button>
 
                   <Button variant="contained" sx={{width:'50%', minHeight:'56px'}} color="secondary">
-                      <Link to="/login">Log Out</Link>
+                      <Link to="/login" onClick={handleLogout()}>Log Out</Link>
                   </Button>
               </Stack>
           </Box>
@@ -94,16 +94,15 @@ export default function Navigation() {
           <Link to="/help">Help </Link>
         </h2>
 
-        {/* {user != null && ( */}
+        {user != null && (
           <div className="bottomOptions">
             <h2 className="links">
               <Box onClick={() => {
                 handleOpen();
-                handleLogout();
               }}><Link>Log Out</Link></Box>
             </h2>
           </div>
-        {/* )} */}
+        )}
       </div>
     </div>
   );
