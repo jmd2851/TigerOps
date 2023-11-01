@@ -4,17 +4,3 @@
     flex-direction: row;
     justify-content: space-between;
 }
-.iconContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-.iconContainer > * {
-    /* display: none; */
-    min-width: 100px;
-}
-.iconGroup {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}

@@ -13,6 +13,7 @@ import Configuration from "./pages/configuration/configuration";
 import Create from "./pages/create/create";
 
 import AppContext from "./AppContext";
+import Edit from "./pages/edit/edit";
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -39,6 +40,7 @@ const App = () => {
         <Route exact path="/help" element={<Help />} />
         <Route exact path="/configuration" element={<Configuration />} />
         <Route exact path="/create" element={<Create />} />
+        <Route exact path="/edit" element={<Edit />} />
       </Routes>
     </AppContext.Provider>
   );
