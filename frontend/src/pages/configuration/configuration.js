@@ -76,7 +76,7 @@ function AccountRole() {
     return (
       <div>
         <Button variant="contained" className='permissionButton' onClick={handleClickOpen}>
-          Account Role
+          Admin
         </Button>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>Account Role</DialogTitle>
@@ -189,16 +189,15 @@ function AccountRole() {
 const columns = [
     { field: 'name', headerName: 'Name', width: 130 },
     { field: 'email', headerName: 'Email', width: 180 },
-    { field: 'accountType', headerName: 'Account Type', width: 130},
-    { field: 'accountRole', headerName: 'Account Role', width: 170, renderCell: AccountRole, disableClickEventBubbling: true  },
+    { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
     { field: 'removeAccount', headerName: 'Remove Account', width: 190, renderCell: RemoveAccount, disableClickEventBubbling: true },
   ];
   
   const rows = [
-    { id: 1, name: 'Example_Name', email: 'Example@gmail.com', accountType: 'Admin', permissions: ' ', 
+    { id: 1, name: 'Example_Name', email: 'Example@gmail.com', accountType: 'Admin', 
     removeAccount: ' '},
-    { id: 2, name: 'Example_Name', email: 'Example@gmail.com', accountType: 'Admin', permissions: ' ', removeAccount: ' '},
-    { id: 3, name: 'Example_Name', email: 'Example@gmail.com', accountType: 'Admin', permissions: ' ', removeAccount: ' '},
+    { id: 2, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
+    { id: 3, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
   ];
 
   export default function DataTable() {

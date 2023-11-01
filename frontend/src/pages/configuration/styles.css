@@ -25,7 +25,7 @@
 }
 
 .addAccount{
-    background-color: #7CB8FF;
+    background-color: #7CB8FF !important;
     width: 200px;
     height: 50px;
 }
