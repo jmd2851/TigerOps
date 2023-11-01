@@ -1,20 +1,5 @@
-.eventsHeader {
-    width: 800px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-.iconContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-}
-.iconContainer > * {
-    /* display: none; */
-    min-width: 100px;
-}
-.iconGroup {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.heading {
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    /* border-top: 1px solid rgb(107, 107, 107); */
 }

@@ -1,13 +1,8 @@
 import "./styles.css";
 import Page from "../../components/Page";
 import PageHeader from "../../components/PageHeader";
-import Container from "@mui/material/Container";
 import {
   Button,
-  FormControl,
-  Stack,
-  TextField,
-  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import EventForm from "./EventForm";
@@ -18,8 +13,7 @@ export default function Create() {
   const [type, setType] = useState(null);
 
   return (
-    <Page>
-      <PageHeader title="Create a Slide" />
+    <Page title="Create a Slide" subtitle="Choose the Slide type and fill out its details">
 
       <Button
         variant="contained"
