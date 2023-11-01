@@ -2,11 +2,9 @@
     background-color: #51A46A;
     padding-right: 2em;
     padding-left: 2em;
-    width: 20vw;
+    min-width: 16vw;
     display: flex;
     flex-direction: column;
-    padding-right: 2em;
-    padding-left: 2em;
     height: 100%;
     flex-grow: 1;
     box-shadow: 0px 0px 5px .5px black;
