@@ -14,9 +14,12 @@ import Create from "./pages/create/create";
 
 import AppContext from "./AppContext";
 import Edit from "./pages/edit/edit";
+import LoadingScreen from "./components/LoadingScreen";
+import config from "./configs.json"
 
 const App = () => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     axios
@@ -32,7 +35,8 @@ const App = () => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ user, setUser }}>
+    <AppContext.Provider value={{ user, setUser, setIsLoading }}>
+      <LoadingScreen loading={isLoading} />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route exact path="/events" element={<Events />} />

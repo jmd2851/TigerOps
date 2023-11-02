@@ -2,18 +2,20 @@ import logo from "../../assets/images/logo.png";
 import "./styles.css";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import React, { useEffect, useState } from "react";
+import Alert from "@mui/material/Alert";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import AppContext from "../../AppContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import config from "../../configs.json";
 
-export default function Login(props) {
-  const [state, setState] = useState({
-    email: "",
-    password: "",
-  });
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  const { user, setUser } = React.useContext(AppContext);
+  const { user, setUser, setIsLoading } = useContext(AppContext);
 
   const navigate = useNavigate();
 
@@ -23,34 +25,45 @@ export default function Login(props) {
     }
   }, user);
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  };
-
   const handleLogin = (e) => {
     e.preventDefault();
+    if (!email || !password) {
+      setShowError(true);
+      setShowSuccess(false);
+      return;
+    }
     const body = JSON.stringify({
-      email: state.email,
-      password: state.password,
+      email,
+      password,
     });
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true,
+    };
     axios
-      .post("http://localhost:4000/login", body, {
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        withCredentials: true,
-      })
+      .post(
+        `${config[process.env.NODE_ENV].apiDomain}/login`,
+        body,
+        axiosConfig
+      )
       .then((response) => {
-        setUser(response.data.user);
-        return response.json();
+        setShowSuccess(true);
+        setShowError(false);
+        setIsLoading(true);
+        setTimeout(() => {
+          setIsLoading(false);
+          setUser(response.data.user);
+        }, 2000);
       })
       .catch((error) => {
-        // TODO: handle error here
+        alert(error);
+        setShowError(true);
+        setShowSuccess(false);
+        setEmail("");
+        setPassword("");
       });
   };
 
@@ -65,26 +78,40 @@ export default function Login(props) {
               enter your email address and password to log in.
             </p>
           </div>
-
           <div className="inputs">
             <TextField
               fullWidth
-              label="Email"
               id="email"
+              value={email}
+              label="Email"
               variant="filled"
               margin="normal"
-              onChange={handleChange}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               type="password"
               fullWidth
               id="password"
+              value={password}
               label="Password"
               variant="filled"
               margin="normal"
-              onChange={handleChange}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          {showError && (
+            <Alert
+              severity="error"
+              onClose={() => {
+                setShowError(false);
+              }}
+            >
+              Invalid login credentials. Please check and try again.
+            </Alert>
+          )}
+          {showSuccess && (
+            <Alert severity="success">You have successfully logged in!</Alert>
+          )}
 
           <div className="forgotPasswordContainer">
             <p className="subtitle">
@@ -94,7 +121,7 @@ export default function Login(props) {
 
           <div className="loginButtonContainer">
             <Button id="loginButton" variant="contained" onClick={handleLogin}>
-              submit
+              login
             </Button>
           </div>
         </div>
@@ -109,9 +136,11 @@ export default function Login(props) {
           </div>
 
           <div className="visitorButtonContainer">
-            <Button fullWidth variant="contained">
-              continue as viewer
-            </Button>
+            <Link to="/events">
+              <Button fullWidth variant="contained">
+                continue as viewer
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
