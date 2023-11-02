@@ -3,11 +3,11 @@ import * as React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import PageHeader from "../../components/PageHeader";
 import Page from "../../components/Page";
 import dayjs from "dayjs";
 import axios from "axios";
 import Badge from "@mui/material/Badge";
+import config from "../../configs.json";
 
 import { PickersDay } from "@mui/x-date-pickers";
 
@@ -58,27 +58,27 @@ export default function Calendar() {
     currentDate.format("YYYY-MM-DD")
   );
 
-  const fetchEvents = (startDate, endDate) => {
+  const fetchEvents = (startTime, endTime) => {
     setIsLoading(true);
     axios
-      .get("http://localhost:4000/events", {
+      .get(`${config[process.env.NODE_ENV].apiDomain}/events`, {
         params: {
-          startdate: startDate.format("YYYY-MM-DD HH:mm:ss"),
-          enddate: endDate.format("YYYY-MM-DD HH:mm:ss"),
+          startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
+          endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
         },
       })
       .then((response) => {
         const groupedEvents = response.data.events.reduce((grouped, event) => {
-          const startdate = dayjs(event.EventStartTime).format("YYYY-MM-DD");
-          const enddate = dayjs(event.EventEndTime).format("YYYY-MM-DD");
-          if (!grouped[startdate]) {
-            grouped[startdate] = [];
+          const startDate = dayjs(event.EventStartTime).format("YYYY-MM-DD");
+          const endDate = dayjs(event.EventEndTime).format("YYYY-MM-DD");
+          if (!grouped[startDate]) {
+            grouped[startDate] = [];
           }
-          grouped[startdate].push(event);
-          if (!grouped[enddate]) {
-            grouped[enddate] = [];
+          grouped[startDate][event.EventId] = event;
+          if (!grouped[endDate]) {
+            grouped[endDate] = [];
           }
-          grouped[enddate].push(event);
+          grouped[endDate].push(event);
           return grouped;
         }, {});
         setEvents({
@@ -109,7 +109,7 @@ export default function Calendar() {
   };
 
   return (
-    <Page title="Calendar View" >
+    <Page title="Calendar View">
       <div className="calendarContainer">
         <div className="calendar">
           <LocalizationProvider dateAdapter={AdapterDayjs}>
