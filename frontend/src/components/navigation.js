@@ -23,7 +23,14 @@ export default function Navigation() {
   return (
     <div className="navContainer">
       <div className="nav">
-        <h1 className="User">{role.toUpperCase()}</h1>
+        <h1 className="User">
+          {role.toUpperCase()}
+          {user == null && (
+            <p>
+              <a href="/login">(Click here to login)</a>
+            </p>
+          )}
+        </h1>
         <div className="calendarOptions">
           <div className="topOptions">
             <h2 className="links">
