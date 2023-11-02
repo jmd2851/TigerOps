@@ -1,11 +1,9 @@
 .page {
-    display:flex;
-    flex-direction: row;
     height: 100vh;
-    padding-bottom: 40px;
+    display: flex;
 }
 .contentContainer {
     padding: 80px 80px 0 80px;
-    margin: 0 auto;
+    margin-left: 25%;
     width: 100%;
 }
