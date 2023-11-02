@@ -3,11 +3,9 @@
     padding-right: 2em;
     padding-left: 2em;
     min-width: 16vw;
-    display: flex;
-    flex-direction: column;
     height: 100%;
-    flex-grow: 1;
     box-shadow: 0px 0px 5px .5px black;
+    position: fixed;
 }
 
 .navContainer{
@@ -24,7 +22,7 @@
 
 .calendarOptions{
     margin-top: 3em;
-    margin-bottom: 9em;
+    margin-bottom: 6em;
 }
 
 .topOptions{
@@ -38,8 +36,8 @@
 }
 
 .bottomOptions{
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 
