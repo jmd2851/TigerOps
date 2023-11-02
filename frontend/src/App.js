@@ -8,7 +8,7 @@ import axios from "axios";
 import Login from "./pages/login/login";
 import Events from "./pages/events/events";
 import Calendar from "./pages/calendar/calendar";
-import Help from "./pages/help/help";
+import Information from "./pages/information/information";
 import Configuration from "./pages/configuration/configuration";
 import Create from "./pages/create/create";
 
@@ -37,7 +37,7 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route exact path="/events" element={<Events />} />
         <Route exact path="/calendar" element={<Calendar />} />
-        <Route exact path="/help" element={<Help />} />
+        <Route exact path="/information" element={<Information />} />
         <Route exact path="/configuration" element={<Configuration />} />
         <Route exact path="/create" element={<Create />} />
         <Route exact path="/edit" element={<Edit />} />
