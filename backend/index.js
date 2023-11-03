@@ -67,23 +67,10 @@ db.query(
     if (results.length === 0) {
       // Admin account doesn't exist, so insert it
       bcrypt.genSalt(10, (err, salt) => {
-        if (err) {
-          console.log(err);
-          return;
-        }
         bcrypt.hash("tigerops", salt, (err, hash) => {
-          if (err) {
-            console.log(err);
-            return;
-          }
           db.query(
             `INSERT INTO user (FirstName, LastName, Email, Password, UserRole) VALUES (?, ?, ?, ?, ?)`,
-            ["test", "test", adminEmail, hash, "admin"],
-            function (err, results) {
-              if (err) {
-                console.log(err);
-              }
-            }
+            ["test", "test", adminEmail, hash, "admin"]
           );
         });
       });
@@ -113,8 +100,7 @@ app.post("/logout", (req, res) => {
     req.session.destroy((err) => {
       if (err) {
         res.status(500).json({
-          message: `Internal error ${err}.`,
-          err,
+          message: `Failed to log out, ${err}`,
         });
       } else {
         res.clearCookie("connect.sid", {
@@ -145,7 +131,7 @@ app.post("/login", (req, res) => {
     function (err, result) {
       if (err) {
         res.status(500).json({
-          message: `Internal Error $err`,
+          message: `Failed to login in, ${err}.`,
         });
       }
       if (result.length > 0) {
@@ -198,7 +184,7 @@ app.get("/events/:id", async (req, res) => {
     if (err) {
       return res.status(404).json({
         events: [],
-        message: `Failed to find event ${id}: ${err}`,
+        message: `Failed to find event ${id}, ${err}.`,
       });
     }
     return res.status(200).json({
@@ -218,12 +204,12 @@ app.put("/events/:id", async (req, res) => {
     if (err) {
       return res.status(400).json({
         events: [],
-        message: `Failed to update event ${id}: ${err}`,
+        message: `Failed to update event ${id}, ${err}`,
       });
     }
     return res.status(200).json({
       events: results,
-      message: `Successfully updated event with ID ${id}.`,
+      message: `Successfully updated event with ID ${id}`,
     });
   });
 });
@@ -267,7 +253,7 @@ app.get("/events", async (req, res) => {
     }
     return res.status(200).json({
       events: results,
-      message: `Successfully retrieved events within the specified date range.`,
+      message: `Successfully retrieved events within the specified date range`,
     });
   });
 });
@@ -371,6 +357,107 @@ app.get("/menus/date", (req, res) => {
     res.status(200).json({
       message: `Menus on the date ${date} retrieved successfully`,
       menus: results,
+    });
+  });
+});
+
+app.post("/users", (req, res) => {
+  const { email, password, firstName, lastName, role } = req.body;
+  if (!email || !password || !firstName || !lastName) {
+    return res.status(400).json({
+      message: "Email, password, first name, and last name are required",
+    });
+  }
+  if (req.session.user && req.session.user.UserRole != "Admin") {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized to create a new user." });
+  }
+  db.query("SELECT * FROM user WHERE Email = ?", [email], (_, results) => {
+    if (results.length > 0) {
+      return res.status(400).json({ message: "Email is already in use" });
+    }
+    bcrypt.hash(password, 10, (_, hash) => {
+      const sql =
+        "INSERT INTO User (Email, Password, FirstName, LastName, UserRole) VALUES (?, ?, ?, ?, ?)";
+      db.query(sql, [email, hash, firstName, lastName, role], (err, result) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: `Failed to create user ${err}` });
+        }
+        res.status(201).json({
+          user: result.affectedRows[0],
+          message: "Successfully created a new user",
+        });
+      });
+    });
+  });
+});
+
+app.get("/users", (req, res) => {
+  const sql = "SELECT * FROM user";
+  db.query(sql, (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: `Failed to retrieve user ${err}` });
+    }
+    res.status(201).json({
+      users: results,
+      message: "Successfully retrieved all new users",
+    });
+  });
+});
+
+app.put("/users/:id", (req, res) => {
+  const { id } = req.params.id;
+  if (req.session.user && req.session.user.UserRole != "Admin") {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized to create update users." });
+  }
+
+  db.query("SELECT * FROM user WHERE UserID = ?", [id], (err, results) => {
+    const user = results[0];
+    if (user.UserRole == "Admin") {
+      return res
+        .status(403)
+        .json({ message: "Permission to edit an admin account denied." });
+    }
+  });
+  const sql = "UPDATE user SET UserRole = ? WHERE UserId = ?";
+  db.query(sql, [role, id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: `Failed to update user ${err}` });
+    }
+    return res.status(200).json({
+      user: result.affectedRows[0],
+      message: `Successfully updated user with ID ${id}`,
+    });
+  });
+});
+
+app.delete("/users/:id", (req, res) => {
+  const { id } = req.params.id;
+  if (req.session.user && req.session.user.UserRole != "Admin") {
+    return res.status(401).json({ message: "Unauthorized to delete users." });
+  }
+  db.query("SELECT * FROM user WHERE UserID = ?", [id], (err, results) => {
+    const user = results[0];
+    if (user.UserRole == "Admin") {
+      return res
+        .status(403)
+        .json({ message: "Permission to delete an admin account denied." });
+    }
+  });
+  const sql = "DELETE FROM user WHERE UserId = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: `Failed to delete user ${err}` });
+    }
+    return res.status(200).json({
+      message: `Successfully deleted user with ID ${id}`,
     });
   });
 });
