@@ -111,19 +111,21 @@ export default function Edit() {
         <Box
           sx={{
             ...modalStyle,
-            width: "600px",
-            height: "700px",
+            width: "500px",
+            height: "580px",
             paddingTop: "40px",
           }}
         >
-          <Typography variant="h5">{title}</Typography>
-          {selectedSlide !== null ? (
-            selectedSlide.type === SlideTypes.EVENT ? (
-              <EventForm formType={FormTypes.EDIT} />
-            ) : (
-              <MenuForm formType={FormTypes.EDIT} />
-            )
-          ) : null}
+          <Stack direction="column" spacing={2}>
+            <Typography variant="h5">{title}</Typography>
+            {selectedSlide !== null ? (
+              selectedSlide.type === SlideTypes.EVENT ? (
+                <EventForm formType={FormTypes.EDIT} />
+              ) : (
+                <MenuForm formType={FormTypes.EDIT} />
+              )
+            ) : null}
+          </Stack>
         </Box>
       </Modal>
 

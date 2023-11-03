@@ -9,6 +9,8 @@ import { FormTypes } from "../../constants";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import config from "../../configs.json";
+import { Stack,Paper } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 class MenuOption {
   constructor(label, description, custom) {
@@ -102,87 +104,103 @@ export default function MenuForm(props) {
   };
 
   return (
-    <div className="menuForm">
+    <div className="form">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <FormControl>
-          <DatePicker
-            label="Date"
-            value={date}
-            onChange={(date) => setDate(date)}
-          />
+        <FormControl sx={{width:'100%'}}>
+          <Stack direction="column" spacing={3}>
+            <DatePicker
+              label="Date"
+              value={date}
+              onChange={(date) => setDate(date)}
+            />
 
-          {menuOptions.map((menuItem, index) => (
-            <div key={index}>
-              <TextField
-                fullWidth
-                select
-                value={menuItem.custom ? "Custom" : menuItem.label}
-                variant="filled"
-                margin="normal"
-                label={`Label for Item ${index + 1}`}
-                onChange={(e) => {
-                  const label = e.target.value;
-                  const custom = label === "Custom";
-                  handleMenuItemChange(
-                    index,
-                    custom ? "" : label,
-                    menuItem.description,
-                    custom
-                  );
-                }}
+            {menuOptions.map((menuItem, index) => (
+              <Paper 
+                key={index}
+                className="menuItemFormContainer"
+                elevation={3}
               >
-                {labels.map((label) => (
-                  <MenuItem value={label}>{label}</MenuItem>
-                ))}
-              </TextField>
-              {menuItem.custom && (
+                <Stack direction="row">
+                  <TextField
+                    fullWidth
+                    select
+                    value={menuItem.custom ? "Custom" : menuItem.label}
+                    variant="standard"
+                    margin="normal"
+                    label={`Label for Item ${index + 1}`}
+                    onChange={(e) => {
+                      const label = e.target.value;
+                      const custom = label === "Custom";
+                      handleMenuItemChange(
+                        index,
+                        custom ? "" : label,
+                        menuItem.description,
+                        custom
+                      );
+                    }}
+                  >
+                    {labels.map((label) => (
+                      <MenuItem value={label}>{label}</MenuItem>
+                    ))}
+                  </TextField>
+
+                  <Button sx={{marginBottom:"-10px"}} onClick={() => handleRemoveMenuItem(index)}>
+                    <CloseIcon sx={{position:'absolute',top:'0',right:'0'}} />
+                  </Button>
+                </Stack>
+
+               
+                {menuItem.custom && (
+                  <TextField
+                    fullWidth
+                    variant="standard"
+                    margin="normal"
+                    label={`Custom Label for Item ${index + 1}`}
+                    value={menuItem.label}
+                    onChange={(e) => {
+                      const label = e.target.value;
+                      handleMenuItemChange(
+                        index,
+                        label,
+                        menuItem.description,
+                        true
+                      );
+                    }}
+                  />
+                )}
+
                 <TextField
                   fullWidth
                   variant="filled"
                   margin="normal"
-                  label={`Custom Label for Item ${index + 1}`}
-                  value={menuItem.label}
+                  label={`Description for Item ${index + 1}`}
+                  value={menuItem.description}
+                  multiline
+                  maxRows={4}
                   onChange={(e) => {
-                    const label = e.target.value;
-                    handleMenuItemChange(
-                      index,
-                      label,
-                      menuItem.description,
-                      true
-                    );
+                    const description = e.target.value;
+                    handleMenuItemChange(index, menuItem.label, description);
                   }}
                 />
+              </Paper>
+            ))}
+
+            <Button variant="outlined" onClick={handleAddMenuItem}>Add Menu Item</Button>
+
+            <Stack direction="row-reverse" spacing={2}>
+              {formType === FormTypes.CREATE ? (
+                <Button variant="contained" onClick={handleCreateMenu} color="secondary">Create Menu</Button>
+              ) : (
+                <Button variant="contained" onClick={handleEditMenu} color="secondary">Save</Button>
               )}
-
-              <TextField
-                fullWidth
-                variant="filled"
-                margin="normal"
-                label={`Description for Item ${index + 1}`}
-                value={menuItem.description}
-                onChange={(e) => {
-                  const description = e.target.value;
-                  handleMenuItemChange(index, menuItem.label, description);
-                }}
-              />
-              <Button onClick={() => handleRemoveMenuItem(index)}>
-                Delete
-              </Button>
-            </div>
-          ))}
-
-          <Button onClick={handleAddMenuItem}>Add Menu Item</Button>
-
-          {formType === FormTypes.CREATE ? (
-            <Button onClick={handleClear}>Clear</Button>
-          ) : (
-            <Button onClick={handleDeleteMenu}>Delete</Button>
-          )}
-          {formType === FormTypes.CREATE ? (
-            <Button onClick={handleCreateMenu}>Create Menu</Button>
-          ) : (
-            <Button onClick={handleEditMenu}>Edit Menu</Button>
-          )}
+              {formType === FormTypes.CREATE ? (
+                <Button variant="text" onClick={handleClear}>Clear</Button>
+              ) : (
+                // TODO: "are you sure" popover
+                <Button variant="text" onClick={handleDeleteMenu}>Delete this Slide</Button>
+              )}
+            </Stack>
+          </Stack>
         </FormControl>
       </LocalizationProvider>
     </div>
