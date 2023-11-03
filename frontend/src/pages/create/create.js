@@ -1,20 +1,20 @@
 import "./styles.css";
 import Page from "../../components/Page";
 import PageHeader from "../../components/PageHeader";
-import {
-  Button,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { useState } from "react";
 import EventForm from "./EventForm";
 import MenuForm from "./MenuForm";
-import { FormTypes, SlideTypes } from "./constants";
+import { FormTypes, SlideTypes } from "../../constants";
 
 export default function Create() {
   const [type, setType] = useState(null);
 
   return (
-    <Page title="Create a Slide" subtitle="Choose the Slide type and fill out its details">
-
+    <Page
+      title="Create a Slide"
+      subtitle="Choose the Slide type and fill out its details"
+    >
       <Button
         variant="contained"
         onClick={() => {
