@@ -196,7 +196,7 @@ export default function MenuForm(props) {
               {formType === FormTypes.CREATE ? (
                 <Button variant="text" onClick={handleClear}>Clear</Button>
               ) : (
-                // TODO: are you sure popper
+                // TODO: "are you sure" popover
                 <Button variant="text" onClick={handleDeleteMenu}>Delete this Slide</Button>
               )}
             </Stack>
