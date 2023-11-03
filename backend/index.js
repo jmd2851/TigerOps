@@ -96,7 +96,6 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  console.log(req.sessionID);
   if (req.session.user) {
     res.send({
       authenticated: true,
@@ -157,11 +156,11 @@ app.post("/login", (req, res) => {
               user: req.session.user,
               message: "Successful Authentication",
             });
-          } else {
-            res.status(401).json({
-              message: `Invalid Credentials ${err}`,
-            });
           }
+        });
+      } else {
+        res.status(401).json({
+          message: `Invalid Credentials ${err}`,
         });
       }
     }
@@ -250,16 +249,16 @@ app.delete("/events/:id", async (req, res) => {
 
 // GET endpoint to retrieve events within a date range
 app.get("/events", async (req, res) => {
-  const { startDate, endDate } = req.query;
+  const { startTime, endTime } = req.query;
   const sql =
     "SELECT * FROM event WHERE EventStartTime >= ? AND EventStartTime <= ?";
-  if (!startDate || !endDate) {
+  if (!startTime || !endTime) {
     return res.status(400).json({
       events: [],
-      message: "Both 'startdate' and 'enddate' query parameters are required.",
+      message: "Both 'startTime' and 'endTime' query parameters are required.",
     });
   }
-  db.query(sql, [startDate, endDate], (err, results) => {
+  db.query(sql, [startTime, endTime], (err, results) => {
     if (err) {
       return res.status(404).json({
         events: [],
@@ -322,8 +321,7 @@ app.get("/menus/:menuId", (req, res) => {
 app.put("/menus/:menuId", (req, res) => {
   const menuId = req.params.menuId;
   const { data, date } = req.body;
-  const sql =
-    "UPDATE menu SET MenuData = ?, Date = ? WHERE MenuID = ?";
+  const sql = "UPDATE menu SET MenuData = ?, Date = ? WHERE MenuID = ?";
   db.query(sql, [JSON.stringify(data), date, menuId], (err, result) => {
     if (err) {
       return res.status(400).json({
@@ -370,12 +368,10 @@ app.get("/menus/date", (req, res) => {
         message: `Failed to fetch menus on the date ${date}: ${err}`,
       });
     }
-    res
-      .status(200)
-      .json({
-        message: `Menus on the date ${date} retrieved successfully`,
-        menus: results,
-      });
+    res.status(200).json({
+      message: `Menus on the date ${date} retrieved successfully`,
+      menus: results,
+    });
   });
 });
 
