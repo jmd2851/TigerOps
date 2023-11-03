@@ -1,0 +1,10 @@
+.form {
+    height: 90%;
+    width: 100% !important;
+    margin: 0;
+}
+.menuItemFormContainer {
+    border: 0;
+    border-radius: 10px;
+    padding: 20px;
+}
