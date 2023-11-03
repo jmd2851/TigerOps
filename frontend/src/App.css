@@ -1,7 +1,8 @@
 html {
   margin: 0;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 /* @media (prefers-reduced-motion: no-preference) {
