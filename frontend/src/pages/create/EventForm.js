@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
 import axios from "axios";
 import config from "../../configs.json";
+import { FormControl, Stack } from "@mui/material";
 
 export default function EventForm(props) {
   const { formType, event } = props;
@@ -67,46 +68,61 @@ export default function EventForm(props) {
   const handleDeleteEvent = () => {};
 
   return (
-    <div className="eventForm">
+    <div className="form">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TextField
-          fullWidth
-          label="Name"
-          id="name"
-          variant="filled"
-          margin="normal"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <TextField
-          fullWidth
-          label="Description"
-          id="description"
-          variant="filled"
-          margin="normal"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <DateTimePicker
-          label="Start Time"
-          value={startTime}
-          onChange={(date) => setStartTime(date)}
-        />
-        <DateTimePicker
-          label="End Time"
-          value={endTime}
-          onChange={(date) => setEndTime(date)}
-        />
-        {formType === FormTypes.CREATE ? (
-          <Button onClick={handleClear}>Clear</Button>
-        ) : (
-          <Button onClick={handleDeleteEvent}>Delete</Button>
-        )}
-        {formType === FormTypes.CREATE ? (
-          <Button onClick={handleCreateEvent}>Create Event</Button>
-        ) : (
-          <Button onClick={handleEditEvent}>Edit Event</Button>
-        )}
+        <FormControl sx={{width:'100%'}}>
+          <Stack direction="column" spacing={3}>
+            <TextField
+              fullWidth
+              label="Name"
+              id="name"
+              variant="filled"
+              margin="normal"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              id="description"
+              variant="filled"
+              margin="normal"
+              multiline
+              rows={8}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            
+            <Stack direction="row" spacing={2}>
+              <DateTimePicker
+                sx={{width:'50%'}}
+                label="Start Time"
+                value={startTime}
+                onChange={(date) => setStartTime(date)}
+              />
+              <DateTimePicker
+                sx={{width:'50%'}}
+                label="End Time"
+                value={endTime}
+                onChange={(date) => setEndTime(date)}
+              />
+            </Stack>
+
+            <Stack direction="row-reverse" spacing={2}>
+              {formType === FormTypes.CREATE ? (
+                <Button variant="contained"  onClick={handleCreateEvent} color="secondary">Create</Button>
+              ) : (
+                <Button variant="contained" onClick={handleEditEvent} color="secondary">Save</Button>
+              )}
+              {formType === FormTypes.CREATE ? (
+                <Button variant="text" onClick={handleClear}>Clear</Button>
+              ) : (
+                // TODO: "are you sure" popover
+                <Button variant="text" onClick={handleDeleteEvent}>Delete this Slide</Button>
+              )}
+            </Stack>
+          </Stack>
+        </FormControl>
       </LocalizationProvider>
     </div>
   );
