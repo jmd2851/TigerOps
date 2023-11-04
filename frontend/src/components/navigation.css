@@ -60,3 +60,7 @@ a:hover{
     color: white;
     text-decoration: none;
 }
+
+.loginLink{
+    margin-top: 10px;
+}
