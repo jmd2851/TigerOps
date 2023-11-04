@@ -3,10 +3,11 @@ import "./navigation.css";
 import { Link } from "react-router-dom";
 import AppContext from "../AppContext";
 import axios from "axios";
-import { Box, Button, Icon, Modal, Stack, Typography } from "@mui/material";
+import { Box, Button, Divider, Icon, Modal, Stack, Typography } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import logo from "../assets/images/logo_transparent.png";
 
-const boxStyle = {
+const modalStyle = {
   position: 'absolute',
   top: '40%',
   left: '50%',
@@ -23,10 +24,6 @@ const actionBarStyles = {
   position: 'absolute',
   top: '16px',
   right: '0',
-
-  // display: 'flex',
-  // flexDirection: 'row',
-  // justifyContent:'flex-end',
 }
 
 export default function Navigation() {
@@ -39,7 +36,8 @@ export default function Navigation() {
   }
 
   const { user, setUser } = React.useContext(AppContext);
-  const role = user ? user.UserRole : "Guest";
+  const role = user ? user.UserRole : "Member";
+  
   const handleLogout = () => {
     axios
       .post("http://localhost:4000/logout", {}, { withCredentials: true })
@@ -54,7 +52,7 @@ export default function Navigation() {
   return (
     <div className="navContainer">
       <Modal open={open} onClose={handleClose}>
-          <Box sx={{...boxStyle, maxWidth:'280px', borderRadius:'10px', padding: '72px 56px 64px 56px'}}>
+          <Box sx={{...modalStyle, maxWidth:'280px', borderRadius:'10px', padding: '72px 56px 64px 56px'}}>
               <div style={{...actionBarStyles}}>
                 <Button onClick={handleClose}><CloseIcon /></Button>
               </div>
@@ -70,49 +68,48 @@ export default function Navigation() {
           </Box>
       </Modal>
 
-      <div className="nav">
-        <h1 className="User">
-          {role.toUpperCase()}
-          {user == null && (
-            <div className="loginLink">
-              <Button variant="contained" sx={{width:'50%', minHeight:'56px'}} color="primary">
-                        <Link to="/login">Login</Link>
-              </Button>
-            </div>
-          )}
-        </h1>
-        <div className="calendarOptions">
-          <div className="topOptions">
-            <h2 className="links">
-              <Link to="/events">Events</Link>
-            </h2>
-          </div>
-          <div className="topOptions">
-            <h2 className="links">
-              <Link to="/calendar">Calendar View</Link>
-            </h2>
-          </div>
-        </div>
-        <div className="border"></div>
-        <div className="bottomOptions">
-          <h2 className="links">
-            <Link to="/configuration">Configuration</Link>
-          </h2>
-        </div>
-        <h2 className="links">
-          <Link to="/information">Information</Link>
-        </h2>
+      <Stack direction="column" spacing={56} className="nav" sx={{textAlign:'center'}}>
+        <Stack direction="column" spacing={16}>
+          <Stack direction="column" spacing={2}>
+            <Box className="logoContainer">
+              <Box className="iconContainer" sx={{backgroundColor:'white', borderRadius:'50%', height:'3em',width:'3em',padding:'0.5em',margin:'0.4em'}}>
+                <img src={logo} alt="St. Peter's Kitchen logo" style={{height:'3em',width:'3em'}} />
+              </Box>
+              <Typography variant="h7" sx={{textTransform:'uppercase'}}>St. Peter's Kitchen</Typography>
+              <Typography variant="h4" sx={{fontWeight:'bold', textTransform:'capitalize'}}>{user!=null ? role : "Viewer"}</Typography>
+            </Box>
+          </Stack>
 
-        {user != null && (
-          <div className="bottomOptions">
-            <h2 className="links">
-              <Box onClick={() => {
-                handleOpen();
-              }}><Link>Log Out</Link></Box>
-            </h2>
-          </div>
-        )}
-      </div>
+          <Stack direction="column" spacing={4}>
+            <Typography variant="h5" sx={{textTransform:'capitalize'}}>
+              <Link to="/events">{user!=null ? "Home" : "Weekly Events"}</Link>
+            </Typography>
+
+            <Typography variant="h5" sx={{textTransform:'capitalize'}}>
+              <Link to="/calendar">Calendar View</Link>
+            </Typography>
+
+            <Typography variant="h5" sx={{textTransform:'capitalize'}}>
+              <Link to="/information">Information</Link>
+            </Typography>
+          </Stack>
+        </Stack>
+
+        <Stack direction="column" spacing={4}>
+          <Divider />
+
+          <Typography variant="h5" sx={{textTransform:'capitalize'}}>
+              <Link to="/configuration">Configuration</Link>
+            </Typography>
+          
+          <Typography variant="h5" sx={{textTransform:'capitalize'}}>
+            {user!=null ? 
+              <Link onClick={handleOpen}>Log Out</Link>
+            : 
+              <Link to="/login">Log In</Link>
+            }</Typography> 
+        </Stack>
+      </Stack>
     </div>
   );
 }

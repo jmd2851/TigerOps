@@ -7,8 +7,8 @@ import PageHeader from './PageHeader';
 export default function Page({title, subtitle, children}) {
     return (
         <div className='page'>
-            <div className='navBar'>
-               <Navigation/>
+            <Navigation/>
+            <div className='spacer'>
             </div>
 
             <div className='contentContainer'>
