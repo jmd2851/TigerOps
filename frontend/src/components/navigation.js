@@ -74,9 +74,11 @@ export default function Navigation() {
         <h1 className="User">
           {role.toUpperCase()}
           {user == null && (
-            <p>
-              <a href="/login">(Click here to login)</a>
-            </p>
+            <div className="loginLink">
+              <Button variant="contained" sx={{width:'50%', minHeight:'56px'}} color="primary">
+                        <Link to="/login">Login</Link>
+              </Button>
+            </div>
           )}
         </h1>
         <div className="calendarOptions">
