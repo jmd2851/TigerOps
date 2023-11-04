@@ -11,9 +11,10 @@ import Calendar from "./pages/calendar/calendar";
 import Information from "./pages/information/information";
 import Configuration from "./pages/configuration/configuration";
 import Create from "./pages/create/create";
+import Edit from "./pages/edit/edit";
+import Fullscreen from "./pages/slideshow/fullscreen";
 
 import AppContext from "./AppContext";
-import Edit from "./pages/edit/edit";
 import LoadingScreen from "./components/LoadingScreen";
 import config from "./configs.json"
 
@@ -45,6 +46,7 @@ const App = () => {
         <Route exact path="/configuration" element={<Configuration />} />
         <Route exact path="/create" element={<Create />} />
         <Route exact path="/edit" element={<Edit />} />
+        <Route exact path="/fullscreen" element={<Fullscreen />} />
       </Routes>
     </AppContext.Provider>
   );

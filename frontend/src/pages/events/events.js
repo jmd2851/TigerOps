@@ -19,9 +19,27 @@ export default function Events() {
         }
     ];
 
+    // TODO: export as slideshow type constant
+    const slideshowProps = {
+        height:'600px',
+        fullHeightHover:'true',
+        navButtonsAlwaysVisible:'true',
+        navButtonsAlwaysInvisible:'false',
+        interval:'10000',
+        animation:'slide',
+        indicatorContainerProps:{style: {
+            opacity:'1',
+            paddingBottom:'8px',
+            borderRadius:'10px',
+        }}
+    }
+
     return (
         <Page title="Live Slideshow" subtitle="This week's current Slideshow, featuring Menus and Events">
-            <Slideshow />
+            <div className='slideshowContainer'>
+                <Slideshow slideStyles={{borderRadius:'10px 10px 0 0'}} slideshowProps={slideshowProps}/>
+            </div>
+            
             <PageHeader title="Slide Customizations" subtitle="Various Slide options and settings" />
             <Stack direction={'row'} spacing={4}>
                 {settings.map(setting => {
