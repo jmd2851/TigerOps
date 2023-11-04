@@ -1,45 +1,26 @@
 .nav{
     background-color: #51A46A;
-    padding-right: 2em;
-    padding-left: 2em;
-    min-width: 16vw;
-    height: 100%;
+    padding: 2.3em 2em 4em 2em;
+    min-width: 14em;
+    height: 100vh;
     box-shadow: 0px 0px 5px .5px black;
     position: fixed;
+}
+
+.logoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: baseline;
+}
+
+.iconContainer {
+    box-shadow: 0px 0px 5px .5px black;
 }
 
 .navContainer{
     display: inline;
 }
-
-.User{
-    margin-top: 2em;
-}
-
-.links{
-    font-weight: 500;
-}
-
-.calendarOptions{
-    margin-top: 3em;
-    margin-bottom: 6em;
-}
-
-.topOptions{
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.border{
-    border: 1.5px solid black;
-    margin: 0em;
-}
-
-.bottomOptions{
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
 
 a:link{
     color: black;
@@ -59,8 +40,4 @@ a:visited{
 a:hover{
     color: white;
     text-decoration: none;
-}
-
-.loginLink{
-    margin-top: 10px;
 }
