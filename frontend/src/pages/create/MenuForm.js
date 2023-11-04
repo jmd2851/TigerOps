@@ -11,6 +11,7 @@ import axios from "axios";
 import config from "../../configs.json";
 import { Stack,Paper } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import dayjs from "dayjs";
 
 class MenuOption {
   constructor(label, description, custom) {
@@ -34,7 +35,6 @@ export default function MenuForm(props) {
   const { formType, menu } = props;
   const [date, setDate] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
-  const selectedLabels = new Set();
 
   const handleClear = () => {
     setDate(null);
@@ -43,10 +43,20 @@ export default function MenuForm(props) {
 
   useEffect(() => {
     if (formType === FormTypes.EDIT) {
+      setDate(dayjs(menu.Date.split("T")[0]));
+      const savedMenuOptions = [];
+      for (const [label, description] of Object.entries(menu.MenuData)) {
+        let custom = false;
+        if (!labels.includes(label)) {
+          custom = true;
+        }
+        savedMenuOptions.push(new MenuOption(label, description, custom));
+      }
+      setMenuOptions(savedMenuOptions);
     } else {
       setMenuOptions([new MenuOption("", "")]);
     }
-  }, []);
+  }, [menu]);
 
   const handleCreateMenu = () => {
     const allOptionsValid = menuOptions.every(
@@ -54,7 +64,7 @@ export default function MenuForm(props) {
         menuItem.label.trim() !== "" && menuItem.description.trim() !== ""
     );
     if (date == null || !allOptionsValid) {
-      alert("TODO: add validation error message");
+      // "TODO: add validation error message"
       return;
     }
     const body = {

@@ -62,7 +62,7 @@ export default function Navigation() {
                   <Button variant="contained" sx={{width:'50%'}} onClick={handleClose}>Cancel</Button>
 
                   <Button variant="contained" sx={{width:'50%', minHeight:'56px'}} color="secondary">
-                      <Link to="/login" onClick={handleLogout()}>Log Out</Link>
+                      <Link to="/login" onClick={handleLogout}>Log Out</Link>
                   </Button>
               </Stack>
           </Box>

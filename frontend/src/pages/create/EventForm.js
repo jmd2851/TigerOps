@@ -8,6 +8,7 @@ import { FormTypes } from "../../constants";
 import axios from "axios";
 import config from "../../configs.json";
 import { FormControl, Stack } from "@mui/material";
+import dayjs from "dayjs";
 
 export default function EventForm(props) {
   const { formType, event } = props;
@@ -25,7 +26,11 @@ export default function EventForm(props) {
 
   useEffect(() => {
     if (formType === FormTypes.EDIT) {
-      // Perform any additional logic for editing here.
+      console.log(event)
+      setName(event.EventName);
+      setDescription(event.EventDescription);
+      setStartTime(dayjs(event.EventStartTime));
+      setEndTime(dayjs(event.EventEndTime));
     }
   }, []);
 
