@@ -16,7 +16,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 function createAccountRadioButton() {
     return (
@@ -186,28 +187,64 @@ function AccountRole() {
     );
   }
 
-const columns = [
+
+export default function DataTable() {
+    const [user, setUser] = useState([]);
+    // useEffect(() => {
+    //   //TO DO
+    //   console.log('Current User')
+    //   fetch('http://localhost:4000/users')
+    //   .then((response) => {
+    //     return response.json();
+    //   })
+    //   .then(data => {
+    //     console.log("I am in", data)
+    //     setUser(data);
+    //   })
+
+    // }, [
+    // ]);
+  axios.get('http://localhost:4000/users').then((response) => {
+    console.log("im in", response)
+    const data = response.data;
+    setUser(data.users);
+
+  })
+  .catch((e) => {
+    console.error(e)
+  })
+
+  
+
+  console.log("testing" , user)
+
+  const columns = [
     { field: 'name', headerName: 'Name', width: 130 },
     { field: 'email', headerName: 'Email', width: 180 },
     { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
     { field: 'removeAccount', headerName: 'Remove Account', width: 190, renderCell: RemoveAccount, disableClickEventBubbling: true },
   ];
-  
+    
   const rows = [
-    { id: 1, name: 'Example_Name', email: 'Example@gmail.com', accountType: 'Admin', 
-    removeAccount: ' '},
-    { id: 2, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
-    { id: 3, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
-  ];
-
-  export default function DataTable() {
+      { id: 1, name: 'examplename', email: 'Example@gmail.com', accountType: 'Admin',  removeAccount: ' '},
+      { id: 2, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
+      { id: 3, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
+    ];
     return (
-    <Page title="Configuration" subtitle="Various configuration settings and options for site administrators">
+   <Page title="Configuration" subtitle="Various configuration settings and options for site administrators">
         <div className='configBorder'>
             <h1 className='userListTitle'>
                 User List
             </h1>
             <div style={{ height: 'auto', width: '100%' }}>
+
+            {user.users.map((o) =>
+            <div>
+            <h1>  {o.UserID}</h1>
+            </div>
+            )}
+
+
                 <DataGrid
                 rows={rows}
                 columns={columns}
@@ -224,5 +261,10 @@ const columns = [
             </div>
         </div>
       </Page>
+
+
+
+
+
     );
   }
