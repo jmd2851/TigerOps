@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import config from "../../configs.json";
 import axios from "axios";
 
-const today = dayjs();
+const today = dayjs().startOf("day");
 
 export default function Edit() {
   const [open, setOpen] = useState(false);
@@ -81,7 +81,7 @@ export default function Edit() {
           for (const [label, description] of Object.entries(menu.MenuData)) {
             descriptions.push(`${label} - ${description}`);
           }
-          const date = dayjs(menu["Date"]).add(1, "d");
+          const date = dayjs(menu.Date.split("T")[0]);
           return new Slide(
             `${date.format("MMMM D, YYYY")} Menu`,
             "",
@@ -97,8 +97,8 @@ export default function Edit() {
 
           return new Slide(
             event.EventName,
-            `${startTime.format("MMMM D, YYYY hA")} through ${endTime.format(
-              "MMMM D, YYYY hA"
+            `${startTime.format("MMMM D, YYYY h:mmA")} through ${endTime.format(
+              "MMMM D, YYYY h:mmA"
             )}`,
             event.EventDescription,
             SlideTypes.EVENT,
@@ -156,16 +156,21 @@ export default function Edit() {
             paddingTop: "40px",
           }}
         >
-          <Typography variant="h5">
-            {selectedSlide ? selectedSlide.title : ""}
-          </Typography>
-          {selectedSlide !== null ? (
-            selectedSlide.type === SlideTypes.EVENT ? (
-              <EventForm formType={FormTypes.EDIT} event={selectedSlide.data} />
-            ) : (
-              <MenuForm formType={FormTypes.EDIT} menu={selectedSlide.data} />
-            )
-          ) : null}
+          <Stack direction="column" spacing={2}>
+            <Typography variant="h5">
+              {selectedSlide ? selectedSlide.title : ""}
+            </Typography>
+            {selectedSlide !== null ? (
+              selectedSlide.type === SlideTypes.EVENT ? (
+                <EventForm
+                  formType={FormTypes.EDIT}
+                  event={selectedSlide.data}
+                />
+              ) : (
+                <MenuForm formType={FormTypes.EDIT} menu={selectedSlide.data} />
+              )
+            ) : null}
+          </Stack>
         </Box>
       </Modal>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
