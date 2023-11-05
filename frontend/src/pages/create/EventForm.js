@@ -8,6 +8,7 @@ import { FormTypes } from "../../constants";
 import axios from "axios";
 import config from "../../configs.json";
 import { FormControl, Stack } from "@mui/material";
+import dayjs from "dayjs";
 
 export default function EventForm(props) {
   const { formType, event } = props;
@@ -25,7 +26,11 @@ export default function EventForm(props) {
 
   useEffect(() => {
     if (formType === FormTypes.EDIT) {
-      // Perform any additional logic for editing here.
+      console.log(event);
+      setName(event.EventName);
+      setDescription(event.EventDescription);
+      setStartTime(dayjs(event.EventStartTime));
+      setEndTime(dayjs(event.EventEndTime));
     }
   }, []);
 
@@ -70,7 +75,7 @@ export default function EventForm(props) {
   return (
     <div className="form">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <FormControl sx={{width:'100%'}}>
+        <FormControl sx={{ width: "100%" }}>
           <Stack direction="column" spacing={3}>
             <TextField
               fullWidth
@@ -92,16 +97,16 @@ export default function EventForm(props) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-            
+
             <Stack direction="row" spacing={2}>
               <DateTimePicker
-                sx={{width:'50%'}}
+                sx={{ width: "50%" }}
                 label="Start Time"
                 value={startTime}
                 onChange={(date) => setStartTime(date)}
               />
               <DateTimePicker
-                sx={{width:'50%'}}
+                sx={{ width: "50%" }}
                 label="End Time"
                 value={endTime}
                 onChange={(date) => setEndTime(date)}
@@ -110,15 +115,31 @@ export default function EventForm(props) {
 
             <Stack direction="row-reverse" spacing={2}>
               {formType === FormTypes.CREATE ? (
-                <Button variant="contained"  onClick={handleCreateEvent} color="secondary">Create</Button>
+                <Button
+                  variant="contained"
+                  onClick={handleCreateEvent}
+                  color="secondary"
+                >
+                  Create
+                </Button>
               ) : (
-                <Button variant="contained" onClick={handleEditEvent} color="secondary">Save</Button>
+                <Button
+                  variant="contained"
+                  onClick={handleEditEvent}
+                  color="secondary"
+                >
+                  Save
+                </Button>
               )}
               {formType === FormTypes.CREATE ? (
-                <Button variant="text" onClick={handleClear}>Clear</Button>
+                <Button variant="text" onClick={handleClear}>
+                  Clear
+                </Button>
               ) : (
                 // TODO: "are you sure" popover
-                <Button variant="text" onClick={handleDeleteEvent}>Delete this Slide</Button>
+                <Button variant="text" onClick={handleDeleteEvent}>
+                  Delete this Slide
+                </Button>
               )}
             </Stack>
           </Stack>

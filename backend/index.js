@@ -235,9 +235,10 @@ app.delete("/events/:id", async (req, res) => {
 
 // GET endpoint to retrieve events within a date range
 app.get("/events", async (req, res) => {
+  console.log(req.query)
   const { startTime, endTime } = req.query;
   const sql =
-    "SELECT * FROM event WHERE EventStartTime >= ? AND EventStartTime <= ?";
+    "SELECT * FROM event WHERE EventStartTime BETWEEN ? AND ?";
   if (!startTime || !endTime) {
     return res.status(400).json({
       events: [],
@@ -275,14 +276,18 @@ app.post("/menus", (req, res) => {
 });
 
 app.get("/menus", (req, res) => {
-  const sql = "SELECT * FROM menu";
-  db.query(sql, (err, results) => {
+  const { startDate, endDate } = req.query;
+  const sql = "SELECT * FROM menu WHERE Date BETWEEN ? AND ?";
+  db.query(sql, [startDate, endDate], (err, results) => {
     if (err) {
       return res.status(500).json({
-        message: `Failed to fetch menus: ${err}`,
+        message: `Failed to retrieve menus: ${err}`,
       });
     }
-    res.status(200).json(results);
+    res.status(200).json({
+      menus: results,
+      message: "Successfully retrieved menu.",
+    });
   });
 });
 
