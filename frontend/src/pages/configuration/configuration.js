@@ -18,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import config from "../../configs.json";
 
 function createAccountRadioButton() {
     return (
@@ -204,7 +205,7 @@ export default function DataTable() {
 
     // }, [
     // ]);
-  axios.get('http://localhost:4000/users').then((response) => {
+  axios.get(`${config[process.env.NODE_ENV].apiDomain}/users`).then((response) => {
     console.log("im in", response)
     const data = response.data;
     setUser(data.users);
@@ -224,12 +225,16 @@ export default function DataTable() {
     { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
     { field: 'removeAccount', headerName: 'Remove Account', width: 190, renderCell: RemoveAccount, disableClickEventBubbling: true },
   ];
-    
-  const rows = [
-      { id: 1, name: 'examplename', email: 'Example@gmail.com', accountType: 'Admin',  removeAccount: ' '},
-      { id: 2, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
-      { id: 3, name: 'Example_Name', email: 'Example@gmail.com', accountType: '', removeAccount: ' '},
-    ];
+  
+  const rows = user.map((u) =>
+    (
+      { id: u.UserID , 
+        name: u.FirstName + " " + u.LastName, 
+        email: u.Email
+      }
+    ))
+  
+
     return (
    <Page title="Configuration" subtitle="Various configuration settings and options for site administrators">
         <div className='configBorder'>
@@ -237,23 +242,26 @@ export default function DataTable() {
                 User List
             </h1>
             <div style={{ height: 'auto', width: '100%' }}>
+                <DataGrid 
 
-            {user.users.map((o) =>
-            <div>
-            <h1>  {o.UserID}</h1>
-            </div>
-            )}
-
-
-                <DataGrid
+                
                 rows={rows}
-                columns={columns}
+
+
+                columns={ [
+                  { field: 'name', headerName: 'name', width: 150 },
+                  { field: 'email', headerName: 'email', width: 150 },
+                  { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
+                  { field: 'removeAccount', headerName: 'Remove Account', width: 190, renderCell: RemoveAccount, disableClickEventBubbling: true },
+                  ]
+                }
+
                 initialState={{
                     pagination: {
                     paginationModel: { page: 0, pageSize: 5 },
                     },
                 }}
-                pageSizeOptions={[5, 10]}
+                pageSizeOptions={[0, 0]}
                 />
             </div>
             <div className = 'addAccountPosition'>
