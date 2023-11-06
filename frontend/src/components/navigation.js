@@ -96,7 +96,7 @@ export default function Navigation() {
         </Stack>
 
         <Stack direction="column" spacing={4}>
-          <Divider />
+          <Divider color="black" />
 
           <Typography variant="h5" sx={{textTransform:'capitalize'}}>
               <Link to="/configuration">Configuration</Link>
