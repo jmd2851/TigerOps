@@ -2,6 +2,7 @@ import './styles.css';
 import Page from '../../components/Page';
 import { Box, Card, Divider, Paper, Stack, Typography } from '@mui/material';
 import PageHeader from '../../components/PageHeader';
+import { Link } from 'react-router-dom';
 
 function pair(label,info) {
     return (
@@ -56,10 +57,10 @@ export default function Information() {
                 <Paper elevation={3} className='infoCard'>
                     <Stack direction="row" spacing={5} sx={{minHeight:'400px'}}>
                         <Stack direction="column" spacing={0} sx={{width:'100%'}}>
-                            <PageHeader title="Documentation" subtitle="Looking for more information about this site?"/>
+                            <PageHeader title="Documentation" subtitle="Looking for more information?"/>
                             <Divider />
                             <div className='content'>    
-                                <p>implement documentation information here</p>
+                                <Typography variant="h7">Click <Link sx={{fontWeight:'black'}}><a href="https://github.com/jmd2851/TigerOps" style={{textDecoration:'underline'}}>this link</a></Link> to access this application's documentation.</Typography>
                             </div>
                         </Stack> 
                     </Stack>

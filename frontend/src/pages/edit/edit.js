@@ -100,31 +100,35 @@ export default function Edit() {
         </Box>
       </Modal>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="Start Date"
-          value={startDate}
-          onChange={(date) => {
-            const startOfDay = date.startOf("day");
-            if (startOfDay > endDate) {
-              alert("Start date cannot be after end date.");
-              return;
-            }
-            setStartDate(startOfDay);
-          }}
-        />
+        <Stack direction="row" spacing={2} sx={{paddingTop: '8px'}}>
+          <DatePicker
+            sx={{width:'50%'}}
+            label="Start Date"
+            value={startDate}
+            onChange={(date) => {
+              const startOfDay = date.startOf("day");
+              if (startOfDay > endDate) {
+                alert("Start date cannot be after end date.");
+                return;
+              }
+              setStartDate(startOfDay);
+            }}
+          />
 
-        <DatePicker
-          label="End Date"
-          value={endDate}
-          onChange={(date) => {
-            const startOfDay = date.startOf("day");
-            if (startOfDay < startDate) {
-              alert("End date cannot be before start date.");
-              return;
-            }
-            setEndDate(startOfDay);
-          }}
-        />
+          <DatePicker
+            sx={{width:'50%'}}
+            label="End Date"
+            value={endDate}
+            onChange={(date) => {
+              const startOfDay = date.startOf("day");
+              if (startOfDay < startDate) {
+                alert("End date cannot be before start date.");
+                return;
+              }
+              setEndDate(startOfDay);
+            }}
+          />
+        </Stack>
       </LocalizationProvider>
       <Stack spacing={{ sm: 2 }} direction="row" useFlexGap flexWrap="wrap">
         {slides.map((slide) => {
