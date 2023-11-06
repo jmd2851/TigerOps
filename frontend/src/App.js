@@ -37,9 +37,7 @@ const App = () => {
         console.log(err);
       });
   }, []);
-  {
-    /* <Navigate to="/slides"> : */
-  }
+
   return (
     <AppContext.Provider value={{ user, setUser, setIsLoading }}>
       <LoadingScreen loading={isLoading} />
