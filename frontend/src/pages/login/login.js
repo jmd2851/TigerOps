@@ -135,7 +135,7 @@ export default function Login() {
           </div>
 
           <div className="visitorButtonContainer">
-            <Link to="/events">
+            <Link to="/slides">
               <Button fullWidth variant="contained" color="secondary" sx={{padding:'16px'}}>
                 continue as viewer
               </Button>
