@@ -20,6 +20,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import config from "../../configs.json";
 import axios from "axios";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 const today = dayjs().startOf("day");
 
@@ -58,8 +61,8 @@ export default function Edit() {
           `${config[process.env.NODE_ENV].apiDomain}/menus`,
           {
             params: {
-              startDate: startDate.format("YYYY-MM-DD"),
-              endDate: endDate.format("YYYY-MM-DD"),
+              startDate: dayjs.utc(startDate).format("YYYY-MM-DD"),
+              endDate: dayjs.utc(endDate).format("YYYY-MM-DD"),
             },
           },
           axiosConfig
@@ -68,8 +71,8 @@ export default function Edit() {
           `${config[process.env.NODE_ENV].apiDomain}/events`,
           {
             params: {
-              startTime: startDate.format("YYYY-MM-DD HH:mm:ss"),
-              endTime: endDate.format("YYYY-MM-DD HH:mm:ss"),
+              startTime: dayjs.utc(startDate).format("YYYY-MM-DD HH:mm:ss"),
+              endTime: dayjs.utc(endDate).format("YYYY-MM-DD HH:mm:ss"),
             },
           },
           axiosConfig
@@ -107,10 +110,9 @@ export default function Edit() {
             endTime
           );
         });
-        const sortedSlides = [...menuSlides, ...eventSlides].sort((a, b) => {
-          return a.start < b.start;
-        });
-        setSlides(sortedSlides);
+        const slides = [...menuSlides, ...eventSlides];
+        slides.sort((a, b) => a.start - b.start);
+        setSlides(slides);
       })
       .catch((error) => console.error(error));
   };
