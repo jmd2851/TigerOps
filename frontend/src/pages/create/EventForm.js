@@ -9,6 +9,9 @@ import axios from "axios";
 import config from "../../configs.json";
 import { FormControl, Stack } from "@mui/material";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 export default function EventForm(props) {
   const { formType, event } = props;
@@ -26,7 +29,6 @@ export default function EventForm(props) {
 
   useEffect(() => {
     if (formType === FormTypes.EDIT) {
-      console.log(event);
       setName(event.EventName);
       setDescription(event.EventDescription);
       setStartTime(dayjs(event.EventStartTime));
@@ -65,7 +67,7 @@ export default function EventForm(props) {
       .then((response) => {
         handleClear();
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.erro(error));
   };
 
   const handleEditEvent = () => {};
@@ -103,13 +105,13 @@ export default function EventForm(props) {
                 sx={{ width: "50%" }}
                 label="Start Time"
                 value={startTime}
-                onChange={(date) => setStartTime(date)}
+                onChange={(date) => setStartTime(dayjs.utc(date))}
               />
               <DateTimePicker
                 sx={{ width: "50%" }}
                 label="End Time"
                 value={endTime}
-                onChange={(date) => setEndTime(date)}
+                onChange={(date) => setEndTime(dayjs.utc(date))}
               />
             </Stack>
 
