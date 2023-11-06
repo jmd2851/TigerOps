@@ -59,15 +59,12 @@ const permissionCol = [
 const permissionRow = [
   {
     id: 1,
-    name: "Example_Name",
-    email: "Example@gmail.com",
-    accountType: "Admin",
-    permissions: " ",
-    removeAccount: " ",
+    name: "name",
   },
 ];
 
 function AccountRole() {
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -95,7 +92,11 @@ function AccountRole() {
           </DialogContentText>
 
           <div style={{ height: "auto", width: "100%" }}>
-            <DataGrid rows={permissionRow} columns={permissionCol} />
+            <DataGrid rows={
+              permissionRow
+              } columns={
+                permissionCol
+                } />
           </div>
         </DialogContent>
         <DialogActions>
@@ -205,6 +206,7 @@ function AddAccount() {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
+      withCredentials: true
     };
 
 
@@ -283,17 +285,23 @@ function AddAccount() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="emailField">
-              <TextField
-                autoFocus
-                margin="dense"
-                className="email"
-                label="role"
-                variant="standard"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              />
-            </div>
+            <FormControl>
+              <FormLabel className="radioButton">Account Type:</FormLabel>
+              <RadioGroup defaultValue="user" name="radio-buttons-group">
+                <FormControlLabel 
+                  value="User" 
+                  control={<Radio />} 
+                  label="User" 
+                  onChange={(e) => setRole(e.target.value)}
+                />
+                <FormControlLabel 
+                  value="Admin" 
+                  control={<Radio />} 
+                  label="Admin"
+                  onChange={(e) => setRole(e.target.value)} 
+                />
+              </RadioGroup>
+            </FormControl>
             <div className="radioButtonOption">
               <createAccountRadioButton />
             </div>
@@ -329,6 +337,7 @@ const rows = user.map((u) => ({
   id: u.UserID,
   name: u.FirstName + " " + u.LastName,
   email: u.Email,
+  role: u.UserRole
 }))
 
   const  [row, setRows] = useState(rows);
@@ -351,7 +360,7 @@ const rows = user.map((u) => ({
                 field: "accountRole",
                 headerName: "Account Role",
                 width: 150,
-                renderCell: AccountRole,
+                renderCell: (params) => AccountRole(params.row.name),
                 disableClickEventBubbling: true,
               },
               {
