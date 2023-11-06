@@ -130,6 +130,7 @@ function RemoveAccount(rowId) {
       .catch((e) => {
         console.error(e);
       });
+
     setOpen(false);
   };
 
@@ -170,6 +171,14 @@ function RemoveAccount(rowId) {
 }
 
 function AddAccount() {
+
+  const [firstName, setFirstName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [role, setRole] = useState("");
+
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -179,6 +188,40 @@ function AddAccount() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSubmit = () => {
+    setOpen(false);
+
+    const body = {
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName:  lastName,
+      role: role
+    };
+
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+
+
+  axios
+  .post(`${config[process.env.NODE_ENV].apiDomain}/users`, body, axiosConfig)
+      .then((response) => {
+      })
+      .then((response) => {
+        const data = response.data;
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+    setOpen(false);
+  };
+
 
   return (
     <div>
@@ -201,8 +244,21 @@ function AddAccount() {
                 autoFocus
                 margin="dense"
                 className="firstName"
-                label="First Name"
+                label="first name"
                 variant="standard"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+            <div className="firstNameField">
+              <TextField
+                autoFocus
+                margin="dense"
+                className="firstName"
+                label="last name"
+                variant="standard"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
               />
             </div>
             <div className="lastNameField">
@@ -210,8 +266,10 @@ function AddAccount() {
                 autoFocus
                 margin="dense"
                 className="lastName"
-                label="Last Name"
+                label="Email"
                 variant="standard"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="emailField">
@@ -219,8 +277,21 @@ function AddAccount() {
                 autoFocus
                 margin="dense"
                 className="email"
-                label="Email"
+                label="Password"
                 variant="standard"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="emailField">
+              <TextField
+                autoFocus
+                margin="dense"
+                className="email"
+                label="role"
+                variant="standard"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
               />
             </div>
             <div className="radioButtonOption">
@@ -230,7 +301,7 @@ function AddAccount() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose} variant="contained">
+          <Button onClick={handleSubmit} variant="contained">
             Submit
           </Button>
         </DialogActions>
@@ -254,24 +325,15 @@ export default function DataTable() {
       });
   }, []);
 
-  const columns = [
-    { field: "name", headerName: "Name", width: 130 },
-    { field: "email", headerName: "Email", width: 180 },
-    {
-      field: "accountRole",
-      headerName: "Account Role",
-      width: 150,
-      renderCell: AccountRole,
-      disableClickEventBubbling: true,
-    },
-    {
-      field: "removeAccount",
-      headerName: "Remove Account",
-      width: 190,
-      renderCell: RemoveAccount,
-      disableClickEventBubbling: true,
-    },
-  ];
+const rows = user.map((u) => ({
+  id: u.UserID,
+  name: u.FirstName + " " + u.LastName,
+  email: u.Email,
+}))
+
+  const  [row, setRows] = useState(rows);
+
+
   return (
     <Page
       title="Configuration"
@@ -281,11 +343,7 @@ export default function DataTable() {
         <h1 className="userListTitle">User List</h1>
         <div style={{ height: "auto", width: "100%" }}>
           <DataGrid
-            rows={user.map((u) => ({
-              id: u.UserID,
-              name: u.FirstName + " " + u.LastName,
-              email: u.Email,
-            }))}
+            rows={rows}
             columns={[
               { field: "name", headerName: "name", width: 150 },
               { field: "email", headerName: "email", width: 150 },
