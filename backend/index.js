@@ -235,10 +235,8 @@ app.delete("/events/:id", async (req, res) => {
 
 // GET endpoint to retrieve events within a date range
 app.get("/events", async (req, res) => {
-  console.log(req.query)
   const { startTime, endTime } = req.query;
-  const sql =
-    "SELECT * FROM event WHERE EventStartTime BETWEEN ? AND ?";
+  const sql = "SELECT * FROM event WHERE EventStartTime BETWEEN ? AND ?";
   if (!startTime || !endTime) {
     return res.status(400).json({
       events: [],
@@ -416,53 +414,80 @@ app.get("/users", (req, res) => {
 });
 
 app.put("/users/:id", (req, res) => {
-  const { id } = req.params.id;
-  if (req.session.user && req.session.user.UserRole != "Admin") {
-    return res
-      .status(401)
-      .json({ message: "Unauthorized to create update users." });
+  const { id } = req.params;
+  const { role } = req.body;
+  if (
+    !req.session.user ||
+    req.session.user.UserRole.toLowerCase() !== "admin"
+  ) {
+    return res.status(401).json({ message: "Unauthorized to update users." });
   }
-
   db.query("SELECT * FROM user WHERE UserID = ?", [id], (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: `Failed to retrieve user: ${err}` });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: "User not found." });
+    }
     const user = results[0];
-    if (user.UserRole == "Admin") {
+    if (user.UserRole.toLowerCase() === "admin") {
       return res
         .status(403)
         .json({ message: "Permission to edit an admin account denied." });
     }
-  });
-  const sql = "UPDATE user SET UserRole = ? WHERE UserId = ?";
-  db.query(sql, [role, id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: `Failed to update user ${err}` });
-    }
-    return res.status(200).json({
-      user: result.affectedRows[0],
-      message: `Successfully updated user with ID ${id}`,
+    const updateSql = "UPDATE user SET UserRole = ? WHERE UserId = ?";
+    db.query(updateSql, [role, id], (updateErr, result) => {
+      if (updateErr) {
+        return res
+          .status(500)
+          .json({ message: `Failed to update user: ${updateErr}` });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "User not found." });
+      }
+      return res.status(200).json({
+        user: result.affectedRows,
+        message: `Successfully updated user with ID ${id}`,
+      });
     });
   });
 });
 
 app.delete("/users/:id", (req, res) => {
-  const { id } = req.params.id;
-  if (req.session.user && req.session.user.UserRole != "Admin") {
+  const { id } = req.params;
+  if (
+    !req.session.user ||
+    req.session.user.UserRole.toLowerCase() !== "admin"
+  ) {
     return res.status(401).json({ message: "Unauthorized to delete users." });
   }
   db.query("SELECT * FROM user WHERE UserID = ?", [id], (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ message: `Failed to retrieve user: ${err}` });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ message: "User not found." });
+    }
     const user = results[0];
-    if (user.UserRole == "Admin") {
+    if (user.UserRole.toLowerCase() === "admin") {
       return res
         .status(403)
         .json({ message: "Permission to delete an admin account denied." });
     }
-  });
-  const sql = "DELETE FROM user WHERE UserId = ?";
-  db.query(sql, [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: `Failed to delete user ${err}` });
-    }
-    return res.status(200).json({
-      message: `Successfully deleted user with ID ${id}`,
+    const deleteSql = "DELETE FROM user WHERE UserId = ?";
+    db.query(deleteSql, [id], (deleteErr, deleteResult) => {
+      if (deleteErr) {
+        return res
+          .status(500)
+          .json({ message: `Failed to delete user: ${deleteErr}` });
+      }
+      return res
+        .status(200)
+        .json({ message: `Successfully deleted user with ID ${id}` });
     });
   });
 });
