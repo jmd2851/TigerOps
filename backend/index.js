@@ -371,7 +371,7 @@ app.post("/users", (req, res) => {
       message: "Email, password, first name, and last name are required",
     });
   }
-  if (req.session.user && req.session.user.UserRole != "Admin") {
+  if (!req.session.user || req.session.user.UserRole.toLowerCase() != "admin") {
     return res
       .status(401)
       .json({ message: "Unauthorized to create a new user." });
@@ -382,7 +382,7 @@ app.post("/users", (req, res) => {
     }
     bcrypt.hash(password, 10, (_, hash) => {
       const sql =
-        "INSERT INTO User (Email, Password, FirstName, LastName, UserRole) VALUES (?, ?, ?, ?, ?)";
+        "INSERT INTO user (Email, Password, FirstName, LastName, UserRole) VALUES (?, ?, ?, ?, ?)";
       db.query(sql, [email, hash, firstName, lastName, role], (err, result) => {
         if (err) {
           return res
