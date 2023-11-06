@@ -201,7 +201,24 @@ function AccountRole() {
     );
   }
 
-const columns = [
+
+export default function DataTable() {
+    const [user, setUser] = useState([]);
+  axios.get(`${config[process.env.NODE_ENV].apiDomain}/users`).then((response) => {
+    console.log("im in", response)
+    const data = response.data;
+    setUser(data.users);
+
+  })
+  .catch((e) => {
+    console.error(e)
+  })
+
+  
+
+  console.log("testing" , user)
+
+  const columns = [
     { field: 'name', headerName: 'Name', width: 130 },
     { field: 'email', headerName: 'Email', width: 180 },
     { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
@@ -228,7 +245,17 @@ const columns = [
 
                 
                 rows={rows}
-                columns={columns}
+
+
+                columns={ [
+                  { field: 'name', headerName: 'name', width: 150 },
+                  { field: 'email', headerName: 'email', width: 150 },
+                  { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
+                  { field: 'removeAccount', headerName: 'Remove Account', width: 190, 
+                  renderCell: (params) => RemoveAccount(params.row.id), disableClickEventBubbling: true },
+                  ]
+                }
+
                 initialState={{
                     pagination: {
                     paginationModel: { page: 0, pageSize: 5 },
