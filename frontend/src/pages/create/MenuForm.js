@@ -9,9 +9,12 @@ import { FormTypes } from "../../constants";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import config from "../../configs.json";
-import { Stack,Paper } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import { Stack, Paper } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 class MenuOption {
   constructor(label, description, custom) {
@@ -116,16 +119,16 @@ export default function MenuForm(props) {
   return (
     <div className="form">
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <FormControl sx={{width:'100%'}}>
+        <FormControl sx={{ width: "100%" }}>
           <Stack direction="column" spacing={3}>
             <DatePicker
               label="Date"
               value={date}
-              onChange={(date) => setDate(date)}
+              onChange={(date) => setDate(dayjs.utc(date))}
             />
 
             {menuOptions.map((menuItem, index) => (
-              <Paper 
+              <Paper
                 key={index}
                 className="menuItemFormContainer"
                 elevation={3}
@@ -154,12 +157,16 @@ export default function MenuForm(props) {
                     ))}
                   </TextField>
 
-                  <Button sx={{marginBottom:"-10px"}} onClick={() => handleRemoveMenuItem(index)}>
-                    <CloseIcon sx={{position:'absolute',top:'0',right:'0'}} />
+                  <Button
+                    sx={{ marginBottom: "-10px" }}
+                    onClick={() => handleRemoveMenuItem(index)}
+                  >
+                    <CloseIcon
+                      sx={{ position: "absolute", top: "0", right: "0" }}
+                    />
                   </Button>
                 </Stack>
 
-               
                 {menuItem.custom && (
                   <TextField
                     fullWidth
@@ -195,19 +202,37 @@ export default function MenuForm(props) {
               </Paper>
             ))}
 
-            <Button variant="outlined" onClick={handleAddMenuItem}>Add Menu Item</Button>
+            <Button variant="outlined" onClick={handleAddMenuItem}>
+              Add Menu Item
+            </Button>
 
             <Stack direction="row-reverse" spacing={2}>
               {formType === FormTypes.CREATE ? (
-                <Button variant="contained" onClick={handleCreateMenu} color="secondary">Create Menu</Button>
+                <Button
+                  variant="contained"
+                  onClick={handleCreateMenu}
+                  color="secondary"
+                >
+                  Create Menu
+                </Button>
               ) : (
-                <Button variant="contained" onClick={handleEditMenu} color="secondary">Save</Button>
+                <Button
+                  variant="contained"
+                  onClick={handleEditMenu}
+                  color="secondary"
+                >
+                  Save
+                </Button>
               )}
               {formType === FormTypes.CREATE ? (
-                <Button variant="text" onClick={handleClear}>Clear</Button>
+                <Button variant="text" onClick={handleClear}>
+                  Clear
+                </Button>
               ) : (
                 // TODO: "are you sure" popover
-                <Button variant="text" onClick={handleDeleteMenu}>Delete this Slide</Button>
+                <Button variant="text" onClick={handleDeleteMenu}>
+                  Delete this Slide
+                </Button>
               )}
             </Stack>
           </Stack>
