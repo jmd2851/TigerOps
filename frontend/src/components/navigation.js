@@ -164,7 +164,7 @@ export default function Navigation() {
 
         <Stack direction="column" spacing={4}>
           <Divider />
-          {user != null ? (
+          {user != null && user.UserRole.toLowerCase() == "admin" ? (
             <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
               <Link to="/configuration">Configuration</Link>
             </Typography>
