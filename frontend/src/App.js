@@ -15,6 +15,7 @@ import Edit from "./pages/edit/edit";
 import Fullscreen from "./pages/slideshow/fullscreen";
 
 import AppContext from "./AppContext";
+import Edit from "./pages/edit/edit";
 import LoadingScreen from "./components/LoadingScreen";
 import config from "./configs.json"
 
