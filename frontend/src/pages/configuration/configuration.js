@@ -105,7 +105,10 @@ function AccountRole() {
     );
   }
 
-  function RemoveAccount() {
+  function RemoveAccount(rowId) {
+    
+    const [id, setId] = useState([]);
+
     const [open, setOpen] = React.useState(false);
   
     const handleClickOpen = () => {
@@ -113,6 +116,16 @@ function AccountRole() {
     };
   
     const handleClose = () => {
+      console.log("id", rowId)
+
+      axios.delete(`${config[process.env.NODE_ENV].apiDomain}/users/${rowId}`).then((response) => {
+        const data = response.data;
+        setId(data.id);
+    
+      })
+      .catch((e) => {
+        console.error(e)
+      })
       setOpen(false);
     };
   
@@ -129,7 +142,7 @@ function AccountRole() {
             </DialogContentText>
                 <div className='removeAccount_ButtonItems'>
                 <Button onClick={handleClose} variant="contained" className="removeAccount_NoButton">No</Button>
-                <Button variant="contained" className="removeAccount_YesButton">Yes</Button>
+                <Button onClick={handleClose} variant="contained" className="removeAccount_YesButton">Yes</Button>
                 </div>
 
           </DialogContent>
@@ -191,20 +204,6 @@ function AccountRole() {
 
 export default function DataTable() {
     const [user, setUser] = useState([]);
-    // useEffect(() => {
-    //   //TO DO
-    //   console.log('Current User')
-    //   fetch('http://localhost:4000/users')
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then(data => {
-    //     console.log("I am in", data)
-    //     setUser(data);
-    //   })
-
-    // }, [
-    // ]);
   axios.get(`${config[process.env.NODE_ENV].apiDomain}/users`).then((response) => {
     console.log("im in", response)
     const data = response.data;
@@ -252,7 +251,8 @@ export default function DataTable() {
                   { field: 'name', headerName: 'name', width: 150 },
                   { field: 'email', headerName: 'email', width: 150 },
                   { field: 'accountRole', headerName: 'Account Role', width: 150, renderCell: AccountRole, disableClickEventBubbling: true  },
-                  { field: 'removeAccount', headerName: 'Remove Account', width: 190, renderCell: RemoveAccount, disableClickEventBubbling: true },
+                  { field: 'removeAccount', headerName: 'Remove Account', width: 190, 
+                  renderCell: (params) => RemoveAccount(params.row.id), disableClickEventBubbling: true },
                   ]
                 }
 
