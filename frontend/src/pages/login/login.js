@@ -59,7 +59,6 @@ export default function Login() {
         }, 2000);
       })
       .catch((error) => {
-        alert(error);
         setShowError(true);
         setShowSuccess(false);
         setEmail("");
