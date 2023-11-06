@@ -166,6 +166,7 @@ export default function Navigation() {
           <Divider color="black" />
           {user != null && user.UserRole.toLowerCase() == "admin" ? (
             <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
+
               <Link to="/configuration">Configuration</Link>
             </Typography>
           ) : null}
