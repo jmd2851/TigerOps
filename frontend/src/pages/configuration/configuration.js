@@ -88,7 +88,7 @@ function AccountRole(userName, userId, userRole) {
           </div>
           <FormControl>
            <FormLabel className="radioButton">Account Type:</FormLabel>
-            <RadioGroup defaultValue="User" name="adminButton">
+            <RadioGroup defaultValue= {userRole} name="adminButton">
         
               <FormControlLabel 
                 value="Admin" 
