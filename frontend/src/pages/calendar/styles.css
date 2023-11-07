@@ -219,3 +219,8 @@
   margin-top: 40px;
   margin-bottom: 20px;
 }
+
+.calendarContainer .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
+  padding-left: 60px !important;
+}
+
