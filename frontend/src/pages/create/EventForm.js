@@ -83,9 +83,31 @@ export default function EventForm(props) {
       .catch((error) => console.erro(error));
   };
 
-  const handleEditEvent = () => {};
+  const handleEditEvent = (e) => {
+    alert('handleEditEvent');
+  };
 
-  const handleDeleteEvent = () => {};
+  const handleDeleteEvent = (e) => {
+    setIsLoading(true);
+
+    axios
+      .delete(`${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,{})
+      .then((response)=>{
+        handleClear();
+        showAlert(
+          "success",
+          "Successfully deleted an event."
+        );
+      })
+      .catch((err) => {
+        showAlert(
+          "error",
+          "Could not delete event."
+        );
+        console.log(err);
+      })
+      .finally(()=>setIsLoading(false));
+  };
 
   return (
     <div className="form">
