@@ -333,17 +333,17 @@ app.delete("/menus/:id", async (req, res) => {
   const sql = `DELETE FROM menu WHERE MenuID = ?`;
   db.query(sql, [id], function (err, result) {
     if (err) {
-      res.status(400).json({
+      return res.status(400).json({
         message: `Failed to delete the menu ${id}: ${err}`,
       });
     }
     if (result.affectedRows === 0) {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Menu not found",
       });
     }
     res.status(200).json({
-      message: `Successfully delted menu with ID ${id}`,
+      message: `Successfully deleted menu with ID ${id}`,
     });
   });
 });
