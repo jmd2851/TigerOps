@@ -101,7 +101,25 @@ export default function MenuForm(props) {
 
   const handleEditMenu = () => {};
 
-  const handleDeleteMenu = () => {};
+  const handleDeleteMenu = (e) => {
+    console.log('menuid: '+menu.MenuID);
+    axios
+      .delete(`${config[process.env.NODE_ENV].apiDomain}/menus/${menu.MenuID}`,{})
+      .then((response)=>{
+        handleClear();
+        showAlert(
+          "success",
+          "Successfully deleted menu."
+        );
+      })
+      .catch((err) => {
+        showAlert(
+          "error",
+          "Could not delete menu."
+        );
+        console.log(err);
+      });
+  };
 
   const handleMenuItemChange = (index, label, description, custom = false) => {
     const updatedMenuOptions = [...menuOptions];

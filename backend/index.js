@@ -328,22 +328,22 @@ app.put("/menus/:menuId", (req, res) => {
   });
 });
 
-app.delete("/menus/:id", (req, res) => {
-  const menuId = req.params.menuId;
-  const sql = "DELETE FROM menu WHERE MenuID = ?";
-  db.query(sql, [menuId], (err, result) => {
+app.delete("/menus/:id", async (req, res) => {
+  const id = parseInt(req.params.id); 
+  const sql = `DELETE FROM menu WHERE MenuID = ?`;
+  db.query(sql, [id], function (err, result) {
     if (err) {
-      return res.status(500).json({
-        message: `Failed to delete the menu: ${err}`,
+      res.status(400).json({
+        message: `Failed to delete the menu ${id}: ${err}`,
       });
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json({
+      res.status(404).json({
         message: "Menu not found",
       });
     }
     res.status(200).json({
-      message: "Menu deleted successfully",
+      message: `Successfully delted menu with ID ${id}`,
     });
   });
 });

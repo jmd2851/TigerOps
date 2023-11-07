@@ -88,8 +88,6 @@ export default function EventForm(props) {
   };
 
   const handleDeleteEvent = (e) => {
-    setIsLoading(true);
-
     axios
       .delete(`${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,{})
       .then((response)=>{
@@ -105,8 +103,7 @@ export default function EventForm(props) {
           "Could not delete event."
         );
         console.log(err);
-      })
-      .finally(()=>setIsLoading(false));
+      });
   };
 
   return (
