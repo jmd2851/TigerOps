@@ -20,7 +20,6 @@ export default function EventForm(props) {
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
 
   const { showAlert } = useContext(AppContext);
 
@@ -92,11 +91,7 @@ export default function EventForm(props) {
     setIsLoading(true);
 
     axios
-      .delete(`${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,{
-        params: {
-          id: event.EventID
-        },
-      })
+      .delete(`${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,{})
       .then((response)=>{
         handleClear();
         showAlert(
