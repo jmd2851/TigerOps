@@ -3,7 +3,6 @@
 - VPS is Ubuntu-based.
 - Running software: pm2, Node.JS, Nginx, MySQL server
 - Current production URL is [tigerops.jamiesondube.com/login](http://tigerops.jamiesondube.com/login)
-- VPS login is root/TigerOpsAdm1n
 - Frontend runs on port 3000, backend on port 4000
 - pm2 is used to run multiple Node applications and provide persistence upon restart.
 - Run `pm2 l` to see status of running Node applications.
