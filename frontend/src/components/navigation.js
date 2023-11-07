@@ -106,11 +106,11 @@ export default function Navigation() {
 
       <Stack
         direction="column"
-        spacing={56}
+        spacing={10}
         className="nav"
         sx={{ textAlign: "center" }}
       >
-        <Stack direction="column" spacing={16}>
+        <Stack direction="column" spacing={10}>
           <Stack direction="column" spacing={2}>
             <Box className="logoContainer">
               <Box
