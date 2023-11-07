@@ -260,9 +260,9 @@ app.get("/events", async (req, res) => {
 });
 
 app.post("/menus", (req, res) => {
-  const { menuData, date } = req.body;
-  const sql = "INSERT INTO menu (MenuData, Date) VALUES (?, ?)";
-  db.query(sql, [JSON.stringify(menuData), date], (err, result) => {
+  const { menuData, date, isVisible } = req.body;
+  const sql = "INSERT INTO menu (MenuData, Date, IsVisible) VALUES (?, ?, ?)";
+  db.query(sql, [JSON.stringify(menuData), date, isVisible], (err, result) => {
     if (err) {
       return res.status(400).json({
         message: `Failed to create the menu: ${err}`,
@@ -311,9 +311,10 @@ app.get("/menus/:menuId", (req, res) => {
 
 app.put("/menus/:menuId", (req, res) => {
   const menuId = parseInt(req.params.menuId);
+  const isVisible = parseInt(req.body.isVisible);
   const { menuData, date } = req.body;
-  const sql = "UPDATE menu SET MenuData = ?, Date = ? WHERE MenuID = ?";
-  db.query(sql, [JSON.stringify(menuData), date, menuId], (err, result) => {
+  const sql = "UPDATE menu SET MenuData = ?, Date = ?, IsVisible = ? WHERE MenuID = ?";
+  db.query(sql, [JSON.stringify(menuData), date, isVisible, menuId], (err, result) => {
     if (err) {
       return res.status(400).json({
         message: `Failed to update the menu: ${err}`,
