@@ -4,7 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
@@ -13,6 +13,7 @@ import { Stack, Paper } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import AppContext from "../../AppContext";
 
 dayjs.extend(utc);
 
@@ -38,6 +39,8 @@ export default function MenuForm(props) {
   const { formType, menu } = props;
   const [date, setDate] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
+
+  const { showAlert } = useContext(AppContext);
 
   const handleClear = () => {
     setDate(null);
@@ -67,7 +70,7 @@ export default function MenuForm(props) {
         menuItem.label.trim() !== "" && menuItem.description.trim() !== ""
     );
     if (date == null || !allOptionsValid) {
-      // "TODO: add validation error message"
+      showAlert("error", "Please fill out all fields before creating a menu.");
       return;
     }
     const body = {
@@ -90,9 +93,10 @@ export default function MenuForm(props) {
         axiosConfig
       )
       .then((response) => {
+        showAlert("success", "Successfully created a menu.");
         handleClear();
       })
-      .catch((error) => console.log(error));
+      .catch(() => showAlert("error", "Something went wrong..."));
   };
 
   const handleEditMenu = () => {};
@@ -196,7 +200,12 @@ export default function MenuForm(props) {
                   maxRows={4}
                   onChange={(e) => {
                     const description = e.target.value;
-                    handleMenuItemChange(index, menuItem.label, description);
+                    handleMenuItemChange(
+                      index,
+                      menuItem.label,
+                      description,
+                      menuItem.custom
+                    );
                   }}
                 />
               </Paper>

@@ -33,12 +33,16 @@ export default function Edit() {
   const [endDate, setEndDate] = useState(today.add(7, "day"));
   const [slides, setSlides] = useState([]);
 
+
+  
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+
 
   useEffect(() => {
     fetchSlides(startDate, endDate).then((res) => {

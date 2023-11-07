@@ -3,13 +3,14 @@ import TextField from "@mui/material/TextField";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
 import axios from "axios";
 import config from "../../configs.json";
 import { FormControl, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import AppContext from "../../AppContext";
 
 dayjs.extend(utc);
 
@@ -19,6 +20,8 @@ export default function EventForm(props) {
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+
+  const { showAlert } = useContext(AppContext);
 
   const handleClear = () => {
     setName("");
@@ -39,11 +42,17 @@ export default function EventForm(props) {
   const handleCreateEvent = (e) => {
     e.preventDefault();
     if (!name || !description || !startTime || !endTime) {
-      alert("Please fill out all fields before creating the event.");
+      showAlert(
+        "error",
+        "Please fill out all fields before creating an event."
+      );
       return;
     }
     if (startTime >= endTime) {
-      alert("End time must be after the start time.");
+      showAlert(
+        "error",
+        "Start time must be before end time."
+      );
       return;
     }
     const body = {
@@ -66,6 +75,10 @@ export default function EventForm(props) {
       )
       .then((response) => {
         handleClear();
+        showAlert(
+          "success",
+          "Successfully created an event."
+        );
       })
       .catch((error) => console.erro(error));
   };
