@@ -36,7 +36,7 @@ const labels = [
 ];
 
 export default function MenuForm(props) {
-  const { formType, menu } = props;
+  const { formType, menu, handleClose, refetch } = props;
   const [date, setDate] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
 
@@ -49,7 +49,7 @@ export default function MenuForm(props) {
 
   useEffect(() => {
     if (formType === FormTypes.EDIT) {
-      setDate(dayjs(menu.Date.split("T")[0]));
+      setDate(dayjs.utc(menu.Date));
       const savedMenuOptions = [];
       for (const [label, description] of Object.entries(menu.MenuData)) {
         let custom = false;
@@ -99,32 +99,60 @@ export default function MenuForm(props) {
       .catch(() => showAlert("error", "Something went wrong..."));
   };
 
-  const handleEditMenu = () => {};
+  const handleEditMenu = (e) => {
+    const allOptionsValid = menuOptions.every(
+      (menuItem) =>
+        menuItem.label.trim() !== "" && menuItem.description.trim() !== ""
+    );
+    if (date == null || !allOptionsValid) {
+      showAlert("error", "Please fill out all fields.");
+      return;
+    }
+    const body = {
+      menuData: menuOptions.reduce((acc, menuItem) => {
+        acc[menuItem.label] = menuItem.description;
+        return acc;
+      }, {}),
+      date: date.format("YYYY-MM-DD"),
+    };
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+    axios
+      .put(
+        `${config[process.env.NODE_ENV].apiDomain}/menus/${menu.MenuID}`,
+        body,
+        axiosConfig
+      )
+      .then((response) => {
+        showAlert("success", "Successfully edited the menu.");
+        handleClose();
+        handleClear();
+        refetch();
+      })
+      .catch(() => showAlert("error", "Something went wrong..."));
+  };
 
   const handleDeleteMenu = (e) => {
-    console.log('menuid: '+menu.MenuID);
     axios
-      .delete(`${config[process.env.NODE_ENV].apiDomain}/menus/${menu.MenuID}`,{})
-      .then((response)=>{
+      .delete(`${config[process.env.NODE_ENV].apiDomain}/menus/${menu.MenuID}`)
+      .then(() => {
+        showAlert("success", "Successfully deleted menu.");
+        handleClose();
         handleClear();
-        showAlert(
-          "success",
-          "Successfully deleted menu."
-        );
+        refetch();
       })
       .catch((err) => {
-        showAlert(
-          "error",
-          "Could not delete menu."
-        );
-        console.log(err);
+        showAlert("error", "Something went wrong...");
       });
   };
 
   const handleMenuItemChange = (index, label, description, custom = false) => {
     const updatedMenuOptions = [...menuOptions];
     updatedMenuOptions[index] = new MenuOption(label, description, custom);
-    console.log(updatedMenuOptions);
     setMenuOptions(updatedMenuOptions);
   };
 

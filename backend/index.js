@@ -199,7 +199,7 @@ app.put("/events/:id", async (req, res) => {
   const { name, description, startTime, endTime } = req.body;
   const id = parseInt(req.params.id);
   const sql =
-    "UPDATE event SET EventName = ?, Description = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
+    "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
   db.query(sql, [name, description, startTime, endTime, id], (err, results) => {
     if (err) {
       return res.status(400).json({
@@ -290,7 +290,7 @@ app.get("/menus", (req, res) => {
 });
 
 app.get("/menus/:menuId", (req, res) => {
-  const menuId = req.params.menuId;
+  const menuId = parseInt(req.params.menuId);
   const sql = "SELECT * FROM menu WHERE MenuID = ?";
   db.query(sql, [menuId], (err, results) => {
     if (err) {
@@ -308,10 +308,10 @@ app.get("/menus/:menuId", (req, res) => {
 });
 
 app.put("/menus/:menuId", (req, res) => {
-  const menuId = req.params.menuId;
-  const { data, date } = req.body;
+  const menuId = parseInt(req.params.menuId);
+  const { menuData, date } = req.body;
   const sql = "UPDATE menu SET MenuData = ?, Date = ? WHERE MenuID = ?";
-  db.query(sql, [JSON.stringify(data), date, menuId], (err, result) => {
+  db.query(sql, [JSON.stringify(menuData), date, menuId], (err, result) => {
     if (err) {
       return res.status(400).json({
         message: `Failed to update the menu: ${err}`,
