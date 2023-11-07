@@ -108,7 +108,7 @@ export default function EventForm(props) {
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
-      visible: visible,
+      isVisible: visible,
     };
     const axiosConfig = {
       headers: {
