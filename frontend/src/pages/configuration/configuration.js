@@ -149,8 +149,10 @@ function RemoveAccount(rowId) {
       .catch((e) => {
         console.error(e);
       });
-
+    
+    window.location.reload();
     setOpen(false);
+
   };
 
   return (
@@ -244,6 +246,8 @@ function AddAccount() {
       });
 
     setOpen(false);
+
+    window.location.reload();
   };
 
 
@@ -268,7 +272,7 @@ function AddAccount() {
                 autoFocus
                 margin="dense"
                 className="firstName"
-                label="first name"
+                label="First Name"
                 variant="standard"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -279,7 +283,7 @@ function AddAccount() {
                 autoFocus
                 margin="dense"
                 className="firstName"
-                label="last name"
+                label="Last Name"
                 variant="standard"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
@@ -362,8 +366,6 @@ const rows = user.map((u) => ({
   role: u.UserRole
 }))
 
-  const  [row, setRows] = useState(rows);
-
 
   return (
     <Page
@@ -395,10 +397,10 @@ const rows = user.map((u) => ({
             ]}
             initialState={{
               pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
+                paginationModel: { page: 2, pageSize: 5 },
               },
             }}
-            pageSizeOptions={[0, 0]}
+            pageSizeOptions={[1, 1]}
           />
         </div>
         <div className="addAccountPosition">
