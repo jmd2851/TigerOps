@@ -36,9 +36,7 @@ export default function Navigation() {
     setOpen(false);
   };
 
-  const { user, setUser } = React.useContext(AppContext);
-
-  const role = user ? user.UserRole : "Member";
+  const { user, setUser, showAlert } = React.useContext(AppContext);
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -50,10 +48,11 @@ export default function Navigation() {
       )
       .then(() => {
         setUser(null);
-        setOpen(false);
+        handleClose();
+        showAlert("success", "You've successfully logged out...");
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        showAlert("error", "Something went wrong...");
       });
   };
 
@@ -99,9 +98,7 @@ export default function Navigation() {
               sx={{ width: "50%", minHeight: "56px" }}
               color="secondary"
             >
-              <Link to="/login" onClick={handleLogout}>
-                Log Out
-              </Link>
+              <Link onClick={handleLogout}>Log Out</Link>
             </Button>
           </Stack>
         </Box>
