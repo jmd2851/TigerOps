@@ -20,7 +20,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { fetchSlides } from "../../utils/slide_utils";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Unstable_Grid2";
 
 dayjs.extend(utc);
 
@@ -32,23 +32,24 @@ export default function Edit() {
   const [startDate, setStartDate] = useState(today);
   const [endDate, setEndDate] = useState(today.add(7, "day"));
   const [slides, setSlides] = useState([]);
+  const [refetchCount, setRefetchCount] = useState(0);
 
-
-  
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
-
-
+  
+  const refetchSlides = () => {
+    setRefetchCount(refetchCount + 1)
+  }
 
   useEffect(() => {
     fetchSlides(startDate, endDate).then((res) => {
       setSlides(res);
     });
-  }, [startDate, endDate]);
+  }, [startDate, endDate, refetchCount]);
 
   // TODO: export as reusable modal component
   const modalStyle = {
@@ -96,18 +97,29 @@ export default function Edit() {
                 <EventForm
                   formType={FormTypes.EDIT}
                   event={selectedSlide.data}
+                  handleClose={handleClose}
+                  refetch={refetchSlides}
                 />
               ) : (
-                <MenuForm formType={FormTypes.EDIT} menu={selectedSlide.data} />
+                <MenuForm
+                  formType={FormTypes.EDIT}
+                  menu={selectedSlide.data}
+                  handleClose={handleClose}
+                  refetch={refetchSlides}
+                />
               )
             ) : null}
           </Stack>
         </Box>
       </Modal>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Stack direction="row" spacing={2} sx={{paddingTop: '8px',marginTop: '8px'}}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ paddingTop: "8px", marginTop: "8px" }}
+        >
           <DatePicker
-            sx={{width:'50%', minHeight:'80px'}}
+            sx={{ width: "50%", minHeight: "80px" }}
             label="Start Date"
             value={startDate}
             onChange={(date) => {
@@ -121,8 +133,7 @@ export default function Edit() {
           />
 
           <DatePicker
-            sx={{width:'50%', minHeight:'80px'}}
-
+            sx={{ width: "50%", minHeight: "80px" }}
             label="End Date"
             value={endDate}
             onChange={(date) => {
@@ -137,10 +148,13 @@ export default function Edit() {
         </Stack>
       </LocalizationProvider>
 
-      
-      <Box sx={{flexGrow:1}}>
-        <Grid container spacing={{xs:2, m:3}} columns={{xs:4, sm:8, md:12}}>
-        {/* <Stack spacing={{ sm: 2 }} direction="row" useFlexGap flexWrap="wrap"> */}
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid
+          container
+          spacing={{ xs: 2, m: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {/* <Stack spacing={{ sm: 2 }} direction="row" useFlexGap flexWrap="wrap"> */}
           {slides.map((slide) => {
             return (
               <Grid xs={3} sm={5} md={6} key={slide.id}>
@@ -159,18 +173,19 @@ export default function Edit() {
                     }}
                     sx={{ minHeight: "360px" }}
                   >
-                    <CardHeader title={slide.title} subheader={slide.subheader} />
+                    <CardHeader
+                      title={slide.title}
+                      subheader={slide.subheader}
+                    />
                     <CardContent>
-                      <Typography variant="body2">
-                        {slide.body}
-                      </Typography>
+                      <Typography variant="body2">{slide.body}</Typography>
                     </CardContent>
                   </CardActionArea>
                 </Card>
               </Grid>
             );
           })}
-        {/* </Stack> */}
+          {/* </Stack> */}
         </Grid>
       </Box>
     </Page>
