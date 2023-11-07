@@ -194,3 +194,13 @@
 .css-144dnr3-MuiBadge-badge{
   color: white !important
 }
+
+.calendarContainer .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
+  padding-bottom: 4em !important;
+}
+
+
+.css-i5q14k-MuiDayCalendar-header {
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
