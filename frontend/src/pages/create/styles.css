@@ -1,8 +1,10 @@
+/* eventForm, menuForm */
 .form {
     height: 90%;
     width: 100% !important;
     margin: 0;
 }
+/* create.js */
 .menuItemFormContainer {
     border: 0;
     border-radius: 10px;

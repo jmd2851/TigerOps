@@ -21,23 +21,3 @@
 .navContainer{
     display: inline;
 }
-
-a:link{
-    color: black;
-    text-decoration: none;
-}
-
-a:active{
-    color: black;
-    text-decoration: none;
-}
-
-a:visited{
-    color: black;
-    text-decoration: none;
-}
-
-a:hover{
-    color: white;
-    text-decoration: none;
-}
