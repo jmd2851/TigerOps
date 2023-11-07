@@ -9,7 +9,7 @@ import { FormTypes } from "../../constants";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import config from "../../configs.json";
-import { Stack, Paper } from "@mui/material";
+import { Stack, Paper, FormControlLabel, Checkbox } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -39,6 +39,7 @@ export default function MenuForm(props) {
   const { formType, menu, handleClose, refetch } = props;
   const [date, setDate] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
+  const [isVisible, setIsVisible] = useState(true);
 
   const { showAlert } = useContext(AppContext);
 
@@ -62,6 +63,14 @@ export default function MenuForm(props) {
     } else {
       setMenuOptions([new MenuOption("", "")]);
     }
+
+    //initialize
+    if (menu.IsVisible == 1) {
+      setIsVisible(true);
+    }else {
+      setIsVisible(false);
+    }
+    console.log("[initalized] isVisible: "+isVisible);
   }, [menu]);
 
   const handleCreateMenu = () => {
@@ -104,23 +113,31 @@ export default function MenuForm(props) {
       (menuItem) =>
         menuItem.label.trim() !== "" && menuItem.description.trim() !== ""
     );
+
     if (date == null || !allOptionsValid) {
       showAlert("error", "Please fill out all fields.");
       return;
     }
+
+    const visible = isVisible ? 1 : 0;
+    console.log('visible: '+ visible);
+
     const body = {
       menuData: menuOptions.reduce((acc, menuItem) => {
         acc[menuItem.label] = menuItem.description;
         return acc;
       }, {}),
       date: date.format("YYYY-MM-DD"),
+      isVisible: visible,
     };
+
     const axiosConfig = {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
     };
+
     axios
       .put(
         `${config[process.env.NODE_ENV].apiDomain}/menus/${menu.MenuID}`,
@@ -166,8 +183,23 @@ export default function MenuForm(props) {
     setMenuOptions(updatedMenuOptions);
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsVisible(e.target.checked);
+  }
+
   return (
     <div className="form">
+      <FormControl sx={{position:'absolute',top:'34px',right:'0px',padding:'0 24px'}}>
+        <FormControlLabel control={
+          <Checkbox 
+            defaultChecked 
+            labelPlacement = "left"
+            checked = {isVisible}
+            onChange = {(e) => handleCheckboxChange(e)}
+          />
+          } label={"isVisible "+ isVisible} />
+      </FormControl>
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <FormControl sx={{ width: "100%" }}>
           <Stack direction="column" spacing={3}>

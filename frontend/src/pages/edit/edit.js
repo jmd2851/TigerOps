@@ -154,7 +154,6 @@ export default function Edit() {
           spacing={{ xs: 2, m: 3 }}
           columns={{ xs: 4, sm: 8, md: 12 }}
         >
-          {/* <Stack spacing={{ sm: 2 }} direction="row" useFlexGap flexWrap="wrap"> */}
           {slides.map((slide) => {
             return (
               <Grid xs={3} sm={5} md={6} key={slide.id}>
@@ -185,7 +184,6 @@ export default function Edit() {
               </Grid>
             );
           })}
-          {/* </Stack> */}
         </Grid>
       </Box>
     </Page>

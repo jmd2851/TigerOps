@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
 import axios from "axios";
 import config from "../../configs.json";
-import { FormControl, Stack } from "@mui/material";
+import { Checkbox, FormControl, FormControlLabel, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import AppContext from "../../AppContext";
@@ -134,6 +134,15 @@ export default function EventForm(props) {
 
   return (
     <div className="form">
+      <FormControl sx={{position:'absolute',top:'34px',right:'0'}}>
+        <FormControlLabel control={
+          <Checkbox 
+            checked = {event.isVisible}
+            defaultChecked 
+          />
+          } label="Visible"/>
+      </FormControl>
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <FormControl sx={{ width: "100%" }}>
           <Stack direction="column" spacing={3}>
