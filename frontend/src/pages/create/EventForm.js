@@ -38,6 +38,14 @@ export default function EventForm(props) {
       setStartTime(dayjs.utc(event.EventStartTime));
       setEndTime(dayjs.utc(event.EventEndTime));
     }
+
+    //initialize
+    if (event.IsVisible == 1) {
+      setIsVisible(true);
+    }else {
+      setIsVisible(false);
+    }
+    console.log("[initalized] isVisible: "+isVisible);
   }, []);
 
   const handleCreateEvent = (e) => {
@@ -100,7 +108,7 @@ export default function EventForm(props) {
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
-      isVisible, visible,
+      visible: visible,
     };
     const axiosConfig = {
       headers: {
@@ -141,15 +149,21 @@ export default function EventForm(props) {
       });
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsVisible(e.target.checked);
+  }
+
   return (
     <div className="form">
-      <FormControl sx={{position:'absolute',top:'34px',right:'0'}}>
+      <FormControl sx={{position:'absolute',top:'34px',right:'0px',padding:'0 24px'}}>
         <FormControlLabel control={
           <Checkbox 
-            checked = {event.isVisible}
             defaultChecked 
+            labelPlacement = "left"
+            checked = {isVisible}
+            onChange = {(e) => handleCheckboxChange(e)}
           />
-          } label="Visible"/>
+          } label={"Visible?"} />
       </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>

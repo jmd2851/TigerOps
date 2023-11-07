@@ -124,7 +124,6 @@ export default function MenuForm(props) {
     }
 
     const visible = isVisible ? 1 : 0;
-    console.log('visible: '+ visible);
 
     const body = {
       menuData: menuOptions.reduce((acc, menuItem) => {
@@ -201,7 +200,7 @@ export default function MenuForm(props) {
             checked = {isVisible}
             onChange = {(e) => handleCheckboxChange(e)}
           />
-          } label={"isVisible "+ isVisible} />
+          } label="Visible?" />
       </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
