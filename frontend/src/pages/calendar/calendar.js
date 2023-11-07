@@ -1,22 +1,25 @@
 import "./styles.css";
-import * as React from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { PickersDay } from "@mui/x-date-pickers";
+import { useContext, useEffect, useState } from "react";
+
 import Page from "../../components/Page";
 import dayjs from "dayjs";
 import axios from "axios";
 import Badge from "@mui/material/Badge";
 import config from "../../configs.json";
+import utc from "dayjs/plugin/utc";
+import AppContext from "../../AppContext";
 
-import { PickersDay } from "@mui/x-date-pickers";
-
+dayjs.extend(utc);
 function CalendarEvents(props) {
   const { events, date } = props;
   return (
     <div>
-      <h3>Event for the date {date}</h3>
-      {events.map((event) => (
+      <h3>Events for the date {date}</h3>
+      {Object.values(events).map((event) => (
         <div key={event.EventId}>
           <h3>{event.EventName}</h3>
           <p>{event.EventStartTime}</p>
@@ -29,14 +32,14 @@ function CalendarEvents(props) {
 
 function EventDay(props) {
   const { events = [], day, outsideCurrentMonth, ...other } = props;
+  const date = day.format("YYYY-MM-DD");
   return (
     <Badge
       key={props.day.toString()}
       overlap="circular"
       badgeContent={
-        !props.outsideCurrentMonth &&
-        events[day.format("YYYY-MM-DD")] !== undefined
-          ? events[day.format("YYYY-MM-DD")].length
+        !props.outsideCurrentMonth && events[date] !== undefined
+          ? Object.values(events[date]).length
           : undefined
       }
     >
@@ -52,14 +55,16 @@ function EventDay(props) {
 const currentDate = dayjs();
 
 export default function Calendar() {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [events, setEvents] = React.useState({});
-  const [selectedDate, setSelectedDate] = React.useState(
+  const [calendarLoading, setCalendarLoading] = useState(false);
+  const [events, setEvents] = useState({});
+  const [selectedDate, setSelectedDate] = useState(
     currentDate.format("YYYY-MM-DD")
   );
 
+  const { showAlert } = useContext(AppContext);
+
   const fetchEvents = (startTime, endTime) => {
-    setIsLoading(true);
+    setCalendarLoading(true);
     axios
       .get(`${config[process.env.NODE_ENV].apiDomain}/events`, {
         params: {
@@ -72,13 +77,13 @@ export default function Calendar() {
           const startDate = dayjs(event.EventStartTime).format("YYYY-MM-DD");
           const endDate = dayjs(event.EventEndTime).format("YYYY-MM-DD");
           if (!grouped[startDate]) {
-            grouped[startDate] = [];
+            grouped[startDate] = {};
           }
-          grouped[startDate][event.EventId] = event;
+          grouped[startDate][event.EventID] = event;
           if (!grouped[endDate]) {
-            grouped[endDate] = [];
+            grouped[endDate] = {};
           }
-          grouped[endDate].push(event);
+          grouped[endDate][event.EventID] = event;
           return grouped;
         }, {});
         setEvents({
@@ -86,21 +91,21 @@ export default function Calendar() {
           ...groupedEvents,
         });
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        showAlert("error", "Something went wrong...");
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => setCalendarLoading(false));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const startOfMonth = currentDate.startOf("month");
     const endOfMonth = currentDate.endOf("month");
     fetchEvents(startOfMonth, endOfMonth);
   }, []);
 
   const handleMonthChange = (date) => {
-    const startOfMonth = date.startOf("month");
-    const endOfMonth = date.endOf("month");
+    const startOfMonth = dayjs.utc(date).startOf("month");
+    const endOfMonth = dayjs.utc(date).endOf("month");
     fetchEvents(startOfMonth, endOfMonth);
   };
 
@@ -115,7 +120,7 @@ export default function Calendar() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar
               defaultValue={currentDate}
-              loading={isLoading}
+              loading={calendarLoading}
               onMonthChange={handleMonthChange}
               onChange={handleDateChange}
               slots={{
@@ -134,7 +139,7 @@ export default function Calendar() {
             the schedule for that day.
           </p>
           <CalendarEvents
-            events={events[[selectedDate]] || []}
+            events={events[[selectedDate]] || {}}
             date={selectedDate}
           />
         </div>
