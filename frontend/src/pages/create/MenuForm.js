@@ -82,12 +82,16 @@ export default function MenuForm(props) {
       showAlert("error", "Please fill out all fields before creating a menu.");
       return;
     }
+
+    const visible = isVisible ? 1 : 0;
+
     const body = {
       menuData: menuOptions.reduce((acc, menuItem) => {
         acc[menuItem.label] = menuItem.description;
         return acc;
       }, {}),
       date: date.format("YYYY-MM-DD"),
+      isVisible: visible,
     };
     const axiosConfig = {
       headers: {

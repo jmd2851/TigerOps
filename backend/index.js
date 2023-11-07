@@ -154,12 +154,13 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/events", async (req, res) => {
+  const isVisible = parseInt(req.body.isVisible);
   const { name, description, startTime, endTime } = req.body;
   const sql =
-    "INSERT INTO event (EventName, EventDescription, EventStartTime, EventEndTime) VALUES (?, ?, ?, ?)";
+    "INSERT INTO event (EventName, EventDescription, EventStartTime, EventEndTime) VALUES (?, ?, ?, ?, ?)";
   db.query(
     sql,
-    [name, description, startTime, endTime],
+    [name, description, startTime, endTime, isVisible],
     function (err, results) {
       if (err) {
         return res.status(400).json({
@@ -196,11 +197,12 @@ app.get("/events/:id", async (req, res) => {
 
 // PUT endpoint to update an event by ID
 app.put("/events/:id", async (req, res) => {
+  const isVisible = parseInt(req.body.isVisible);
   const { name, description, startTime, endTime } = req.body;
   const id = parseInt(req.params.id);
   const sql =
-    "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
-  db.query(sql, [name, description, startTime, endTime, id], (err, results) => {
+    "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ?, IsVisible = ? WHERE EventID = ?";
+  db.query(sql, [name, description, startTime, endTime, isVisible, id], (err, results) => {
     if (err) {
       return res.status(400).json({
         events: [],

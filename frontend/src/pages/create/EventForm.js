@@ -20,6 +20,7 @@ export default function EventForm(props) {
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
 
   const { showAlert } = useContext(AppContext);
 
@@ -52,11 +53,15 @@ export default function EventForm(props) {
       showAlert("error", "Start time must be before end time.");
       return;
     }
+
+    const visible = isVisible ? 1 : 0
+
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
+      isVisible: visible,
     };
     const axiosConfig = {
       headers: {
@@ -87,11 +92,15 @@ export default function EventForm(props) {
       showAlert("error", "Start time must be before end time.");
       return;
     }
+
+    const visible = isVisible ? 1 : 0
+
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
+      isVisible, visible,
     };
     const axiosConfig = {
       headers: {
