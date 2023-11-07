@@ -27,8 +27,6 @@ function AccountRole(userName, userId, userRole) {
   const [id, setId] = useState(userId);
   const [role, setRole] = useState(userRole);
 
-  console.log(id);
-  console.log(role);
 
   const [open, setOpen] = React.useState(false);
 
