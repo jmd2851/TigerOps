@@ -15,7 +15,7 @@ import AppContext from "../../AppContext";
 dayjs.extend(utc);
 
 export default function EventForm(props) {
-  const { formType, event } = props;
+  const { formType, event, handleClose, refetch } = props;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState(null);
@@ -34,8 +34,8 @@ export default function EventForm(props) {
     if (formType === FormTypes.EDIT) {
       setName(event.EventName);
       setDescription(event.EventDescription);
-      setStartTime(dayjs(event.EventStartTime));
-      setEndTime(dayjs(event.EventEndTime));
+      setStartTime(dayjs.utc(event.EventStartTime));
+      setEndTime(dayjs.utc(event.EventEndTime));
     }
   }, []);
 
@@ -49,10 +49,7 @@ export default function EventForm(props) {
       return;
     }
     if (startTime >= endTime) {
-      showAlert(
-        "error",
-        "Start time must be before end time."
-      );
+      showAlert("error", "Start time must be before end time.");
       return;
     }
     const body = {
@@ -75,38 +72,64 @@ export default function EventForm(props) {
       )
       .then((response) => {
         handleClear();
-        showAlert(
-          "success",
-          "Successfully created an event."
-        );
+        showAlert("success", "Successfully created an event.");
       })
-      .catch((error) => console.erro(error));
+      .catch((error) => showAlert("error", "Something went wrong..."));
   };
 
   const handleEditEvent = (e) => {
-    alert('handleEditEvent');
+    e.preventDefault();
+    if (!name || !description || !startTime || !endTime) {
+      showAlert("error", "Please fill out all fields.");
+      return;
+    }
+    if (startTime >= endTime) {
+      showAlert("error", "Start time must be before end time.");
+      return;
+    }
+    const body = {
+      name,
+      description,
+      startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
+      endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
+    };
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    };
+    axios
+      .put(
+        `${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,
+        body,
+        axiosConfig
+      )
+      .then(() => {
+        showAlert("success", "Successfully edited the event.");
+        handleClose();
+        handleClear();
+        refetch();
+      })
+      .catch((err) => {
+        showAlert("error", "Something went wrong...");
+      });
   };
 
   const handleDeleteEvent = (e) => {
-    setIsLoading(true);
-
     axios
-      .delete(`${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,{})
-      .then((response)=>{
+      .delete(
+        `${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`
+      )
+      .then(() => {
+        showAlert("success", "Successfully deleted an event.");
+        handleClose();
         handleClear();
-        showAlert(
-          "success",
-          "Successfully deleted an event."
-        );
+        refetch();
       })
       .catch((err) => {
-        showAlert(
-          "error",
-          "Could not delete event."
-        );
-        console.log(err);
-      })
-      .finally(()=>setIsLoading(false));
+        showAlert("error", "Something went wrong...");
+      });
   };
 
   return (

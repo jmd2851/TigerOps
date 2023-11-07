@@ -199,7 +199,7 @@ app.put("/events/:id", async (req, res) => {
   const { name, description, startTime, endTime } = req.body;
   const id = parseInt(req.params.id);
   const sql =
-    "UPDATE event SET EventName = ?, Description = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
+    "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ? WHERE EventID = ?";
   db.query(sql, [name, description, startTime, endTime, id], (err, results) => {
     if (err) {
       return res.status(400).json({
@@ -292,7 +292,7 @@ app.get("/menus", (req, res) => {
 });
 
 app.get("/menus/:menuId", (req, res) => {
-  const menuId = req.params.menuId;
+  const menuId = parseInt(req.params.menuId);
   const sql = "SELECT * FROM menu WHERE MenuID = ?";
   db.query(sql, [menuId], (err, results) => {
     if (err) {
@@ -310,10 +310,10 @@ app.get("/menus/:menuId", (req, res) => {
 });
 
 app.put("/menus/:menuId", (req, res) => {
-  const menuId = req.params.menuId;
-  const { data, date } = req.body;
+  const menuId = parseInt(req.params.menuId);
+  const { menuData, date } = req.body;
   const sql = "UPDATE menu SET MenuData = ?, Date = ? WHERE MenuID = ?";
-  db.query(sql, [JSON.stringify(data), date, menuId], (err, result) => {
+  db.query(sql, [JSON.stringify(menuData), date, menuId], (err, result) => {
     if (err) {
       return res.status(400).json({
         message: `Failed to update the menu: ${err}`,
@@ -330,22 +330,22 @@ app.put("/menus/:menuId", (req, res) => {
   });
 });
 
-app.delete("/menus/:id", (req, res) => {
-  const menuId = req.params.menuId;
-  const sql = "DELETE FROM menu WHERE MenuID = ?";
-  db.query(sql, [menuId], (err, result) => {
+app.delete("/menus/:id", async (req, res) => {
+  const id = parseInt(req.params.id); 
+  const sql = `DELETE FROM menu WHERE MenuID = ?`;
+  db.query(sql, [id], function (err, result) {
     if (err) {
-      return res.status(500).json({
-        message: `Failed to delete the menu: ${err}`,
+      res.status(400).json({
+        message: `Failed to delete the menu ${id}: ${err}`,
       });
     }
     if (result.affectedRows === 0) {
-      return res.status(404).json({
+      res.status(404).json({
         message: "Menu not found",
       });
     }
     res.status(200).json({
-      message: "Menu deleted successfully",
+      message: `Successfully delted menu with ID ${id}`,
     });
   });
 });
