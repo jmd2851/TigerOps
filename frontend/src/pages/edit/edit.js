@@ -32,12 +32,16 @@ export default function Edit() {
   const [endDate, setEndDate] = useState(today.add(7, "day"));
   const [slides, setSlides] = useState([]);
 
+
+  
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
   };
+
+
 
   useEffect(() => {
     fetchSlides(startDate, endDate).then((res) => {
@@ -100,9 +104,9 @@ export default function Edit() {
         </Box>
       </Modal>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Stack direction="row" spacing={2} sx={{paddingTop: '8px'}}>
+        <Stack direction="row" spacing={2} sx={{ paddingTop: "8px" }}>
           <DatePicker
-            sx={{width:'50%'}}
+            sx={{ width: "50%" }}
             label="Start Date"
             value={startDate}
             onChange={(date) => {
@@ -116,7 +120,7 @@ export default function Edit() {
           />
 
           <DatePicker
-            sx={{width:'50%'}}
+            sx={{ width: "50%" }}
             label="End Date"
             value={endDate}
             onChange={(date) => {
