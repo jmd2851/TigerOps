@@ -75,7 +75,6 @@ export default function EventForm(props) {
         axiosConfig
       )
       .then((response) => {
-        console.log("adding new event. name: " + name + ", description: "+description+", start time: "+startTime+", end time: "+endTime);
         handleClear();
         showAlert(
           "success",
