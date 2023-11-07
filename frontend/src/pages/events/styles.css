@@ -14,3 +14,11 @@
     box-shadow: 4px 0 12px rgba(0, 0, 0, 0.25);
     margin-bottom: 80px;
 }
+
+.MuiCardContent-root {
+    font-size: 300% !important;
+}
+
+.MuiCardHeader-title {
+    font-size: 300% !important;
+}
