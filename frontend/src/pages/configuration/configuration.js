@@ -20,50 +20,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import config from "../../configs.json";
 
-function createAccountRadioButton() {
-  return (
-    <FormControl>
-      <FormLabel className="radioButton">Account Type:</FormLabel>
-      <RadioGroup defaultValue="user" name="radio-buttons-group">
-        <FormControlLabel value="user" control={<Radio />} label="User" />
-        <FormControlLabel value="admin" control={<Radio />} label="Admin" />
-      </RadioGroup>
-    </FormControl>
-  );
-}
 
-function accountRoleButton() {
-  return (
-    <FormControl>
-      <RadioGroup defaultValue="admin" name="adminButton">
-        <div className="accountRoleButton">
-          <FormControlLabel value="admin" control={<Radio />} label="Admin" />
-          <FormControlLabel value="user" control={<Radio />} label="User" />
-        </div>
-      </RadioGroup>
-    </FormControl>
-  );
-}
 
-const permissionCol = [
-  { field: "name", headerName: "Name", width: 160 },
-  {
-    field: "admin",
-    headerName: "Account Role",
-    width: 180,
-    renderCell: accountRoleButton,
-    disableClickEventBubbling: true,
-  },
-];
+function AccountRole(userName, userId, userRole) {
+  const [name, setName] = useState(userName);
+  const [id, setId] = useState(userId);
+  const [role, setRole] = useState(userRole);
 
-const permissionRow = [
-  {
-    id: 1,
-    name: "name",
-  },
-];
-
-function AccountRole() {
+  console.log(id);
+  console.log(role);
 
   const [open, setOpen] = React.useState(false);
 
@@ -75,6 +40,36 @@ function AccountRole() {
     setOpen(false);
   };
 
+  const handleSubmit = () => {
+    const body = {
+      role: role
+    };
+
+    const axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      withCredentials: true
+    };
+
+
+  axios
+  .put(`${config[process.env.NODE_ENV].apiDomain}/users/${id}`, body, axiosConfig)
+      .then((response) => {
+      })
+      .then((response) => {
+        const data = response.data;
+      })
+      .catch((e) => {
+        console.error(e);
+      });
+
+    setOpen(false);
+  };
+
+
+
   return (
     <div>
       <Button
@@ -82,7 +77,7 @@ function AccountRole() {
         className="permissionButton"
         onClick={handleClickOpen}
       >
-        Admin
+        Role Settings
       </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Account Role</DialogTitle>
@@ -90,18 +85,34 @@ function AccountRole() {
           <DialogContentText>
             Below, are the options to change the specified account's role.
           </DialogContentText>
-
-          <div style={{ height: "auto", width: "100%" }}>
-            <DataGrid rows={
-              permissionRow
-              } columns={
-                permissionCol
-                } />
+          <div className = "accountName">
+            <h3>{name}</h3>
           </div>
+          <FormControl>
+           <FormLabel className="radioButton">Account Type:</FormLabel>
+            <RadioGroup defaultValue="User" name="adminButton">
+        
+              <FormControlLabel 
+                value="Admin" 
+                control={<Radio />} 
+                label="Admin" 
+                onChange={(e) => setRole(e.target.value)}
+              />
+              <FormControlLabel 
+                value="User" 
+                control={<Radio />} 
+                label="User" 
+                onChange={(e) => setRole(e.target.value)}
+                />
+          </RadioGroup>
+        </FormControl>
+
+
+          
         </DialogContent>
         <DialogActions>
-          <Button>Close</Button>
-          <Button onClick={handleClose} variant="contained">
+          <Button onClick={handleClose}>Close</Button>
+          <Button onClick={handleSubmit} variant="contained">
             Submit
           </Button>
         </DialogActions>
@@ -110,8 +121,17 @@ function AccountRole() {
   );
 }
 
+
+
+
+
+
 function RemoveAccount(rowId) {
   const [id, setId] = useState([]);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const [open, setOpen] = React.useState(false);
 
@@ -151,7 +171,7 @@ function RemoveAccount(rowId) {
             Are you sure you want to delete this account?
           </DialogContentText>
           <div className="removeAccount_ButtonItems">
-            <Button variant="contained" className="removeAccount_NoButton">
+            <Button onClick={handleClose} variant="contained" className="removeAccount_NoButton">
               No
             </Button>
             <Button
@@ -164,7 +184,7 @@ function RemoveAccount(rowId) {
           </div>
         </DialogContent>
         <DialogActions>
-          <Button>Close</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -172,13 +192,11 @@ function RemoveAccount(rowId) {
 }
 
 function AddAccount() {
-
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [lastName, setLastName] = useState("");
   const [role, setRole] = useState("");
-
 
   const [open, setOpen] = React.useState(false);
 
@@ -191,6 +209,12 @@ function AddAccount() {
   };
 
   const handleSubmit = () => {
+    setFirstName("");
+    setLastName("");
+    setEmail("");
+    setPassword("");
+    setRole("");
+
     setOpen(false);
 
     const body = {
@@ -354,13 +378,13 @@ const rows = user.map((u) => ({
           <DataGrid
             rows={rows}
             columns={[
-              { field: "name", headerName: "name", width: 150 },
-              { field: "email", headerName: "email", width: 150 },
+              { field: "name", headerName: "name", width: 190 },
+              { field: "email", headerName: "email", width: 190 },
               {
                 field: "accountRole",
                 headerName: "Account Role",
-                width: 150,
-                renderCell: (params) => AccountRole(params.row.name),
+                width: 190,
+                renderCell: (params) => AccountRole(params.row.name, params.row.id, params.row.role),
                 disableClickEventBubbling: true,
               },
               {
