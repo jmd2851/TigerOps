@@ -17,13 +17,21 @@ dayjs.extend(utc);
 function CalendarEvents(props) {
   const { events, date } = props;
   return (
-    <div>
+    <div className="Events">
       <h3>Events for the date {date}</h3>
       {Object.values(events).map((event) => (
+        console.log(event),
         <div key={event.EventId}>
+        <div className="Event">
+          <hr class ="divider"/>
           <h3>{event.EventName}</h3>
-          <p>{event.EventStartTime}</p>
+          <h4>Start Time:</h4>
+          <p>Start Time: {event.EventStartTime}</p>
+          <h4>End Time:</h4>
           <p>{event.EventEndTime}</p>
+          <h4>Description:</h4>
+          <p>{event.EventDescription}</p>
+          </div>
         </div>
       ))}
     </div>
