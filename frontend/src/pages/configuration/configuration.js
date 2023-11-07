@@ -284,6 +284,7 @@ function AddAccount(props) {
             <div className="emailField">
               <TextField
                 autoFocus
+                type="password"
                 margin="dense"
                 className="email"
                 label="Password"
