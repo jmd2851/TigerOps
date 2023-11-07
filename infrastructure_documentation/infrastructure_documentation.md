@@ -1,0 +1,17 @@
+# Infrastructure Documentation
+- Site is hosted on [hostinger.com](https://hostinger.com)
+- VPS is Ubuntu-based.
+- Running software: pm2, Node.JS, Nginx, MySQL server
+- Current production URL is [tigerops.jamiesondube.com/login](http://tigerops.jamiesondube.com/login)
+- VPS login is root/TigerOpsAdm1n
+- Frontend runs on port 3000, backend on port 4000
+- pm2 is used to run multiple Node applications and provide persistence upon restart.
+- Run `pm2 l` to see status of running Node applications.
+- Code is located under `/root/TigerOps/`
+- Provided no need to install additional Node packages, simply `cd /root/TigerOps` and `git pull` to update the application. pm2 is watching the applications and will restart them automatically.
+- If you need to install additional Node packages:
+    - `cd /root/TigerOps`
+    - `git pull`
+    - `cd frontend` for frontend, or `cd backend` for backend
+    - `npm i`
+    - `pm2 restart all` (or specify frontend or backend)
