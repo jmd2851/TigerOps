@@ -64,13 +64,11 @@ export default function MenuForm(props) {
       setMenuOptions([new MenuOption("", "")]);
     }
 
-    //initialize
     if (menu.IsVisible == 1) {
       setIsVisible(true);
     }else {
       setIsVisible(false);
     }
-    console.log("[initalized] isVisible: "+isVisible);
   }, [menu]);
 
   const handleCreateMenu = () => {

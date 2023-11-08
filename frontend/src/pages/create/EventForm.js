@@ -39,13 +39,11 @@ export default function EventForm(props) {
       setEndTime(dayjs.utc(event.EventEndTime));
     }
 
-    //initialize
     if (event.IsVisible == 1) {
       setIsVisible(true);
     }else {
       setIsVisible(false);
     }
-    console.log("[initalized] isVisible: "+isVisible);
   }, []);
 
   const handleCreateEvent = (e) => {
