@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
 import axios from "axios";
 import config from "../../configs.json";
-import { FormControl, Stack } from "@mui/material";
+import { Checkbox, FormControl, FormControlLabel, Stack } from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import AppContext from "../../AppContext";
@@ -20,6 +20,7 @@ export default function EventForm(props) {
   const [description, setDescription] = useState("");
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
 
   const { showAlert } = useContext(AppContext);
 
@@ -37,6 +38,12 @@ export default function EventForm(props) {
       setStartTime(dayjs.utc(event.EventStartTime));
       setEndTime(dayjs.utc(event.EventEndTime));
     }
+
+    if (event.IsVisible == 1) {
+      setIsVisible(true);
+    }else {
+      setIsVisible(false);
+    }
   }, []);
 
   const handleCreateEvent = (e) => {
@@ -52,11 +59,15 @@ export default function EventForm(props) {
       showAlert("error", "Start time must be before end time.");
       return;
     }
+
+    const visible = isVisible ? 1 : 0
+
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
+      isVisible: visible,
     };
     const axiosConfig = {
       headers: {
@@ -87,11 +98,15 @@ export default function EventForm(props) {
       showAlert("error", "Start time must be before end time.");
       return;
     }
+
+    const visible = isVisible ? 1 : 0
+
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
+      isVisible: visible,
     };
     const axiosConfig = {
       headers: {
@@ -132,8 +147,23 @@ export default function EventForm(props) {
       });
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsVisible(e.target.checked);
+  }
+
   return (
     <div className="form">
+      <FormControl sx={{position:'absolute',top:'34px',right:'0px',padding:'0 24px'}}>
+        <FormControlLabel control={
+          <Checkbox 
+            defaultChecked 
+            labelPlacement = "left"
+            checked = {isVisible}
+            onChange = {(e) => handleCheckboxChange(e)}
+          />
+          } label={"Visible?"} />
+      </FormControl>
+
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <FormControl sx={{ width: "100%" }}>
           <Stack direction="column" spacing={3}>
