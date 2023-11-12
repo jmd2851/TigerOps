@@ -17,24 +17,26 @@ dayjs.extend(utc);
 function CalendarEvents(props) {
   const { events, date } = props;
   return (
-    <div className="Events">
-      <h3>Events for the date {date}</h3>
-      {Object.values(events).map((event) => (
-        console.log(event),
-        <div key={event.EventId}>
-        <div className="Event">
-          <hr class ="divider"/>
-          <h3>{event.EventName}</h3>
-          <h4>Start Time:</h4>
-          <p>Start Time: {event.EventStartTime}</p>
-          <h4>End Time:</h4>
-          <p>{event.EventEndTime}</p>
-          <h4>Description:</h4>
-          <p>{event.EventDescription}</p>
+    <div className = "container">
+      <div className="Events">
+        <h3>Events for the date {date}</h3>
+        {Object.values(events).map((event) => (
+          console.log(event),
+          <div key={event.EventId}>
+          <div className="Event">
+            <hr class ="divider"/>
+            <h3>{event.EventName}</h3>
+            <h4>Start Time:</h4>
+            <p>Start Time: {event.EventStartTime}</p>
+            <h4>End Time:</h4>
+            <p>{event.EventEndTime}</p>
+            <h4>Description:</h4>
+            <p>{event.EventDescription}</p>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+      </div>
   );
 }
 
@@ -123,35 +125,39 @@ export default function Calendar() {
 
   return (
     <Page title="Calendar View">
-      <div className="calendarContainer">
-        <div className="calendar">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateCalendar
-              defaultValue={currentDate}
-              loading={calendarLoading}
-              onMonthChange={handleMonthChange}
-              onChange={handleDateChange}
-              slots={{
-                day: EventDay,
-              }}
-              slotProps={{
-                day: {
-                  events,
-                },
-              }}
+      <div className = "container">
+        <div className="calendarContainer">
+          <div className="calendar">
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateCalendar
+                defaultValue={currentDate}
+                loading={calendarLoading}
+                onMonthChange={handleMonthChange}
+                onChange={handleDateChange}
+                slots={{
+                  day: EventDay,
+                }}
+                slotProps={{
+                  day: {
+                    events,
+                  },
+                }}
+              />
+            </LocalizationProvider>
+            <div className="Event">
+            <CalendarEvents
+              events={events[[selectedDate]] || {}}
+              date={selectedDate}
             />
-          </LocalizationProvider>
-          <div className="event"> </div>
-          <p className="description">
-            Tap the <div className="circle"></div> on the calendar to check out
-            the schedule for that day.
-          </p>
-          <CalendarEvents
-            events={events[[selectedDate]] || {}}
-            date={selectedDate}
-          />
+            </div>
+
+          </div>
         </div>
-      </div>
+        </div>
+        <p className="description">
+              Tap the <div className="circle"></div> on the calendar to check out
+              the schedule for that day.
+            </p>
     </Page>
   );
 }

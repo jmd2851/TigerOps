@@ -1,11 +1,11 @@
-.calendarContainer {
-  display: flex;
-}
 
 .calendar {
-  text-align: center;
-  margin-left: 15%;
-  margin: auto;
+ display: flex;
+}
+
+.description{
+  display: block;
+  margin-left: 5em;
 }
 
 .calendarTitle {
@@ -207,20 +207,20 @@
 
 
 .Events{
-    margin-top: 50px;
-    margin-left: 20%;
-    margin-right: 20%;
-    padding: 1em;
+    margin-left: 4em;
+    padding-left: 4em;
+    padding-right: 4em;
+    padding-top: 1em;
+    padding-bottom: 1em;
     border: 3px solid #d9d9d9;
     background-color: #f7f7f7;
     border-radius: 10px !important;
-}
-.Event{
-  margin-top: 40px;
-  margin-bottom: 20px;
 }
 
 .calendarContainer .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
   padding-left: 60px !important;
 }
 
+.container{
+  display: flex;
+}
