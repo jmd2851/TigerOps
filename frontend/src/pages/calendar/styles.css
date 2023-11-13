@@ -20,6 +20,17 @@
   display: inline-block;
 }
 
+.calendarCircle {
+  height: 25px;
+  width: 25px;
+  background-color: #fccd6c;
+  border-radius: 50%;
+  display: inline-block;
+  margin-top: 5em;
+  margin-right: 4em;
+
+}
+
 .calendarContainer .css-cyfsxc-MuiPickersCalendarHeader-labelContainer {
   font-size: 24px !important;
 }
@@ -48,10 +59,6 @@
   margin: 0px !important;
 }
 
-.calendarContainer .css-1c32n2y-MuiBadge-root {
-  display: block !important;
-  vertical-align: none !important;
-}
 
 .calendarContainer .css-1u23akw-MuiButtonBase-root-MuiPickersDay-root {
   font-size: 1em !important;
@@ -191,9 +198,6 @@
   padding-bottom: 6em !important;
 }
 
-.css-144dnr3-MuiBadge-badge{
-  color: white !important
-}
 
 .calendarContainer .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
   padding-bottom: 4em !important;

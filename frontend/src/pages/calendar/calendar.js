@@ -49,8 +49,7 @@ function EventDay(props) {
       overlap="circular"
       badgeContent={
         !props.outsideCurrentMonth && events[date] !== undefined
-          ? Object.values(events[date]).length
-          : undefined
+          ? <div className = "calendarCircle"> </div> : undefined
       }
     >
       <PickersDay
