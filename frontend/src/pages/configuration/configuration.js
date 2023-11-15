@@ -17,8 +17,20 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { useEffect, useState } from "react";
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import axios from "axios";
 import config from "../../configs.json";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 
 
 
@@ -121,6 +133,81 @@ function AccountRole(userName, userId, userRole) {
 
 
 
+const marks = [
+  {
+    value: 10,
+    label: '1',
+  },
+  {
+    value: 20,
+    label: '2',
+  },
+  {
+    value: 30,
+    label: '3',
+  },
+  {
+    value: 40,
+    label: '4',
+  },
+  {
+    value: 50,
+    label: '5',
+  },
+  {
+    value: 60,
+    label: '6',
+  },
+  {
+    value: 70,
+    label: '7',
+  },
+  {
+    value: 80,
+    label: '8',
+  },
+  {
+    value: 90,
+    label: '9',
+  },
+  {
+    value: 100,
+    label: '10',
+  },
+];
+
+function valuetext(value) {
+  return `${value} gb`;
+}
+
+function DiscreteSliderMarks() {
+  return (
+    <Box sx={{ width: 400 }}>
+      <Slider
+        aria-label="Custom marks"
+        defaultValue={50}
+        getAriaValueText={valuetext}
+        valueLabelDisplay="auto"
+        step={10}
+        min={10}
+        max={100}
+        marks={marks}
+      />
+    </Box>
+  );
+}
+
+function BasicTimePicker() {
+  return (
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DemoContainer components={['TimePicker']}>
+        <TimePicker label="Select Default Time" sx={{
+          width: "200px"
+        }} />
+      </DemoContainer>
+    </LocalizationProvider>
+  );
+}
 
 
 
@@ -344,7 +431,70 @@ function AddAccount() {
   );
 }
 
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 6 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const dayoftheweek = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
+
+function MultipleSelectCheckmarks() {
+  const [personName, setPersonName] = React.useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  return (
+    <div>
+      <FormControl sx={{ m: 1, width: 200 }}>
+        <InputLabel id="demo-multiple-checkbox-label">Select Duration</InputLabel>
+        <Select
+          labelId="demo-multiple-checkbox-label"
+          id="demo-multiple-checkbox"
+          multiple
+          value={personName}
+          onChange={handleChange}
+          input={<OutlinedInput label="Select Duration" />}
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {dayoftheweek.map((name) => (
+            <MenuItem key={name} value={name}>
+              <Checkbox checked={personName.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
+  );
+}
+
+
 export default function DataTable() {
+
   const [user, setUser] = useState([]);
 
   useEffect(() => {
@@ -378,8 +528,8 @@ const rows = user.map((u) => ({
           <DataGrid
             rows={rows}
             columns={[
-              { field: "name", headerName: "name", width: 190 },
-              { field: "email", headerName: "email", width: 190 },
+              { field: "name", headerName: "Name", width: 190 },
+              { field: "email", headerName: "Email", width: 190 },
               {
                 field: "accountRole",
                 headerName: "Account Role",
@@ -405,6 +555,63 @@ const rows = user.map((u) => ({
         </div>
         <div className="addAccountPosition">
           <AddAccount />
+        </div>
+      </div>
+    
+          
+
+
+
+        
+
+
+
+
+      <div className="applicationSettings">
+        <h1 className="userListTitle">Application Settings</h1>
+        <div style={{ height: "auto", width: "100%" }}>
+          <DataGrid rowHeight={140}
+            rows={[
+              {id: 0, alidetime: "a", duration: "awd", threshhold: "ad"}
+              ]}
+            columns={[
+              { 
+                field: "alidetime", 
+                headerName: "Default Slide Time", 
+                width: 250,
+                renderCell:  BasicTimePicker,
+                disableClickEventBubbling: true,
+              },
+              { 
+                field: "duration", 
+                headerName: "Slide Duration",
+                width: 250,
+                renderCell:  MultipleSelectCheckmarks,
+                disableClickEventBubbling: true,
+              },
+              {
+                field: "threshhold",
+                headerName: "Storage Threshold",
+                width: 400,
+                renderCell:  DiscreteSliderMarks,
+                disableClickEventBubbling: true,
+              },
+            ]}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 2, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[1, 1]}
+          />
+        </div>
+        <div className="addAccountPosition">
+          <Button
+          variant="contained"
+          className="addAccount"
+          >
+          Apply Changes
+        </Button>
         </div>
       </div>
     </Page>

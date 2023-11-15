@@ -3,6 +3,14 @@
     font-size: 36;
 }
 
+.applicationSettings{
+    margin-top: 2em;
+    padding: 2em;
+    background-color: #F7F7F7;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
 .userListTitle{
     font-size: 24;
 }
