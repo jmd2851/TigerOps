@@ -439,14 +439,14 @@ function MultipleSelectCheckmarks() {
   return (
     <div>
       <FormControl sx={{ m: 1, width: 200 }}>
-        <InputLabel id="demo-multiple-checkbox-label">Select Duration</InputLabel>
+        <InputLabel id="demo-multiple-checkbox-label">Select Day Range</InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
           id="demo-multiple-checkbox"
           multiple
           value={personName}
           onChange={handleChange}
-          input={<OutlinedInput label="Select Duration" />}
+          input={<OutlinedInput label="Select Day Range" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
