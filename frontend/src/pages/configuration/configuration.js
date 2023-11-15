@@ -133,66 +133,36 @@ function AccountRole(userName, userId, userRole) {
 
 
 
-const marks = [
-  {
-    value: 10,
-    label: '1',
-  },
-  {
-    value: 20,
-    label: '2',
-  },
-  {
-    value: 30,
-    label: '3',
-  },
-  {
-    value: 40,
-    label: '4',
-  },
-  {
-    value: 50,
-    label: '5',
-  },
-  {
-    value: 60,
-    label: '6',
-  },
-  {
-    value: 70,
-    label: '7',
-  },
-  {
-    value: 80,
-    label: '8',
-  },
-  {
-    value: 90,
-    label: '9',
-  },
-  {
-    value: 100,
-    label: '10',
-  },
-];
+function BasicSelect() {
+  const [age, setAge] = React.useState('');
 
-function valuetext(value) {
-  return `${value} gb`;
-}
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
 
-function DiscreteSliderMarks() {
   return (
-    <Box sx={{ width: 400 }}>
-      <Slider
-        aria-label="Custom marks"
-        defaultValue={50}
-        getAriaValueText={valuetext}
-        valueLabelDisplay="auto"
-        step={10}
-        min={10}
-        max={100}
-        marks={marks}
-      />
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Storage</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Storage"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>1 gb</MenuItem>
+          <MenuItem value={20}>2 gb</MenuItem>
+          <MenuItem value={30}>3 gb</MenuItem>
+          <MenuItem value={40}>4 gb</MenuItem>
+          <MenuItem value={50}>5 gb</MenuItem>
+          <MenuItem value={60}>6 gb</MenuItem>
+          <MenuItem value={70}>7 gb</MenuItem>
+          <MenuItem value={80}>8 gb</MenuItem>
+          <MenuItem value={90}>9 gb</MenuItem>
+          <MenuItem value={100}>10 gb</MenuItem>
+        </Select>
+      </FormControl>
     </Box>
   );
 }
@@ -584,7 +554,7 @@ const rows = user.map((u) => ({
               },
               { 
                 field: "duration", 
-                headerName: "Slide Duration",
+                headerName: "Day Range",
                 width: 250,
                 renderCell:  MultipleSelectCheckmarks,
                 disableClickEventBubbling: true,
@@ -592,8 +562,8 @@ const rows = user.map((u) => ({
               {
                 field: "threshhold",
                 headerName: "Storage Threshold",
-                width: 400,
-                renderCell:  DiscreteSliderMarks,
+                width: 250,
+                renderCell:  BasicSelect,
                 disableClickEventBubbling: true,
               },
             ]}
