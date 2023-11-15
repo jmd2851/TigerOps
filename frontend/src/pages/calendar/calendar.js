@@ -154,8 +154,7 @@ export default function Calendar() {
         </div>
         </div>
         <p className="description">
-              Tap the <div className="circle"></div> on the calendar to check out
-              the schedule for that day.
+              Click on the square that contains a  <div className="circle"></div>  to see the event for that day
             </p>
     </Page>
   );

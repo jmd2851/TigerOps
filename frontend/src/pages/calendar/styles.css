@@ -5,7 +5,7 @@
 
 .description{
   display: block;
-  margin-left: 5em;
+  margin-left: 3em;
 }
 
 .calendarTitle {
@@ -18,18 +18,26 @@
   background-color: #fccd6c;
   border-radius: 50%;
   display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .calendarCircle {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   background-color: #fccd6c;
   border-radius: 50%;
   display: inline-block;
-  margin-top: 5em;
-  margin-right: 4em;
-
+  margin-top: 1em;
+  margin-right: 1em;
+  z-index: 2;
 }
+
+.calendarContainer .css-g7itob-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+  padding-left: 12em !important;
+  padding-right: 12em !important;
+}
+
 
 .calendarContainer .css-cyfsxc-MuiPickersCalendarHeader-labelContainer {
   font-size: 24px !important;
@@ -126,7 +134,7 @@
   .css-g7itob-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
   padding-top: 1em !important;
   padding-right: 1em !important;
-  padding-left: 4em !important;
+  padding-left: 52px !important;
   padding-bottom: 4em !important;
   border: solid rgb(0, 0, 0) important;
 }
