@@ -60,14 +60,9 @@ export default function MenuForm(props) {
         savedMenuOptions.push(new MenuOption(label, description, custom));
       }
       setMenuOptions(savedMenuOptions);
+      setIsVisible(menu.IsVisible == 1);
     } else {
       setMenuOptions([new MenuOption("", "")]);
-    }
-
-    if (menu.IsVisible == 1) {
-      setIsVisible(true);
-    }else {
-      setIsVisible(false);
     }
   }, [menu]);
 
@@ -81,15 +76,13 @@ export default function MenuForm(props) {
       return;
     }
 
-    const visible = isVisible ? 1 : 0;
-
     const body = {
       menuData: menuOptions.reduce((acc, menuItem) => {
         acc[menuItem.label] = menuItem.description;
         return acc;
       }, {}),
       date: date.format("YYYY-MM-DD"),
-      isVisible: visible,
+      isVisible: isVisible ? 1 : 0,
     };
     const axiosConfig = {
       headers: {
@@ -121,15 +114,13 @@ export default function MenuForm(props) {
       return;
     }
 
-    const visible = isVisible ? 1 : 0;
-
     const body = {
       menuData: menuOptions.reduce((acc, menuItem) => {
         acc[menuItem.label] = menuItem.description;
         return acc;
       }, {}),
       date: date.format("YYYY-MM-DD"),
-      isVisible: visible,
+      isVisible: isVisible ? 1 : 0,
     };
 
     const axiosConfig = {
@@ -186,19 +177,29 @@ export default function MenuForm(props) {
 
   const handleCheckboxChange = (e) => {
     setIsVisible(e.target.checked);
-  }
+  };
 
   return (
     <div className="form">
-      <FormControl sx={{position:'absolute',top:'34px',right:'0px',padding:'0 24px'}}>
-        <FormControlLabel control={
-          <Checkbox 
-            defaultChecked 
-            labelPlacement = "left"
-            checked = {isVisible}
-            onChange = {(e) => handleCheckboxChange(e)}
-          />
-          } label="Visible?" />
+      <FormControl
+        sx={{
+          position: "absolute",
+          top: "34px",
+          right: "0px",
+          padding: "0 24px",
+        }}
+      >
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              labelPlacement="left"
+              checked={isVisible}
+              onChange={(e) => handleCheckboxChange(e)}
+            />
+          }
+          label="Visible?"
+        />
       </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>

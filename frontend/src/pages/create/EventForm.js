@@ -37,12 +37,7 @@ export default function EventForm(props) {
       setDescription(event.EventDescription);
       setStartTime(dayjs.utc(event.EventStartTime));
       setEndTime(dayjs.utc(event.EventEndTime));
-    }
-
-    if (event.IsVisible == 1) {
-      setIsVisible(true);
-    }else {
-      setIsVisible(false);
+      setIsVisible(event.IsVisible == 1);
     }
   }, []);
 
@@ -60,14 +55,12 @@ export default function EventForm(props) {
       return;
     }
 
-    const visible = isVisible ? 1 : 0
-
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
-      isVisible: visible,
+      isVisible: isVisible ? 1 : 0,
     };
     const axiosConfig = {
       headers: {
@@ -99,14 +92,12 @@ export default function EventForm(props) {
       return;
     }
 
-    const visible = isVisible ? 1 : 0
-
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
-      isVisible: visible,
+      isVisible: isVisible ? 1 : 0,
     };
     const axiosConfig = {
       headers: {
@@ -149,19 +140,29 @@ export default function EventForm(props) {
 
   const handleCheckboxChange = (e) => {
     setIsVisible(e.target.checked);
-  }
+  };
 
   return (
     <div className="form">
-      <FormControl sx={{position:'absolute',top:'34px',right:'0px',padding:'0 24px'}}>
-        <FormControlLabel control={
-          <Checkbox 
-            defaultChecked 
-            labelPlacement = "left"
-            checked = {isVisible}
-            onChange = {(e) => handleCheckboxChange(e)}
-          />
-          } label={"Visible?"} />
+      <FormControl
+        sx={{
+          position: "absolute",
+          top: "34px",
+          right: "0px",
+          padding: "0 24px",
+        }}
+      >
+        <FormControlLabel
+          control={
+            <Checkbox
+              defaultChecked
+              labelPlacement="left"
+              checked={isVisible}
+              onChange={(e) => handleCheckboxChange(e)}
+            />
+          }
+          label={"Visible?"}
+        />
       </FormControl>
 
       <LocalizationProvider dateAdapter={AdapterDayjs}>
