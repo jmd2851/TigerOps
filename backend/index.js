@@ -21,6 +21,8 @@ app.use(
   })
 );
 
+app.enable("trust proxy");
+
 const db = mysql.createPool({
   host: consts.DBHOST,
   user: consts.DBUSER,
@@ -40,6 +42,7 @@ app.use(
   sessions({
     secret: consts.SESSIONSECRET,
     saveUninitialized: true,
+    proxy: true,
     cookie: {
       maxAge: consts.SESSIONAGE,
       sameSite: "strict",
@@ -202,18 +205,22 @@ app.put("/events/:id", async (req, res) => {
   const id = parseInt(req.params.id);
   const sql =
     "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ?, IsVisible = ? WHERE EventID = ?";
-  db.query(sql, [name, description, startTime, endTime, isVisible, id], (err, results) => {
-    if (err) {
-      return res.status(400).json({
-        events: [],
-        message: `Failed to update event ${id}, ${err}`,
+  db.query(
+    sql,
+    [name, description, startTime, endTime, isVisible, id],
+    (err, results) => {
+      if (err) {
+        return res.status(400).json({
+          events: [],
+          message: `Failed to update event ${id}, ${err}`,
+        });
+      }
+      return res.status(200).json({
+        events: results,
+        message: `Successfully updated event with ID ${id}`,
       });
     }
-    return res.status(200).json({
-      events: results,
-      message: `Successfully updated event with ID ${id}`,
-    });
-  });
+  );
 });
 
 // DELETE endpoint to delete an event by ID
@@ -315,22 +322,27 @@ app.put("/menus/:menuId", (req, res) => {
   const menuId = parseInt(req.params.menuId);
   const isVisible = parseInt(req.body.isVisible);
   const { menuData, date } = req.body;
-  const sql = "UPDATE menu SET MenuData = ?, Date = ?, IsVisible = ? WHERE MenuID = ?";
-  db.query(sql, [JSON.stringify(menuData), date, isVisible, menuId], (err, result) => {
-    if (err) {
-      return res.status(400).json({
-        message: `Failed to update the menu: ${err}`,
+  const sql =
+    "UPDATE menu SET MenuData = ?, Date = ?, IsVisible = ? WHERE MenuID = ?";
+  db.query(
+    sql,
+    [JSON.stringify(menuData), date, isVisible, menuId],
+    (err, result) => {
+      if (err) {
+        return res.status(400).json({
+          message: `Failed to update the menu: ${err}`,
+        });
+      }
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          message: "Menu not found",
+        });
+      }
+      res.status(200).json({
+        message: "Menu updated successfully",
       });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        message: "Menu not found",
-      });
-    }
-    res.status(200).json({
-      message: "Menu updated successfully",
-    });
-  });
+  );
 });
 
 app.delete("/menus/:id", async (req, res) => {
