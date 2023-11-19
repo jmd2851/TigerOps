@@ -157,6 +157,10 @@ export default function Edit() {
           {slides.map((slide) => {
             return (
               <Grid xs={3} sm={5} md={6} key={slide.id}>
+                <Card sx={{backgroundColor:'red', zIndex:1, position:'absolute', minHeight:'360px'}}>
+                <p>overlay</p>
+                </Card>
+
                 <Card
                   sx={{
                     margin: "16px",
