@@ -5,9 +5,23 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useContext, useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
+import CardHeader from "@mui/material/CardHeader";
+import Container from "@mui/material/Container";
+import CardContent from "@mui/material/CardContent";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import IconButton from "@mui/material/IconButton";
 import axios from "axios";
 import config from "../../configs.json";
-import { Checkbox, FormControl, FormControlLabel, Stack } from "@mui/material";
+import {
+  Card,
+  Checkbox,
+  Collapse,
+  FormControl,
+  FormControlLabel,
+  Paper,
+  Stack,
+} from "@mui/material";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import AppContext from "../../AppContext";
@@ -21,6 +35,8 @@ export default function EventForm(props) {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [isVisible, setIsVisible] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [images, setImages] = useState([]);
 
   const { showAlert } = useContext(AppContext);
 
@@ -142,6 +158,15 @@ export default function EventForm(props) {
     setIsVisible(e.target.checked);
   };
 
+  const handleUploadImage = (e) => {
+    if (images.length >= 2) {
+      showAlert("error", "You can only upload up to 2 images.");
+      return;
+    }
+    const file = e.target.files[0];
+    setImages([...images, file]);
+  };
+
   return (
     <div className="form">
       <FormControl
@@ -189,6 +214,56 @@ export default function EventForm(props) {
               onChange={(e) => setDescription(e.target.value)}
             />
 
+            <Card
+              sx={{
+                border: "1px solid rgba(211,211,211,0.6)",
+              }}
+            >
+              <CardHeader
+                title="Images"
+                action={
+                  <IconButton
+                    onClick={() => setOpen(!open)}
+                    aria-label="expand"
+                    size="small"
+                  >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </IconButton>
+                }
+              ></CardHeader>
+              <div
+                style={{
+                  backgroundColor: "rgba(211,211,211,0.4)",
+                }}
+              >
+                <Collapse in={open} timeout="auto">
+                  <CardContent>
+                    <Container>
+                      {images.map((image) => {
+                        return (
+                          <img
+                            src={URL.createObjectURL(image)}
+                            style={{ width: "40%" }}
+                          />
+                        );
+                      })}
+                      <Button
+                        variant="contained"
+                        component="label"
+                        disabled={images.length >= 2}
+                      >
+                        Upload Image
+                        <input
+                          type="file"
+                          hidden
+                          onChange={handleUploadImage}
+                        />
+                      </Button>
+                    </Container>
+                  </CardContent>
+                </Collapse>
+              </div>
+            </Card>
             <Stack direction="row" spacing={2}>
               <DateTimePicker
                 sx={{ width: "50%" }}
@@ -203,7 +278,6 @@ export default function EventForm(props) {
                 onChange={(date) => setEndTime(dayjs.utc(date))}
               />
             </Stack>
-
             <Stack direction="row-reverse" spacing={2}>
               {formType === FormTypes.CREATE ? (
                 <Button
