@@ -26,7 +26,7 @@ export default function Events() {
 
   // TODO: export as slideshow type constant
   const slideshowProps = {
-    height: "600px",
+    height: "750px",
     fullHeightHover: "true",
     navButtonsAlwaysVisible: "true",
     navButtonsAlwaysInvisible: "false",
@@ -103,7 +103,7 @@ export default function Events() {
       
       <div className="slideshowContainer">
         <Slideshow
-          slideStyles={{ borderRadius: "10px 10px 0 0" }}
+          //slideStyles={{ borderRadius: "10px 10px 0 0" }}
           slideshowProps={slideshowProps}
         />
       </div>
