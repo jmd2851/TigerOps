@@ -157,6 +157,7 @@ export default function Edit() {
           {slides.map((slide) => {
             return (
               <Grid xs={3} sm={5} md={6} key={slide.id}>
+
                 <Card
                   sx={{
                     margin: "16px",
