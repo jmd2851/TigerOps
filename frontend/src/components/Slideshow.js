@@ -17,17 +17,22 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
       {
         title:'Saint Peters Kitchen',
         subheader:'Menu for November 12, 2023',
-        imgPath: "url('../assets/images/building.jpg)",
+        imgPath: '../assets/images/building.jpg',
         body: ['hi','hi']
       },
       {
         title:'Some Crazy Event Title that is particularly long like super duper',
         subtitle:'subtitle2',
-        imgPath: "url('../assets/images/kitchen.jpg')",
+        imgPath: '../assets/images/kitchen.jpg',
         body: ['hi','hi']
       }
     ]);
   }, []);
+
+  const slideImgStyle = {
+    width:'40%', 
+    height: '70%',
+  }
 
   return (
     <>
@@ -35,13 +40,6 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
       <Carousel {...slideshowProps}>
         {sildeshowData.map((slide) => {
           console.log(slide);
-
-          const slideImgStyle = {
-            backgroundImage: `url('../assets/images/building.jpg')`,
-            backgroundColor:'green',
-            width:'40%', 
-            height: '70%',
-          }
 
           return (
             <Card sx={{height: "100%", boxShadow: "0", ...slideStyles}}>
@@ -55,7 +53,9 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                   {slide.body}
                 </Typography>
 
-                <Box sx={{...slideImgStyle}} className="img" />
+                <Box sx={{...slideImgStyle}}>
+                  <img src={slide.imgPath} height="100%" width="100%"/>
+                </Box>
               </CardContent>
 
             </Card>
