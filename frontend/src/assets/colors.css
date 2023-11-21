@@ -6,6 +6,7 @@
     --shadow: #D9D9D9;
     --text: #FFFFFF;
     --textDark : #2C2C2C;
-    --darkGreen: 2D443D;
+    --darkGreen: #2D443D;
+    --white: #FFFFFF,
     --boxShadow:rgb(0, 0, 0, 0.25);
   }

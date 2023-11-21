@@ -6,6 +6,19 @@ import { SlideTypes, Slide } from "../constants";
 
 dayjs.extend(utc);
 
+const getDay = (num) => {
+  switch(num) {
+    case 1: return "Monday"; 
+    case 2: return "Tuesday"; 
+    case 3: return "Wednesday"; 
+    case 4: return "Thursday"; 
+    case 5: return "Friday"; 
+    case 6: return "Saturday"; 
+    case 7: return "Sunday"; 
+    default: return "";
+  }
+}
+
 export const fetchSlides = async (startDate, endDate) => {
   if (!startDate || !endDate) {
     console.error("Both startDate and endDate fields are required.");
@@ -51,10 +64,13 @@ export const fetchSlides = async (startDate, endDate) => {
           descriptions.push(`${label} - ${description}`);
         }
         const date = dayjs(menu.Date.split("T")[0]);
+        const dayNum = dayjs(menu.Date.split("T")[0]).day();
+        let day = getDay(dayNum);
+
         return new Slide(
-          `${date.format("MMMM D, YYYY")} Menu`,
-          "",
-          descriptions.join(", "),
+          "Saint Peter's Kitchen",
+          `Menu for ${day}, ${date.format("MMMM D")}`,
+          descriptions,
           SlideTypes.MENU,
           menu,
           date
@@ -63,11 +79,13 @@ export const fetchSlides = async (startDate, endDate) => {
       const eventSlides = res2.data.events.map((event) => {
         const startTime = dayjs(event.EventStartTime);
         const endTime = dayjs(event.EventEndTime);
+        const startDay = getDay(startTime.day());
+        const endDay = getDay(endTime.day());
 
         return new Slide(
           event.EventName,
-          `${startTime.format("MMMM D, YYYY h:mmA")} through ${endTime.format(
-            "MMMM D, YYYY h:mmA"
+          `${startDay}, ${startTime.format("MMMM D h:mmA")} — ${endDay}, ${endTime.format(
+            "MMMM D h:mmA"
           )}`,
           event.EventDescription,
           SlideTypes.EVENT,

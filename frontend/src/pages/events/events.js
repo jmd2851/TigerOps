@@ -26,7 +26,7 @@ export default function Events() {
 
   // TODO: export as slideshow type constant
   const slideshowProps = {
-    height: "750px",
+    height: "800px",
     fullHeightHover: "true",
     navButtonsAlwaysVisible: "true",
     navButtonsAlwaysInvisible: "false",
@@ -34,9 +34,9 @@ export default function Events() {
     animation: "slide",
     indicatorContainerProps: {
       style: {
+        backgroundColor:'var(--primary)',
         opacity: "1",
         paddingBottom: "8px",
-        borderRadius: "10px",
       },
     },
   };
@@ -81,12 +81,11 @@ export default function Events() {
                   <Card className="settingsCard">
                     <CardHeader
                       title={
-                        <Typography variant="h5">{setting.title}</Typography>
+                        <Typography variant="h6" sx={{fontWeight:'bold'}}>{setting.title}</Typography>
                       }
-                      titleTypographyProps={{
-                        component:'body1'
-                      }}
-                      subheader={setting.description}
+                      subheader={
+                        <Typography variant="h7">{setting.description}</Typography>
+                      }
                     />
                   </Card>
                 </Link>
