@@ -12,6 +12,26 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
     fetchSlides(today, today.add(7, "day")).then((res) =>
       setSlideshowData(res)
     );
+
+    //for testing purposes, remove once image issue is fixed
+    // setSlideshowData([
+    //   {
+    //     title: 'menu example',
+    //     subheader: 'menu for monday, nov 20',
+    //     type: 1,
+    //     body: ['main dish - dirt', 'vegetable - more dirt'],
+    //     imgPath: '../assets/images/building.jpg',
+    //     imgAlt: 'st peters kitchen'
+    //   },
+    //   {
+    //     title: 'event example',
+    //     subheader: 'monday, nov 20 12:00pm - tuesday, nov 21 12:00pm',
+    //     type: 0,
+    //     body: 'event description',
+    //     imgPath: '../assets/images/building.jpg',
+    //     imgAlt: 'st peters kitchen'
+    //   },
+    // ]);
   }, []);
 
   const slideImgStyle = {
@@ -25,8 +45,6 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
       {/* https://github.com/Learus/react-material-ui-carousel#props */}
       <Carousel {...slideshowProps}>
         {sildeshowData.map((slide) => {
-          console.log(slide);
-
           return (
             <Card sx={{height: "100%", boxShadow: "0", ...slideStyles}}>
               <CardHeader 
@@ -40,11 +58,10 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
 
               <CardContent sx={{height:'100%', display:'flex',flexDirection:'column', justifyContent:'space-between'}}>
 
-                {slide.imgPath ?
+                {slide.imgPath ? //implement slide layout
                   <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between', padding:'40px'}}>
                     <Box>
-                      {/* slide type 1 = menu, 0 = event */}
-                      {slide.type === 1 ?
+                      {slide.type === 1 ? //menu
                         slide.body.map((group) => {
                           let temp = group.split("-");
 
@@ -55,7 +72,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                             </Stack>
                           )
                         })
-                      :
+                      : //event
                         <Box sx={{textAlign:'center'}}>
                           <Typography sx={{fontSize:"0.7em"}}>Join us for {slide.title}!</Typography>
                           <Typography sx={{fontSize:"0.7em"}}>{slide.body}</Typography>
@@ -68,7 +85,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                     </Box>
                   </Box>
                 :
-                // no image layout
+                // no image layout - centered
                 <Box sx={{padding:'40px'}}>
                   {slide.type === 1 ? //menu
                     <Box sx={{display:'flex',flexDirection:'column',alignItems:'center'}}>
