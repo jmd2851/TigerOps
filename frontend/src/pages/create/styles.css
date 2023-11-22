@@ -10,3 +10,7 @@
     border-radius: 10px;
     padding: 20px;
 }
+
+.form .MuiCardHeader-title {
+    font-size: 100% !important;
+}
