@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { FormTypes } from "../../constants";
 import CardHeader from "@mui/material/CardHeader";
 import Container from "@mui/material/Container";
@@ -37,6 +37,7 @@ export default function EventForm(props) {
   const [isVisible, setIsVisible] = useState(true);
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState(null);
+  const [imageAlt, setImageAlt] = useState("");
 
   const { showAlert } = useContext(AppContext);
 
@@ -164,6 +165,7 @@ export default function EventForm(props) {
     const renamedFile = new File([file], `${Date.now()}.${fileExtension}`, {
       type: file.type,
     });
+    setImageAlt("");
     setImage(renamedFile);
   };
 
@@ -240,10 +242,21 @@ export default function EventForm(props) {
                   <CardContent>
                     <Container>
                       {image ? (
-                        <img
-                          src={URL.createObjectURL(image)}
-                          style={{ width: "40%" }}
-                        />
+                        <Fragment>
+                          <img
+                            src={URL.createObjectURL(image)}
+                            style={{ width: "40%" }}
+                          />
+                          <TextField
+                            fullWidth
+                            label="Image Description"
+                            id="imgAlt"
+                            variant="filled"
+                            margin="normal"
+                            value={imageAlt}
+                            onChange={(e) => setImageAlt(e.target.value)}
+                          />
+                        </Fragment>
                       ) : null}
                       <Button variant="contained" component="label">
                         Upload Image
