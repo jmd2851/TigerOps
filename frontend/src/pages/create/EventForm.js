@@ -36,7 +36,7 @@ export default function EventForm(props) {
   const [endTime, setEndTime] = useState(null);
   const [isVisible, setIsVisible] = useState(true);
   const [open, setOpen] = useState(false);
-  const [images, setImages] = useState([]);
+  const [image, setImage] = useState(null);
 
   const { showAlert } = useContext(AppContext);
 
@@ -159,12 +159,12 @@ export default function EventForm(props) {
   };
 
   const handleUploadImage = (e) => {
-    if (images.length >= 2) {
-      showAlert("error", "You can only upload up to 2 images.");
-      return;
-    }
     const file = e.target.files[0];
-    setImages([...images, file]);
+    const fileExtension = file.name.split(".").pop();
+    const renamedFile = new File([file], `${Date.now()}.${fileExtension}`, {
+      type: file.type,
+    });
+    setImage(renamedFile);
   };
 
   return (
@@ -239,19 +239,13 @@ export default function EventForm(props) {
                 <Collapse in={open} timeout="auto">
                   <CardContent>
                     <Container>
-                      {images.map((image) => {
-                        return (
-                          <img
-                            src={URL.createObjectURL(image)}
-                            style={{ width: "40%" }}
-                          />
-                        );
-                      })}
-                      <Button
-                        variant="contained"
-                        component="label"
-                        disabled={images.length >= 2}
-                      >
+                      {image ? (
+                        <img
+                          src={URL.createObjectURL(image)}
+                          style={{ width: "40%" }}
+                        />
+                      ) : null}
+                      <Button variant="contained" component="label">
                         Upload Image
                         <input
                           type="file"
