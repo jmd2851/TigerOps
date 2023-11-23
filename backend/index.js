@@ -9,6 +9,8 @@ import expressMysqlSession from "express-mysql-session";
 import bcrypt from "bcryptjs";
 
 import multer from "multer";
+import fs from "fs";
+import path from "path";
 
 const UPLOAD_DIR = "./public/images/";
 
@@ -84,7 +86,6 @@ db.query(
   [adminEmail],
   function (err, results) {
     if (err) {
-      console.log(err);
       return;
     }
     if (results.length === 0) {
@@ -176,16 +177,32 @@ app.post("/login", (req, res) => {
   );
 });
 
-app.post("/events", async (req, res) => {
-  const isVisible = parseInt(req.body.isVisible);
-  const { name, description, startTime, endTime } = req.body;
+app.post("/events", upload.single("image"), async (req, res) => {
+  const {
+    name,
+    description,
+    startTime,
+    endTime,
+    imagePath,
+    imageAlt,
+    isVisible,
+  } = req.body;
   const sql =
-    "INSERT INTO event (EventName, EventDescription, EventStartTime, EventEndTime, IsVisible) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO event (EventName, EventDescription, EventStartTime, EventEndTime, IsVisible, ImagePath, ImageAlt) VALUES (?, ?, ?, ?, ?, ?, ?)";
   db.query(
     sql,
-    [name, description, startTime, endTime, isVisible],
+    [
+      name,
+      description,
+      startTime,
+      endTime,
+      parseInt(isVisible),
+      imagePath,
+      imageAlt,
+    ],
     function (err, results) {
       if (err) {
+        fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
         return res.status(400).json({
           message: `Failed to create the event, ${err}`,
         });
@@ -220,14 +237,13 @@ app.get("/events/:id", async (req, res) => {
 
 // PUT endpoint to update an event by ID
 app.put("/events/:id", async (req, res) => {
-  const isVisible = parseInt(req.body.isVisible);
-  const { name, description, startTime, endTime } = req.body;
+  const { name, description, startTime, endTime, isVisible } = req.body;
   const id = parseInt(req.params.id);
   const sql =
     "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ?, IsVisible = ? WHERE EventID = ?";
   db.query(
     sql,
-    [name, description, startTime, endTime, isVisible, id],
+    [name, description, startTime, endTime, parseInt(isVisible), id],
     (err, results) => {
       if (err) {
         return res.status(400).json({
@@ -246,25 +262,36 @@ app.put("/events/:id", async (req, res) => {
 // DELETE endpoint to delete an event by ID
 app.delete("/events/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  const sql = `DELETE FROM event WHERE EventID = ?`;
-  db.query(sql, [id], function (err, results) {
-    if (err) {
-      res.status(400).json({
-        event: results,
-        message: `Failed to delete event ${id}, ${err}`,
+  const getEventImagePathSQL = `SELECT ImagePath FROM event WHERE EventID = ?`;
+  const deleteEventSQL = `DELETE FROM event WHERE EventID = ?`;
+  db.query(getEventImagePathSQL, [id], function (err, results) {
+    if (err || results.length === 0) {
+      return res.status(400).json({
+        message: `Failed to fetch event ${id} or event not found.`,
+        error: err,
       });
-    } else {
-      res.status(200).json({
+    }
+    const imagePath = results[0].ImagePath;
+    db.query(deleteEventSQL, [id], function (err, deleteResult) {
+      if (err) {
+        return res.status(400).json({
+          message: `Failed to delete event ${id}`,
+          error: err,
+        });
+      }
+      if (imagePath) {
+        fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+      }
+      return res.status(200).json({
         events: [],
         message: `Successfully deleted event with ID ${id}`,
       });
-    }
+    });
   });
 });
 
 // GET endpoint to retrieve events within a date range
 app.get("/events", async (req, res) => {
-  console.log(req.query);
   const { startTime, endTime } = req.query;
   const sql = "SELECT * FROM event WHERE EventStartTime BETWEEN ? AND ?";
   if (!startTime || !endTime) {
