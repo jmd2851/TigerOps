@@ -61,6 +61,8 @@ const sessionStore = new mysqlStore(
   db
 );
 
+app.use(express.static("public"));
+
 app.use(
   sessions({
     secret: consts.SESSIONSECRET,
