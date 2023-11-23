@@ -204,7 +204,9 @@ app.post("/events", upload.single("image"), async (req, res) => {
     ],
     function (err, results) {
       if (err) {
-        fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+        try {
+          fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+        } catch (err) {}
         return res.status(400).json({
           message: `Failed to create the event, ${err}`,
         });
@@ -238,20 +240,43 @@ app.get("/events/:id", async (req, res) => {
 });
 
 // PUT endpoint to update an event by ID
-app.put("/events/:id", async (req, res) => {
-  const { name, description, startTime, endTime, isVisible } = req.body;
+app.put("/events/:id", upload.single("image"), async (req, res) => {
+  const {
+    name,
+    description,
+    startTime,
+    endTime,
+    isVisible,
+    imagePath,
+    imageAlt,
+    oldImagePath,
+  } = req.body;
   const id = parseInt(req.params.id);
   const sql =
-    "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ?, IsVisible = ? WHERE EventID = ?";
+    "UPDATE event SET EventName = ?, EventDescription = ?, EventStartTime = ?, EventEndTime = ?, IsVisible = ?, ImagePath = ?, ImageAlt = ? WHERE EventID = ?";
   db.query(
     sql,
-    [name, description, startTime, endTime, parseInt(isVisible), id],
+    [
+      name,
+      description,
+      startTime,
+      endTime,
+      parseInt(isVisible),
+      imagePath,
+      imageAlt,
+      id,
+    ],
     (err, results) => {
       if (err) {
         return res.status(400).json({
           events: [],
           message: `Failed to update event ${id}, ${err}`,
         });
+      }
+      if (oldImagePath != imagePath) {
+        try {
+          fs.unlinkSync(path.join(UPLOAD_DIR, oldImagePath));
+        } catch (err) {}
       }
       return res.status(200).json({
         events: results,
@@ -282,7 +307,9 @@ app.delete("/events/:id", async (req, res) => {
         });
       }
       if (imagePath) {
-        fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+        try {
+          fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+        } catch (err) {}
       }
       return res.status(200).json({
         events: [],

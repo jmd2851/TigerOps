@@ -133,7 +133,7 @@ export default function EventForm(props) {
     axios
       .put(
         `${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,
-        body,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
