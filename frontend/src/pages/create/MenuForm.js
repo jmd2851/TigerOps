@@ -4,16 +4,30 @@ import FormControl from "@mui/material/FormControl";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, Fragment } from "react";
 import { FormTypes } from "../../constants";
+import AppContext from "../../AppContext";
+import CardHeader from "@mui/material/CardHeader";
+import Container from "@mui/material/Container";
+import CardContent from "@mui/material/CardContent";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 import config from "../../configs.json";
-import { Stack, Paper, FormControlLabel, Checkbox } from "@mui/material";
+import {
+  Stack,
+  Paper,
+  FormControlLabel,
+  Card,
+  Checkbox,
+  Collapse,
+} from "@mui/material";
+
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import AppContext from "../../AppContext";
 
 dayjs.extend(utc);
 
@@ -40,12 +54,18 @@ export default function MenuForm(props) {
   const [date, setDate] = useState(null);
   const [menuOptions, setMenuOptions] = useState([]);
   const [isVisible, setIsVisible] = useState(true);
+  const [image, setImage] = useState(null);
+  const [imageAlt, setImageAlt] = useState("");
+  const [open, setOpen] = useState(false);
 
   const { showAlert } = useContext(AppContext);
 
   const handleClear = () => {
     setDate(null);
     setMenuOptions([new MenuOption("", "")]);
+    setIsVisible(true);
+    setImage(null);
+    setImageAlt("");
   };
 
   useEffect(() => {
@@ -61,6 +81,8 @@ export default function MenuForm(props) {
       }
       setMenuOptions(savedMenuOptions);
       setIsVisible(menu.IsVisible == 1);
+      setImage(menu.ImagePath);
+      setImageAlt(menu.ImageAlt);
     } else {
       setMenuOptions([new MenuOption("", "")]);
     }
@@ -75,27 +97,28 @@ export default function MenuForm(props) {
       showAlert("error", "Please fill out all fields before creating a menu.");
       return;
     }
-
+    const menuDataObj = menuOptions.reduce((acc, menuItem) => {
+      acc[menuItem.label] = menuItem.description;
+      return acc;
+    }, {});
     const body = {
-      menuData: menuOptions.reduce((acc, menuItem) => {
-        acc[menuItem.label] = menuItem.description;
-        return acc;
-      }, {}),
+      menuData: JSON.stringify(menuDataObj),
       date: date.format("YYYY-MM-DD"),
+      imagePath: image.name,
+      imageAlt,
       isVisible: isVisible ? 1 : 0,
     };
-    const axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
+    const formData = new FormData();
+    Object.keys(body).forEach((key) => {
+      formData.append(key, body[key]);
+    });
+    formData.append("image", image);
     axios
-      .post(
-        `${config[process.env.NODE_ENV].apiDomain}/menus`,
-        body,
-        axiosConfig
-      )
+      .post(`${config[process.env.NODE_ENV].apiDomain}/menus`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         showAlert("success", "Successfully created a menu.");
         handleClear();
@@ -113,28 +136,34 @@ export default function MenuForm(props) {
       showAlert("error", "Please fill out all fields.");
       return;
     }
-
+    const menuDataObj = menuOptions.reduce((acc, menuItem) => {
+      acc[menuItem.label] = menuItem.description;
+      return acc;
+    }, {});
     const body = {
-      menuData: menuOptions.reduce((acc, menuItem) => {
-        acc[menuItem.label] = menuItem.description;
-        return acc;
-      }, {}),
+      menuData: JSON.stringify(menuDataObj),
       date: date.format("YYYY-MM-DD"),
+      imagePath: image instanceof File ? image.name : image,
+      imageAlt,
+      oldImagePath: menu.ImagePath,
       isVisible: isVisible ? 1 : 0,
     };
-
-    const axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
-
+    const formData = new FormData();
+    Object.keys(body).forEach((key) => {
+      formData.append(key, body[key]);
+    });
+    if (image instanceof File) {
+      formData.append("image", image);
+    }
     axios
       .put(
         `${config[process.env.NODE_ENV].apiDomain}/menus/${menu.MenuID}`,
-        body,
-        axiosConfig
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       )
       .then((response) => {
         showAlert("success", "Successfully edited the menu.");
@@ -177,6 +206,16 @@ export default function MenuForm(props) {
 
   const handleCheckboxChange = (e) => {
     setIsVisible(e.target.checked);
+  };
+
+  const handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    const fileExtension = file.name.split(".").pop();
+    const renamedFile = new File([file], `${Date.now()}.${fileExtension}`, {
+      type: file.type,
+    });
+    setImageAlt("");
+    setImage(renamedFile);
   };
 
   return (
@@ -294,6 +333,68 @@ export default function MenuForm(props) {
             <Button variant="outlined" onClick={handleAddMenuItem}>
               Add Menu Item
             </Button>
+
+            <Card
+              sx={{
+                border: "1px solid rgba(211,211,211,0.6)",
+              }}
+            >
+              <CardHeader
+                title="Image"
+                action={
+                  <IconButton
+                    onClick={() => setOpen(!open)}
+                    aria-label="expand"
+                    size="small"
+                  >
+                    {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                  </IconButton>
+                }
+              ></CardHeader>
+              <div
+                style={{
+                  backgroundColor: "rgba(211,211,211,0.4)",
+                }}
+              >
+                <Collapse in={open} timeout="auto">
+                  <CardContent>
+                    <Container>
+                      {image ? (
+                        <Fragment>
+                          <img
+                            src={
+                              image instanceof File
+                                ? URL.createObjectURL(image)
+                                : `${
+                                    config[process.env.NODE_ENV].apiDomain
+                                  }/images/${image}`
+                            }
+                            style={{ width: "40%" }}
+                          />
+                          <TextField
+                            fullWidth
+                            label="Image Description"
+                            id="imgAlt"
+                            variant="filled"
+                            margin="normal"
+                            value={imageAlt}
+                            onChange={(e) => setImageAlt(e.target.value)}
+                          />
+                        </Fragment>
+                      ) : null}
+                      <Button variant="contained" component="label">
+                        Upload Image
+                        <input
+                          type="file"
+                          hidden
+                          onChange={handleUploadImage}
+                        />
+                      </Button>
+                    </Container>
+                  </CardContent>
+                </Collapse>
+              </div>
+            </Card>
 
             <Stack direction="row-reverse" spacing={2}>
               {formType === FormTypes.CREATE ? (

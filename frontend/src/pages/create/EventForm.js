@@ -19,7 +19,6 @@ import {
   Collapse,
   FormControl,
   FormControlLabel,
-  Paper,
   Stack,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -234,7 +233,7 @@ export default function EventForm(props) {
               }}
             >
               <CardHeader
-                title="Images"
+                title="Image"
                 action={
                   <IconButton
                     onClick={() => setOpen(!open)}

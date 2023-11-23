@@ -294,16 +294,14 @@ app.delete("/events/:id", async (req, res) => {
   db.query(getEventImagePathSQL, [id], function (err, results) {
     if (err || results.length === 0) {
       return res.status(400).json({
-        message: `Failed to fetch event ${id} or event not found.`,
-        error: err,
+        message: `Failed to fetch event ${id} or event not found: ${err}`,
       });
     }
     const imagePath = results[0].ImagePath;
     db.query(deleteEventSQL, [id], function (err, deleteResult) {
       if (err) {
         return res.status(400).json({
-          message: `Failed to delete event ${id}`,
-          error: err,
+          message: `Failed to delete event ${id}: ${err}`,
         });
       }
       if (imagePath) {
@@ -343,21 +341,34 @@ app.get("/events", async (req, res) => {
   });
 });
 
-app.post("/menus", (req, res) => {
-  const isVisible = parseInt(req.body.isVisible);
-  const { menuData, date } = req.body;
-  const sql = "INSERT INTO menu (MenuData, Date, IsVisible) VALUES (?, ?, ?)";
-  db.query(sql, [JSON.stringify(menuData), date, isVisible], (err, result) => {
-    if (err) {
-      return res.status(400).json({
-        message: `Failed to create the menu: ${err}`,
+app.post("/menus", upload.single("image"), (req, res) => {
+  const { menuData, date, isVisible, imagePath, imageAlt } = req.body;
+  const sql =
+    "INSERT INTO menu (MenuData, Date, IsVisible, ImagePath, ImageAlt) VALUES (?, ?, ?, ?, ?)";
+  db.query(
+    sql,
+    [
+      JSON.stringify(JSON.parse(menuData)),
+      date,
+      parseInt(isVisible),
+      imagePath,
+      imageAlt,
+    ],
+    (err, result) => {
+      if (err) {
+        try {
+          fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+        } catch (err) {}
+        return res.status(400).json({
+          message: `Failed to create the menu: ${err}`,
+        });
+      }
+      res.status(201).json({
+        message: "Menu created successfully",
+        menuId: result.insertId,
       });
     }
-    res.status(201).json({
-      message: "Menu created successfully",
-      menuId: result.insertId,
-    });
-  });
+  );
 });
 
 app.get("/menus", (req, res) => {
@@ -394,15 +405,22 @@ app.get("/menus/:menuId", (req, res) => {
   });
 });
 
-app.put("/menus/:menuId", (req, res) => {
+app.put("/menus/:menuId", upload.single("image"), (req, res) => {
   const menuId = parseInt(req.params.menuId);
-  const isVisible = parseInt(req.body.isVisible);
-  const { menuData, date } = req.body;
+  const { menuData, date, isVisible, imagePath, imageAlt, oldImagePath } =
+    req.body;
   const sql =
-    "UPDATE menu SET MenuData = ?, Date = ?, IsVisible = ? WHERE MenuID = ?";
+    "UPDATE menu SET MenuData = ?, Date = ?, IsVisible = ?, ImagePath = ?, ImageAlt = ? WHERE MenuID = ?";
   db.query(
     sql,
-    [JSON.stringify(menuData), date, isVisible, menuId],
+    [
+      JSON.stringify(JSON.parse(menuData)),
+      date,
+      parseInt(isVisible),
+      imagePath,
+      imageAlt,
+      menuId,
+    ],
     (err, result) => {
       if (err) {
         return res.status(400).json({
@@ -414,6 +432,11 @@ app.put("/menus/:menuId", (req, res) => {
           message: "Menu not found",
         });
       }
+      if (imagePath != oldImagePath) {
+        try {
+          fs.unlinkSync(path.join(UPLOAD_DIR, oldImagePath));
+        } catch (err) {}
+      }
       res.status(200).json({
         message: "Menu updated successfully",
       });
@@ -423,20 +446,29 @@ app.put("/menus/:menuId", (req, res) => {
 
 app.delete("/menus/:id", async (req, res) => {
   const id = parseInt(req.params.id);
-  const sql = `DELETE FROM menu WHERE MenuID = ?`;
-  db.query(sql, [id], function (err, result) {
-    if (err) {
+  const getMenuImagePathSQL = `SELECT ImagePath FROM menu WHERE MenuID = ?`;
+  const deleteMenuSQL = `DELETE FROM menu WHERE MenuID = ?`;
+  db.query(getMenuImagePathSQL, [id], function (err, results) {
+    if (err || results.length === 0) {
       return res.status(400).json({
-        message: `Failed to delete the menu ${id}: ${err}`,
+        message: `Failed to fetch menu ${id} or menu not found: ${err}`,
       });
     }
-    if (result.affectedRows === 0) {
-      return res.status(404).json({
-        message: "Menu not found",
+    const imagePath = results[0].ImagePath;
+    db.query(deleteMenuSQL, [id], function (err, result) {
+      if (err) {
+        return res.status(400).json({
+          message: `Failed to delete the menu ${id}: ${err}`,
+        });
+      }
+      if (imagePath) {
+        try {
+          fs.unlinkSync(path.join(UPLOAD_DIR, imagePath));
+        } catch (err) {}
+      }
+      res.status(200).json({
+        message: `Successfully deleted menu with ID ${id}`,
       });
-    }
-    res.status(200).json({
-      message: `Successfully deleted menu with ID ${id}`,
     });
   });
 });
