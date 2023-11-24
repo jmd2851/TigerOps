@@ -46,6 +46,8 @@ export default function EventForm(props) {
     setDescription("");
     setStartTime(null);
     setEndTime(null);
+    setImageAlt("");
+    setImage(null);
   };
 
   useEffect(() => {
@@ -55,6 +57,8 @@ export default function EventForm(props) {
       setStartTime(dayjs.utc(event.EventStartTime));
       setEndTime(dayjs.utc(event.EventEndTime));
       setIsVisible(event.IsVisible == 1);
+      setImage(event.ImagePath);
+      setImageAlt(event.ImageAlt);
     }
   }, []);
 
@@ -71,26 +75,26 @@ export default function EventForm(props) {
       showAlert("error", "Start time must be before end time.");
       return;
     }
-
     const body = {
       name,
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
+      imagePath: image.name,
+      imageAlt,
       isVisible: isVisible ? 1 : 0,
     };
-    const axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
+    const formData = new FormData();
+    Object.keys(body).forEach((key) => {
+      formData.append(key, body[key]);
+    });
+    formData.append("image", image);
     axios
-      .post(
-        `${config[process.env.NODE_ENV].apiDomain}/events`,
-        body,
-        axiosConfig
-      )
+      .post(`${config[process.env.NODE_ENV].apiDomain}/events`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((response) => {
         handleClear();
         showAlert("success", "Successfully created an event.");
@@ -115,18 +119,26 @@ export default function EventForm(props) {
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
       isVisible: isVisible ? 1 : 0,
+      imagePath: image instanceof File ? image.name : image,
+      imageAlt,
+      oldImagePath: event.ImagePath,
     };
-    const axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    };
+    const formData = new FormData();
+    Object.keys(body).forEach((key) => {
+      formData.append(key, body[key]);
+    });
+    if (image instanceof File) {
+      formData.append("image", image);
+    }
     axios
       .put(
         `${config[process.env.NODE_ENV].apiDomain}/events/${event.EventID}`,
-        body,
-        axiosConfig
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       )
       .then(() => {
         showAlert("success", "Successfully edited the event.");
@@ -244,7 +256,13 @@ export default function EventForm(props) {
                       {image ? (
                         <Fragment>
                           <img
-                            src={URL.createObjectURL(image)}
+                            src={
+                              image instanceof File
+                                ? URL.createObjectURL(image)
+                                : `${
+                                    config[process.env.NODE_ENV].apiDomain
+                                  }/images/${image}`
+                            }
                             style={{ width: "40%" }}
                           />
                           <TextField
