@@ -21,6 +21,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { fetchSlides } from "../../utils/slide_utils";
 import Grid from "@mui/material/Unstable_Grid2";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 dayjs.extend(utc);
 
@@ -40,10 +42,10 @@ export default function Edit() {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   const refetchSlides = () => {
-    setRefetchCount(refetchCount + 1)
-  }
+    setRefetchCount(refetchCount + 1);
+  };
 
   useEffect(() => {
     fetchSlides(startDate, endDate).then((res) => {
@@ -157,7 +159,6 @@ export default function Edit() {
           {slides.map((slide) => {
             return (
               <Grid xs={3} sm={5} md={6} key={slide.id}>
-
                 <Card
                   sx={{
                     margin: "16px",
@@ -173,6 +174,11 @@ export default function Edit() {
                     }}
                     sx={{ minHeight: "360px" }}
                   >
+                    {slide.data.IsVisible ? (
+                      <VisibilityIcon class="visibility" />
+                    ) : (
+                      <VisibilityOffIcon class="visibility" />
+                    )}  
                     <CardHeader
                       title={slide.title}
                       subheader={slide.subheader}
