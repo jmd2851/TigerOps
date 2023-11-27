@@ -9,9 +9,10 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
   const [sildeshowData, setSlideshowData] = useState([]);
   useEffect(() => {
     const today = dayjs().startOf("day");
-    fetchSlides(today, today.add(7, "day")).then((res) =>
-      setSlideshowData(res)
-    );
+    fetchSlides(today, today.add(7, "day")).then((res) => {
+      setSlideshowData(res);
+      console.log(res);
+    });
 
     //for testing purposes, remove once image issue is fixed
     // setSlideshowData([
@@ -58,7 +59,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
 
               <CardContent sx={{height:'100%', display:'flex',flexDirection:'column', justifyContent:'space-between'}}>
 
-                {slide.imgPath ? //implement slide layout
+                {slide.data.ImagePath ? //implement slide layout
                   <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between', padding:'40px'}}>
                     <Box>
                       {slide.type === 1 ? //menu
@@ -81,7 +82,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                     </Box>
 
                     <Box sx={{...slideImgStyle}}>
-                      <img src={slide.imgPath} alt={slide.imgAlt || ""} height="100%" width="100%"/>
+                      <img src={"http://localhost:4000/images/filename/"+slide.data.ImagePath} alt={slide.data.ImageAlt || ""} height="100%" width="100%"/>
                     </Box>
                   </Box>
                 :
