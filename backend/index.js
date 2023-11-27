@@ -489,6 +489,55 @@ app.get("/menus/date", (req, res) => {
   });
 });
 
+// PUT endpoint for updating configuration items
+app.put("/config", (req, res) => {
+  const { name, value } = req.body;
+  const sql = "UPDATE config SET Value = ? WHERE Name = ?";
+  db.query(sql, [value, name], (err, results) => {
+    if (err) {
+      return res.status(400).json({
+        config: [],
+        message: `Failed to update configuration item with name ${name} and value ${value}`,
+      });
+    }
+    return res.status(200).json({
+      config: results,
+      message: `Successfully updated configuration item ${name}`,
+    });
+  });
+});
+
+app.get("/config", (req, res) => {
+  const { name } = req.query;
+  if (!name) {
+    const sql = "SELECT * FROM config";
+    db.query(sql, (err, results) => {
+      if (err) {
+        return res.status(404).json({
+          message: `Failed to get configuration, ${err}`,
+        });
+      }
+      return res.status(200).json({
+        config: results,
+        message: `Successfully retreived configuration.`,
+      });
+    });
+  } else {
+    const sql = "SELECT * FROM config WHERE Name = ?";
+    db.query(sql, [name], (err, results) => {
+      if (err) {
+        return res.status(400).json({
+          message: `Failed to get configuration with name ${name}, ${err}`,
+        });
+      }
+      return res.status(200).json({
+        config: results[0],
+        message: `Successfully retreived configuration with name ${name}`,
+      });
+    });
+  }
+});
+
 app.post("/users", (req, res) => {
   const { email, password, firstName, lastName, role } = req.body;
   if (!email || !password || !firstName || !lastName) {

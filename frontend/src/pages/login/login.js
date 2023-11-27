@@ -112,12 +112,6 @@ export default function Login() {
             <Alert severity="success">You have successfully logged in!</Alert>
           )}
 
-          <div className="forgotPasswordContainer">
-            <p className="subtitle">
-              <a href="">Forgot password?</a>
-            </p>
-          </div>
-
           <div className="loginButtonContainer">
             <Button id="loginButton" variant="contained" onClick={handleLogin}>
               login
@@ -136,7 +130,12 @@ export default function Login() {
 
           <div className="visitorButtonContainer">
             <Link to="/slides">
-              <Button fullWidth variant="contained" color="secondary" sx={{padding:'16px'}}>
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                sx={{ padding: "16px" }}
+              >
                 continue as viewer
               </Button>
             </Link>
