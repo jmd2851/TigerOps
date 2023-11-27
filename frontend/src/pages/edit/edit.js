@@ -9,6 +9,7 @@ import {
   CardActionArea,
   Modal,
   Box,
+  Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FormTypes, Slide, SlideTypes } from "../../constants";
@@ -21,6 +22,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { fetchSlides } from "../../utils/slide_utils";
 import Grid from "@mui/material/Unstable_Grid2";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 dayjs.extend(utc);
 
@@ -48,10 +51,10 @@ export default function Edit() {
   useEffect(() => {
     fetchSlides(startDate, endDate).then((res) => {
       setSlides(res);
+      console.log(res);
     });
   }, [startDate, endDate, refetchCount]);
 
-  // TODO: export as reusable modal component
   const modalStyle = {
     position: "absolute",
     marginTop: "30%",
@@ -179,6 +182,10 @@ export default function Edit() {
                     />
                     <CardContent>
                       <Typography variant="body2">{slide.body}</Typography>
+                      <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="flex-end" sx={{width:'100%',position:'absolute',bottom:'16px',right:'16px'}}>
+                        {slide.data.IsVisible === 1 ? <VisibilityIcon /> : <VisibilityOffIcon /> }
+                        <Typography variant="body2">{slide.data.IsVisible === 1 ? "Visible on Slideshow" : "Hidden from Slideshow" }</Typography>
+                      </Stack>
                     </CardContent>
                   </CardActionArea>
                 </Card>
