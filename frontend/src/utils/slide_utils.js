@@ -51,10 +51,12 @@ export const fetchSlides = async (startDate, endDate) => {
           descriptions.push(`${label} - ${description}`);
         }
         const date = dayjs(menu.Date.split("T")[0]);
+        const dayNum = dayjs(menu.Date.split("T")[0]).day();
+
         return new Slide(
-          `${date.format("MMMM D, YYYY")} Menu`,
-          "",
-          descriptions.join(", "),
+          "Saint Peter's Kitchen",
+          `Menu for ${date.format("dddd, MMMM D")}`,
+          descriptions,
           SlideTypes.MENU,
           menu,
           date
@@ -66,8 +68,8 @@ export const fetchSlides = async (startDate, endDate) => {
 
         return new Slide(
           event.EventName,
-          `${startTime.format("MMMM D, YYYY h:mmA")} through ${endTime.format(
-            "MMMM D, YYYY h:mmA"
+          `${startTime.format("dddd, MMMM D h:mmA")} — ${endTime.format(
+            "dddd, MMMM D h:mmA"
           )}`,
           event.EventDescription,
           SlideTypes.EVENT,

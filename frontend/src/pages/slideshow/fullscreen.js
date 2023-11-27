@@ -16,7 +16,7 @@ const slideshowProps = {
 
 export default function Fullscreen() {
     return (
-        <Box sx={{overflow:'hidden', height:'100vh'}}>
+        <Box sx={{overflow:'hidden !important', height:'100vh'}}>
             <Slideshow slideshowProps={slideshowProps} />
         </Box>
     )
