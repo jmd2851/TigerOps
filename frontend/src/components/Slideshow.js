@@ -82,7 +82,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                     </Box>
 
                     <Box sx={{...slideImgStyle}}>
-                      <img src={"http://localhost:4000/images/filename/"+slide.data.ImagePath} alt={slide.data.ImageAlt || ""} height="100%" width="100%"/>
+                      <img src={"http://localhost:4000/images/"+slide.data.ImagePath} alt={slide.data.ImageAlt || ""} height="100%" width="100%"/>
                     </Box>
                   </Box>
                 :
