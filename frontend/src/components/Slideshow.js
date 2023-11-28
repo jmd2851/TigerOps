@@ -123,7 +123,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                             alignItems: "center",
                           }}
                         >
-                          {slide.body.map((group) => {
+                          {slide.body.split(", ").map((group) => {
                             let temp = group.split("-");
 
                             return (
