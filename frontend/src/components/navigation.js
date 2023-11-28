@@ -150,7 +150,7 @@ export default function Navigation() {
                 St. Peter's Kitchen
               </Typography>
               <Typography
-                variant="h4"
+                variant="h5"
                 sx={{ fontWeight: "bold", textTransform: "capitalize" }}
               >
                 {user != null ? `${user.FirstName} ${user.LastName}` : "Viewer"}
