@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./navigation.css";
 import { Link } from "react-router-dom";
 import AppContext from "../AppContext";
@@ -7,6 +7,7 @@ import { Box, Button, Divider, Modal, Stack, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import logo from "../assets/images/logo_transparent.png";
 import config from "../configs.json";
+import { fetchConfig } from "../utils/config_utils";
 
 const modalStyle = {
   position: "absolute",
@@ -35,6 +36,7 @@ export default function Navigation() {
   const handleClose = () => {
     setOpen(false);
   };
+  const [configs, setConfigs] = useState({});
 
   const { user, setUser, showAlert } = React.useContext(AppContext);
 
@@ -54,6 +56,20 @@ export default function Navigation() {
       .catch(() => {
         showAlert("error", "Something went wrong...");
       });
+  };
+
+  useEffect(() => {
+    fetchConfig().then((res) => {
+      setConfigs(res);
+    });
+  }, []);
+
+  const isStorageWithinThreshold = () => {
+    const free = parseFloat(configs.FreeStorage);
+    const total = parseFloat(configs.TotalStorage);
+    const threshold = parseFloat(configs.LowStorageThreshold);
+    if (!total) return false;
+    return free / total < threshold;
   };
 
   return (
@@ -145,7 +161,7 @@ export default function Navigation() {
           <Stack direction="column" spacing={4}>
             <Typography variant="h5" sx={{ textTransform: "capitalize" }}>
               <Link to="/slides">
-                {user != null ? "Home" : "Weekly Events"}
+                {user != null ? "Slideshow" : "Weekly Events"}
               </Link>
             </Typography>
 
@@ -174,6 +190,16 @@ export default function Navigation() {
             )}
           </Typography>
         </Stack>
+
+        {user != null && user.UserRole.toLowerCase() == "admin" ? (
+          <Stack direction="column" spacing={4}>
+            <Typography
+              sx={{ fontSize: '0.8em', fontWeight: 'bold', color: isStorageWithinThreshold() ? "var(--secondary)" : "var(--red)" }}
+            >
+              {`${configs.FreeStorage} GB / ${configs.TotalStorage} GB`}
+            </Typography>
+          </Stack>
+        ) : null}
       </Stack>
     </div>
   );
