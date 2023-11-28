@@ -104,13 +104,15 @@ export default function Login() {
               onClose={() => {
                 setShowError(false);
               }}
-              sx={{marginBottom: "4px"}}
+              sx={{ marginBottom: "4px" }}
             >
               Invalid login credentials. Please check and try again.
             </Alert>
           )}
           {showSuccess && (
-            <Alert severity="success">You have successfully logged in!</Alert>
+            <Alert severity="success" sx={{ marginBottom: "4px" }}>
+              You have successfully logged in!
+            </Alert>
           )}
 
           <div className="loginButtonContainer">
