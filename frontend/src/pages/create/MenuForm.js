@@ -28,6 +28,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { orderMenuData } from "../../utils/slide_utils";
 
 dayjs.extend(utc);
 
@@ -72,7 +73,8 @@ export default function MenuForm(props) {
     if (formType === FormTypes.EDIT) {
       setDate(dayjs.utc(menu.Date));
       const savedMenuOptions = [];
-      for (const [label, description] of Object.entries(menu.MenuData)) {
+      const menuData = orderMenuData(menu.MenuData);
+      for (const [label, description] of Object.entries(menuData)) {
         let custom = false;
         if (!labels.includes(label)) {
           custom = true;

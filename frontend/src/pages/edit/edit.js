@@ -176,6 +176,7 @@ export default function Edit() {
                     }}
                     sx={{ minHeight: "360px" }}
                   >
+                    {console.log(slide.body)}
                     <CardHeader
                       title={slide.title}
                       subheader={slide.subheader}

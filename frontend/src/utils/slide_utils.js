@@ -6,6 +6,31 @@ import { SlideTypes, Slide } from "../constants";
 
 dayjs.extend(utc);
 
+export const orderMenuData = (menuData) => {
+  const labels = [
+    "Main Dish",
+    "Side Dish",
+    "Vegetable",
+    "Fruit",
+    "Dessert",
+    "Drink",
+    "Custom",
+  ];
+  const sortedEntries = Object.entries(menuData).sort(([labelA], [labelB]) => {
+    const indexA = labels.indexOf(labelA);
+    const indexB = labels.indexOf(labelB);
+    if (labelA === "Main Dish") return -1;
+    if (labelB === "Main Dish") return 1;
+    return indexA - indexB;
+  });
+  const sortedMenuData = sortedEntries.reduce((acc, [label, description]) => {
+    acc[label] = description;
+    return acc;
+  }, {});
+
+  return sortedMenuData;
+};
+
 export const fetchSlides = async (startDate, endDate) => {
   if (!startDate || !endDate) {
     console.error("Both startDate and endDate fields are required.");
@@ -47,16 +72,15 @@ export const fetchSlides = async (startDate, endDate) => {
     .then(([res1, res2]) => {
       const menuSlides = res1.data.menus.map((menu) => {
         const descriptions = [];
-        for (const [label, description] of Object.entries(menu.MenuData)) {
+        const menuData = orderMenuData(menu.MenuData);
+        for (const [label, description] of Object.entries(menuData)) {
           descriptions.push(`${label} - ${description}`);
         }
         const date = dayjs(menu.Date.split("T")[0]);
-        const dayNum = dayjs(menu.Date.split("T")[0]).day();
-
         return new Slide(
           "Saint Peter's Kitchen",
           `Menu for ${date.format("dddd, MMMM D")}`,
-          descriptions,
+          descriptions.join(", "),
           SlideTypes.MENU,
           menu,
           date

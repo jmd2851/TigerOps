@@ -12,7 +12,6 @@ import { fetchSlides } from "../utils/slide_utils";
 import dayjs from "dayjs";
 import config from "../configs.json";
 
-
 export default function Slideshow({ slideStyles, slideshowProps }) {
   const [sildeshowData, setSlideshowData] = useState([]);
   useEffect(() => {
@@ -63,7 +62,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                     >
                       <Box sx={{ width: "60%" }}>
                         {slide.type === 1 ? ( //menu
-                          slide.body.map((group) => {
+                          slide.body.split(", ").map((group) => {
                             let temp = group.split("-");
 
                             return (
@@ -100,7 +99,9 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                         sx={{
                           backgroundImage:
                             "url(" +
-                            `${config[process.env.NODE_ENV].apiDomain}/images/` +
+                            `${
+                              config[process.env.NODE_ENV].apiDomain
+                            }/images/` +
                             slide.data.ImagePath +
                             ")",
                           backgroundPosition: "center",
