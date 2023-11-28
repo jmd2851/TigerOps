@@ -194,8 +194,7 @@ export default function Navigation() {
         {user != null && user.UserRole.toLowerCase() == "admin" ? (
           <Stack direction="column" spacing={4}>
             <Typography
-              variant="body1"
-              sx={{ fontWeight: 'bold', color: isStorageWithinThreshold() ? "var(--secondary)" : "var(--red)" }}
+              sx={{ fontSize: '0.8em', fontWeight: 'bold', color: isStorageWithinThreshold() ? "var(--secondary)" : "var(--red)" }}
             >
               {`${configs.FreeStorage} GB / ${configs.TotalStorage} GB`}
             </Typography>
