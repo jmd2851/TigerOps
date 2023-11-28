@@ -104,7 +104,7 @@ export default function MenuForm(props) {
     const body = {
       menuData: JSON.stringify(menuDataObj),
       date: date.format("YYYY-MM-DD"),
-      imagePath: image.name,
+      imagePath: image ? image.name : "",
       imageAlt,
       isVisible: isVisible ? 1 : 0,
     };
