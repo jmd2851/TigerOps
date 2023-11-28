@@ -69,8 +69,8 @@ export default function Navigation() {
     const total = parseFloat(configs.TotalStorage);
     const threshold = parseFloat(configs.LowStorageThreshold);
     if (!total) return false;
-    return free / total < threshold;
-  };
+    return free / total > (1 - threshold)  
+};
 
   return (
     <div className="navContainer">
@@ -196,7 +196,7 @@ export default function Navigation() {
             <Typography
               sx={{ fontSize: '0.8em', fontWeight: 'bold', color: isStorageWithinThreshold() ? "var(--secondary)" : "var(--red)" }}
             >
-              {`${configs.FreeStorage} GB / ${configs.TotalStorage} GB`}
+              {`${configs.FreeStorage} GB Free / ${configs.TotalStorage} GB Total`}
             </Typography>
           </Stack>
         ) : null}
