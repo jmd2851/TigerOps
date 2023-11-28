@@ -176,22 +176,34 @@ export default function Edit() {
                     }}
                     sx={{ minHeight: "360px" }}
                   >
-                    {slide.data.IsVisible ? (
-                      <VisibilityIcon class="visibility" />
-                    ) : (
-                      <VisibilityOffIcon class="visibility" />
-                    )}  
                     <CardHeader
                       title={slide.title}
                       subheader={slide.subheader}
                     />
                     <CardContent>
                       <Typography variant="body2">{slide.body}</Typography>
-                      <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="flex-end" sx={{width:'100%',position:'absolute',bottom:'16px',right:'16px'}}>
-
-                        {slide.data.IsVisible === 1 ? <VisibilityIcon /> : <VisibilityOffIcon /> }
-                        <Typography variant="body2">{slide.data.IsVisible === 1 ? "Visible on Slideshow" : "Hidden from Slideshow" }</Typography>
-                        
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        justifyContent="flex-end"
+                        alignItems="flex-end"
+                        sx={{
+                          width: "100%",
+                          position: "absolute",
+                          bottom: "16px",
+                          right: "16px",
+                        }}
+                      >
+                        {slide.data.IsVisible === 1 ? (
+                          <VisibilityIcon />
+                        ) : (
+                          <VisibilityOffIcon />
+                        )}
+                        <Typography variant="body2">
+                          {slide.data.IsVisible === 1
+                            ? "Visible on Slideshow"
+                            : "Hidden from Slideshow"}
+                        </Typography>
                       </Stack>
                     </CardContent>
                   </CardActionArea>
