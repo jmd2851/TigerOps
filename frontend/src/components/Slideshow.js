@@ -10,28 +10,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
     const today = dayjs().startOf("day");
     fetchSlides(today, today.add(7, "day")).then((res) => {
       setSlideshowData(res);
-      console.log(res);
     });
-
-    //for testing purposes, remove once image issue is fixed
-    // setSlideshowData([
-    //   {
-    //     title: 'menu example',
-    //     subheader: 'menu for monday, nov 20',
-    //     type: 1,
-    //     body: ['main dish - dirt', 'vegetable - more dirt'],
-    //     imgPath: '../assets/images/building.jpg',
-    //     imgAlt: 'st peters kitchen'
-    //   },
-    //   {
-    //     title: 'event example',
-    //     subheader: 'monday, nov 20 12:00pm - tuesday, nov 21 12:00pm',
-    //     type: 0,
-    //     body: 'event description',
-    //     imgPath: '../assets/images/building.jpg',
-    //     imgAlt: 'st peters kitchen'
-    //   },
-    // ]);
   }, []);
 
 
