@@ -104,6 +104,7 @@ export default function Login() {
               onClose={() => {
                 setShowError(false);
               }}
+              sx={{marginBottom: "4px"}}
             >
               Invalid login credentials. Please check and try again.
             </Alert>
