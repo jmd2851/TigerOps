@@ -112,7 +112,7 @@ export default function MenuForm(props) {
     Object.keys(body).forEach((key) => {
       formData.append(key, body[key]);
     });
-    formData.append("image", image);
+    if (image) formData.append("image", image);
     axios
       .post(`${config[process.env.NODE_ENV].apiDomain}/menus`, formData, {
         headers: {

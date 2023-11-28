@@ -79,7 +79,7 @@ export default function EventForm(props) {
       description,
       startTime: startTime.format("YYYY-MM-DD HH:mm:ss"),
       endTime: endTime.format("YYYY-MM-DD HH:mm:ss"),
-      imagePath: image.name,
+      imagePath: image ? image.name : "",
       imageAlt,
       isVisible: isVisible ? 1 : 0,
     };
@@ -87,7 +87,7 @@ export default function EventForm(props) {
     Object.keys(body).forEach((key) => {
       formData.append(key, body[key]);
     });
-    formData.append("image", image);
+    if (image) formData.append("image", image);
     axios
       .post(`${config[process.env.NODE_ENV].apiDomain}/events`, formData, {
         headers: {
