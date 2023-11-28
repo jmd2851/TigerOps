@@ -1,7 +1,7 @@
 {
   "production": {
-    "apiDomain": "http://tigerops.jamiesondube.com:4000",
-    "appDomain": "http://tigerops.jamiesondube.com:3000"
+    "apiDomain": "https://tigerops.jamiesondube.com:4000",
+    "appDomain": "https://tigerops.jamiesondube.com:3000"
   },
   "development": {
     "apiDomain": "http://localhost:4000",
