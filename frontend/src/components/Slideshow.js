@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { fetchSlides } from "../utils/slide_utils";
 import dayjs from "dayjs";
+import config from "../configs.json";
+
 
 export default function Slideshow({ slideStyles, slideshowProps }) {
   const [sildeshowData, setSlideshowData] = useState([]);
@@ -98,7 +100,7 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                         sx={{
                           backgroundImage:
                             "url(" +
-                            "http://localhost:4000/images/" +
+                            `${config[process.env.NODE_ENV].apiDomain}/images/` +
                             slide.data.ImagePath +
                             ")",
                           backgroundPosition: "center",
