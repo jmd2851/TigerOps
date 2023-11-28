@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { FormTypes, Slide, SlideTypes } from "../../constants";
+import { FormTypes, SlideTypes } from "../../constants";
 import EventForm from "../create/EventForm";
 import MenuForm from "../create/MenuForm";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -36,6 +36,7 @@ export default function Edit() {
   const [endDate, setEndDate] = useState(today.add(7, "day"));
   const [slides, setSlides] = useState([]);
   const [refetchCount, setRefetchCount] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleOpen = () => {
     setOpen(true);
@@ -183,8 +184,10 @@ export default function Edit() {
                     <CardContent>
                       <Typography variant="body2">{slide.body}</Typography>
                       <Stack direction="row" spacing={1} justifyContent="flex-end" alignItems="flex-end" sx={{width:'100%',position:'absolute',bottom:'16px',right:'16px'}}>
+
                         {slide.data.IsVisible === 1 ? <VisibilityIcon /> : <VisibilityOffIcon /> }
                         <Typography variant="body2">{slide.data.IsVisible === 1 ? "Visible on Slideshow" : "Hidden from Slideshow" }</Typography>
+                        
                       </Stack>
                     </CardContent>
                   </CardActionArea>
