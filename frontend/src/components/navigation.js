@@ -196,7 +196,7 @@ export default function Navigation() {
             <Typography
               sx={{ fontSize: '0.8em', fontWeight: 'bold', color: isStorageWithinThreshold() ? "var(--secondary)" : "var(--red)" }}
             >
-              {`${configs.FreeStorage} GB / ${configs.TotalStorage} GB`}
+              {`${configs.FreeStorage} GB Free / ${configs.TotalStorage} GB Total`}
             </Typography>
           </Stack>
         ) : null}
