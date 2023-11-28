@@ -69,8 +69,8 @@ export default function Navigation() {
     const total = parseFloat(configs.TotalStorage);
     const threshold = parseFloat(configs.LowStorageThreshold);
     if (!total) return false;
-    return free / total < threshold;
-  };
+    return free / total > (1 - threshold)  
+};
 
   return (
     <div className="navContainer">
