@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./Slideshow.css";
 import Carousel from "react-material-ui-carousel";
 import { Box, Card, CardContent, CardHeader, Stack, Typography } from "@mui/material";
 import { fetchSlides } from "../utils/slide_utils";
@@ -9,36 +8,11 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
   const [sildeshowData, setSlideshowData] = useState([]);
   useEffect(() => {
     const today = dayjs().startOf("day");
-    fetchSlides(today, today.add(7, "day")).then((res) =>
-      setSlideshowData(res)
-    );
-
-    //for testing purposes, remove once image issue is fixed
-    // setSlideshowData([
-    //   {
-    //     title: 'menu example',
-    //     subheader: 'menu for monday, nov 20',
-    //     type: 1,
-    //     body: ['main dish - dirt', 'vegetable - more dirt'],
-    //     imgPath: '../assets/images/building.jpg',
-    //     imgAlt: 'st peters kitchen'
-    //   },
-    //   {
-    //     title: 'event example',
-    //     subheader: 'monday, nov 20 12:00pm - tuesday, nov 21 12:00pm',
-    //     type: 0,
-    //     body: 'event description',
-    //     imgPath: '../assets/images/building.jpg',
-    //     imgAlt: 'st peters kitchen'
-    //   },
-    // ]);
+    fetchSlides(today, today.add(7, "day")).then((res) => {
+      setSlideshowData(res);
+    });
   }, []);
 
-  const slideImgStyle = {
-    backgroundColor: 'green',
-    width:'40%', 
-    height: '70%',
-  }
 
   return (
     <>
@@ -58,9 +32,10 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
 
               <CardContent sx={{height:'100%', display:'flex',flexDirection:'column', justifyContent:'space-between'}}>
 
-                {slide.imgPath ? //implement slide layout
-                  <Box sx={{display:'flex', flexDirection:'row', justifyContent:'space-between', padding:'40px'}}>
-                    <Box>
+                {slide.data.ImagePath ? //implement slide layout
+                  <Stack direction="row" justifyContent="space-between" spacing={2} sx={{padding:'20px',height:'inherit'}}>
+                    
+                    <Box sx={{width:'60%'}}>
                       {slide.type === 1 ? //menu
                         slide.body.map((group) => {
                           let temp = group.split("-");
@@ -73,17 +48,23 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                           )
                         })
                       : //event
-                        <Box sx={{textAlign:'center'}}>
+                        <Box sx={{textAlign:'left'}}>
                           <Typography sx={{fontSize:"0.7em"}}>Join us for {slide.title}!</Typography>
                           <Typography sx={{fontSize:"0.7em"}}>{slide.body}</Typography>
                         </Box>
                       }
                     </Box>
 
-                    <Box sx={{...slideImgStyle}}>
-                      <img src={slide.imgPath} alt={slide.imgAlt || ""} height="100%" width="100%"/>
+                    <Box sx={{
+                        backgroundImage: "url(" + "http://localhost:4000/images/" + slide.data.ImagePath +  ")",
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        width: '40%',
+                        height:'70%'
+                      }}>
                     </Box>
-                  </Box>
+                  </Stack>
                 :
                 // no image layout - centered
                 <Box sx={{padding:'40px'}}>
