@@ -86,9 +86,6 @@ export default function Slideshow({ slideStyles, slideshowProps }) {
                           //event
                           <Box sx={{ textAlign: "left" }}>
                             <Typography sx={{ fontSize: "0.7em" }}>
-                              Join us for {slide.title}!
-                            </Typography>
-                            <Typography sx={{ fontSize: "0.7em" }}>
                               {slide.body}
                             </Typography>
                           </Box>
