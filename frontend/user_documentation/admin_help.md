@@ -33,3 +33,6 @@
 - Click the "Account Role" button to change the user from Admin to User, or the other way around.
 - Use the "Remove Account" button to delete that user.
 - Click "Add New User" to add a new user.
+## Storage Monitoring
+- When logged in as admin, you can see the storage usage of the system in the navbar.
+- If storage is running low, log in to the server and delete old images. Feel free to contact the system administrator to help with this task.

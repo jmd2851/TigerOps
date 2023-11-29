@@ -1,9 +1,8 @@
-
 .calendar {
- display: flex;
+  display: flex;
 }
 
-.description{
+.description {
   display: block;
   margin-left: 3em;
 }
@@ -33,11 +32,11 @@
   z-index: 2;
 }
 
-.calendarContainer .css-g7itob-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+.calendarContainer
+  .css-g7itob-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
   padding-left: 12em !important;
   padding-right: 12em !important;
 }
-
 
 .calendarContainer .css-cyfsxc-MuiPickersCalendarHeader-labelContainer {
   font-size: 24px !important;
@@ -66,7 +65,6 @@
 .calendarContainer .css-lpgwml-MuiButtonBase-root-MuiPickersDay-root {
   margin: 0px !important;
 }
-
 
 .calendarContainer .css-1u23akw-MuiButtonBase-root-MuiPickersDay-root {
   font-size: 1em !important;
@@ -106,7 +104,10 @@
 }
 
 .calendarContainer
-  .css-g7itob-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
+  .css-g7itob-MuiButtonBase-root-MuiPickersDay-root.Mui-selected,
+.calendarContainer
+  .css-g7itob-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected),
+.calendarContainer .MuiPickersDay-today {
   padding-top: 1em !important;
   padding-right: 1em !important;
   padding-left: 3.4em !important;
@@ -120,6 +121,8 @@
   height: 0px !important;
   width: 0px !important;
   line-height: 0 !important;
+  font-weight: normal !important;
+  border: 0px solid #1e1e1e !important;
 }
 
 .calendarContainer .css-g7itob-MuiButtonBase-root-MuiPickersDay-root {
@@ -129,16 +132,6 @@
 .calendarContainer .css-19kd8x5-MuiPickersDay-root {
   width: 0px !important;
 }
-
-.calendarContainer
-  .css-g7itob-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
-  padding-top: 1em !important;
-  padding-right: 1em !important;
-  padding-left: 52px !important;
-  padding-bottom: 4em !important;
-  border: solid rgb(0, 0, 0) important;
-}
-
 .calendarContainer .css-1y6qini-MuiTypography-root-MuiDayCalendar-weekDayLabel {
   margin-left: 28px !important;
   margin-right: 28px !important;
@@ -199,40 +192,39 @@
   background-color: #f7f7f7;
   border-radius: 10px !important;
   min-height: 0 !important;
-  /* box-shadow: 0px 0px 6px 0px #c5c5c5 !important; */
+  box-shadow: 0px 0px 6px 0px #c5c5c5 !important;
 }
 
 .calendarContainer .css-cwhad8-MuiDateCalendar-root {
   padding-bottom: 6em !important;
 }
 
-
-.calendarContainer .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
+.calendarContainer
+  .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
   padding-bottom: 4em !important;
 }
-
 
 .css-i5q14k-MuiDayCalendar-header {
   padding-top: 20px !important;
   padding-bottom: 20px !important;
 }
 
-
-.Events{
-    margin-left: 4em;
-    padding-left: 4em;
-    padding-right: 4em;
-    padding-top: 1em;
-    padding-bottom: 1em;
-    border: 3px solid #d9d9d9;
-    background-color: #f7f7f7;
-    border-radius: 10px !important;
+.Events {
+  margin-left: 4em;
+  padding-left: 4em;
+  padding-right: 4em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border: 3px solid #d9d9d9;
+  background-color: #f7f7f7;
+  border-radius: 10px !important;
 }
 
-.calendarContainer .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
+.calendarContainer
+  .css-15v8kdh-MuiPickersFadeTransitionGroup-root-MuiDateCalendar-viewTransitionContainer {
   padding-left: 60px !important;
 }
 
-.container{
+.container {
   display: flex;
 }

@@ -2,7 +2,7 @@
 - Site is hosted on [hostinger.com](https://hostinger.com)
 - VPS is Ubuntu-based.
 - Running software: pm2, Node.JS, Nginx, MySQL server
-- Current production URL is [tigerops.jamiesondube.com/login](http://tigerops.jamiesondube.com/login)
+- Current production URL is [tigerops.jamiesondube.com/](http://tigerops.jamiesondube.com/)
 - Frontend runs on port 3000, backend on port 4000
 - pm2 is used to run multiple Node applications and provide persistence upon restart.
 - Run `pm2 l` to see status of running Node applications.
@@ -14,3 +14,6 @@
     - `cd frontend` for frontend, or `cd backend` for backend
     - `npm i`
     - `pm2 restart all` (or specify frontend or backend)
+- The storage monitor visible when logged in as admin is updated via a Bash script.
+    - A Cron job runs every five minutes and calls the script which updates the values in the database.
+- The server reboots nightly at 3:30 AM

@@ -320,14 +320,15 @@ app.delete("/events/:id", async (req, res) => {
 // GET endpoint to retrieve events within a date range
 app.get("/events", async (req, res) => {
   const { startTime, endTime } = req.query;
-  const sql = "SELECT * FROM event WHERE EventStartTime BETWEEN ? AND ?";
+  const sql =
+    "SELECT * FROM event WHERE EventStartTime BETWEEN ? AND ? OR EventStartTime BETWEEN ? AND ?";
   if (!startTime || !endTime) {
     return res.status(400).json({
       events: [],
       message: "Both 'startTime' and 'endTime' query parameters are required.",
     });
   }
-  db.query(sql, [startTime, endTime], (err, results) => {
+  db.query(sql, [startTime, endTime, startTime, endTime], (err, results) => {
     if (err) {
       return res.status(404).json({
         events: [],
